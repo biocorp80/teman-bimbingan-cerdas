@@ -35,7 +35,7 @@
         /* CSS KHUSUS UNTUK HASIL GENERATE AI (AGAR RAPI) */
         .prose { font-size: 0.875rem; line-height: 1.6; color: #334155; }
         .prose p { margin-bottom: 0.5em; text-align: justify; }
-        .prose a { color: #1A4AB6; text-decoration: underline; font-weight: 600; }
+        .prose a { display: none; } /* Sembunyikan link jika masih ada yang lolos */
         .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.5em; }
         .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 0.5em; }
         .prose strong { color: #1e293b; font-weight: 700; }
@@ -488,6 +488,18 @@
             return `PENTING: Gunakan Bahasa ${userData.bahasa} untuk seluruh output JSON dan teks.`;
         }
 
+        // --- FUNGSI PEMBERSIH TEKS (BARU) ---
+        // Fungsi ini menghapus semua sumber/citasi dalam kurung [] atau ()
+        function cleanText(text) {
+            if (!text) return "";
+            return text
+                .replace(/\[.*?\]\(.*?\)/g, '') // Hapus [Source](URL)
+                .replace(/\[.*?\]/g, '')        // Hapus [Source]
+                .replace(/\(.*?\)/g, '')        // Hapus (Source/Link)
+                .replace(/\s+([,.])/g, '$1')    // Rapikan spasi sebelum titik/koma
+                .trim();
+        }
+
         function hideAll() {
             ['step-1','step-2','step-3','step-4','step-5','step-6','step-7','step-8','step-9','step-10','step-11','loading'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
             const s = document.getElementById('sticky-action'); if(s){s.classList.remove('translate-y-0');s.classList.add('translate-y-full');}
@@ -540,7 +552,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        model: "google/gemini-2.0-flash-001", // MENGGUNAKAN GEMINI 2.0 (atau 2.5 jika tersedia)
+                        model: "google/gemini-2.0-flash-001",
                         messages: [
                             { role: "system", content: finalSystem },
                             { role: "user", content: prompt }
@@ -584,9 +596,10 @@
                 data.objects.forEach((obj, idx) => {
                     const d = document.createElement('div'); 
                     d.className = `p-3 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:border-[#1A4AB6] hover:text-[#1A4AB6] cursor-pointer text-center fade-in stagger-${(idx%4)+1} transition-all shadow-sm flex items-center justify-center h-full`;
-                    // Gunakan marked.parseInline untuk merender Markdown tanpa tag <p>
-                    d.innerHTML = marked.parseInline(obj); 
-                    d.onclick = () => { document.getElementById('custom-object').value = obj.replace(/[*_]/g, ''); }; 
+                    // Terapkan cleanText sebelum marked
+                    const cleanObj = cleanText(obj);
+                    d.innerHTML = marked.parseInline(cleanObj); 
+                    d.onclick = () => { document.getElementById('custom-object').value = cleanObj.replace(/[*_]/g, ''); }; 
                     list.appendChild(d);
                 });
                 list.classList.remove('hidden');
@@ -602,15 +615,16 @@
         async function fetchAIMasalah() {
             const btn = document.getElementById('ai-problem-btn'); btn.disabled = true; btn.innerHTML = "Processing...";
             try {
-                const prompt = `Konteks: Jurusan ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah/Fenomena) akademik yang valid. Sertakan sitasi jurnal fiktif jika perlu (contoh: [Journal Name]). BATASAN: Kalimat singkat padat. JSON: { problems: [string] }`;
+                const prompt = `Konteks: Jurusan ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah/Fenomena) akademik yang valid. BATASAN: Kalimat singkat padat. JSON: { problems: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON.");
                 const list = document.getElementById('ai-problems-list'); list.innerHTML = '';
                 data.problems.forEach((p, idx) => {
                     const d = document.createElement('div'); 
                     d.className = `p-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-blue-50 cursor-pointer text-left fade-in stagger-${(idx%4)+1} transition-all shadow-sm flex items-start gap-2`;
-                    // Gunakan marked.parseInline agar link [Judul](URL) menjadi aktif
-                    d.innerHTML = `<i class="fas fa-exclamation-circle mt-1 text-slate-300 flex-shrink-0"></i><div class="prose prose-sm leading-snug">${marked.parseInline(p)}</div>`;
-                    d.onclick = () => { document.getElementById('custom-problem').value = p.replace(/\[.*?\]\(.*?\)/g, ''); }; 
+                    // Terapkan cleanText sebelum marked
+                    const cleanP = cleanText(p);
+                    d.innerHTML = `<i class="fas fa-exclamation-circle mt-1 text-slate-300 flex-shrink-0"></i><div class="prose prose-sm leading-snug">${marked.parseInline(cleanP)}</div>`;
+                    d.onclick = () => { document.getElementById('custom-problem').value = cleanP.replace(/[*_]/g, ''); }; 
                     list.appendChild(d);
                 });
                 list.classList.remove('hidden');
@@ -630,18 +644,19 @@
         async function fetchAIConnectionAnalysis() {
             const btn = document.getElementById('btn-analisis-kaitan'); btn.disabled = true; btn.innerHTML = "Validasi...";
             try {
-                const prompt = `Analisis Validasi Judul Skripsi. Mahasiswa: ${userData.jurusan} (${userData.fakultas}), Minat ${userData.minat}. Rencana: Objek "${userData.objek}", Masalah "${userData.masalah}". Apakah ini linier dan layak? Jika ada referensi jurnal, format dengan markdown link [Nama Jurnal](URL). JSON: { is_relevant: boolean, reason: string }`;
+                const prompt = `Analisis Validasi Judul Skripsi. Mahasiswa: ${userData.jurusan} (${userData.fakultas}), Minat ${userData.minat}. Rencana: Objek "${userData.objek}", Masalah "${userData.masalah}". Apakah ini linier dan layak? JSON: { is_relevant: boolean, reason: string }`;
                 const data = await fetchAI(prompt, "Jawab jujur secara akademik.");
                 const resultDiv = document.getElementById('connection-analysis-result');
                 const nextBtn = document.getElementById('btn-next-step-5');
                 
-                // Gunakan prose agar format paragraf dan link rapi
-                resultDiv.innerHTML = `<div class="prose prose-sm max-w-none">${marked.parse(data.reason)}</div>`;
+                // Terapkan cleanText
+                const cleanReason = cleanText(data.reason);
+                resultDiv.innerHTML = `<div class="prose prose-sm max-w-none">${marked.parse(cleanReason)}</div>`;
                 resultDiv.classList.remove('hidden');
                 
                 if (data.is_relevant) { 
                     resultDiv.className = "text-left p-5 rounded-xl text-sm border transition-all bg-teal-50 border-teal-200";
-                    userData.analisisMasalah = data.reason; nextBtn.disabled = false; 
+                    userData.analisisMasalah = cleanReason; nextBtn.disabled = false; 
                     nextBtn.classList.remove('bg-slate-200','text-slate-400','cursor-not-allowed');
                     nextBtn.classList.add('step-gradient','text-white','shadow-lg','hover:shadow-xl');
                 } else { 
@@ -680,7 +695,10 @@
             savedTitles = paths;
             paths.forEach((p, i) => {
                 let tHTML = p.titles.map(t => `<div class="title-option p-4 rounded-lg text-sm font-semibold text-slate-800 relative group" onclick="pickTitle(this, '${t.replace(/'/g, "\\'")}')"><div class="absolute right-4 opacity-0 group-[.selected]:opacity-100 text-[#1A4AB6]"><i class="fas fa-check-circle"></i></div>${t}</div>`).join('');
-                c.innerHTML += `<div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm fade-in stagger-${i+1}"><div class="flex items-center gap-2 mb-3"><span class="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider">Opsi ${i+1}</span><h3 class="font-bold text-base text-[#1A4AB6] font-heading">${p.topic}</h3></div><p class="text-xs text-slate-500 mb-4 prose prose-sm">${marked.parseInline(p.phenomenon)} using ${marked.parseInline(p.analysis)}</p><div class="space-y-2">${tHTML}</div></div>`;
+                // Terapkan cleanText
+                const cleanPhenom = cleanText(p.phenomenon);
+                const cleanAnalys = cleanText(p.analysis);
+                c.innerHTML += `<div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm fade-in stagger-${i+1}"><div class="flex items-center gap-2 mb-3"><span class="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider">Opsi ${i+1}</span><h3 class="font-bold text-base text-[#1A4AB6] font-heading">${p.topic}</h3></div><p class="text-xs text-slate-500 mb-4 prose prose-sm">${marked.parseInline(cleanPhenom)} using ${marked.parseInline(cleanAnalys)}</p><div class="space-y-2">${tHTML}</div></div>`;
             });
             document.getElementById('step-6').classList.remove('hidden');
             document.getElementById('context-summary').innerText = `${userData.jurusan} • ${userData.metode}`;
@@ -765,14 +783,16 @@
             document.getElementById('analysis-loading').classList.add('hidden'); document.getElementById('analysis-result').classList.remove('hidden');
             document.getElementById('analyzed-title').innerText = finalTitle; 
             
-            // Format kesimpulan dengan prose
-            document.getElementById('synthesis-text').innerHTML = `<div class="prose prose-sm">${marked.parse(data.conclusion)}</div>`;
+            // Terapkan cleanText
+            const cleanConclusion = cleanText(data.conclusion);
+            document.getElementById('synthesis-text').innerHTML = `<div class="prose prose-sm">${marked.parse(cleanConclusion)}</div>`;
             
             const createPillar = (id, label, item) => {
                 const el = document.getElementById(id);
                 let cur = 0; const interval = setInterval(() => { cur+=2; if(cur>=item.score){cur=item.score;clearInterval(interval);} el.innerText=Math.round(cur)+"%"; el.parentElement.style.borderColor = cur<60?"#ef4444":cur<80?"#eab308":"#1CB8A3"; }, 20);
-                // Format alasan dengan prose
-                return `<div class="mb-4 bg-white p-4 rounded-lg border border-slate-100"><h4 class="font-bold text-slate-900 text-sm mb-1">${label} <span class="float-right text-${item.score<70?'red':'emerald'}-600">${item.score}%</span></h4><div class="text-xs text-slate-600 text-justify leading-relaxed prose prose-sm">${marked.parse(item.reason)}</div></div>`;
+                // Terapkan cleanText
+                const cleanReason = cleanText(item.reason);
+                return `<div class="mb-4 bg-white p-4 rounded-lg border border-slate-100"><h4 class="font-bold text-slate-900 text-sm mb-1">${label} <span class="float-right text-${item.score<70?'red':'emerald'}-600">${item.score}%</span></h4><div class="text-xs text-slate-600 text-justify leading-relaxed prose prose-sm">${marked.parse(cleanReason)}</div></div>`;
             };
 
             let feedbackHTML = "";
@@ -804,6 +824,8 @@
                 savedHypothesisData = data; document.getElementById('hypo-title-display').innerText = finalTitle;
                 const vList=document.getElementById('variable-list'); vList.innerHTML=''; 
                 data.variables.forEach(v => {
+                    // Terapkan cleanText
+                    const cleanDef = cleanText(v.def);
                     vList.innerHTML += `
                     <div class="p-4 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start mb-2">
@@ -811,16 +833,18 @@
                             <span class="text-[10px] font-bold text-[#1A4AB6] bg-blue-50 px-2 py-1 rounded uppercase tracking-widest border border-blue-100">${v.role}</span>
                         </div>
                         <div class="text-xs text-slate-600 text-justify leading-relaxed prose prose-sm max-w-none">
-                            ${marked.parse(v.def)}
+                            ${marked.parse(cleanDef)}
                         </div>
                     </div>`;
                 });
                 const hList=document.getElementById('hypothesis-list'); hList.innerHTML=''; 
                 data.hypotheses.forEach((h, i) => {
+                    // Terapkan cleanText
+                    const cleanH = cleanText(h);
                     hList.innerHTML += `
                     <div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 font-medium text-justify border border-teal-100 flex gap-3 items-start">
                         <span class="font-bold text-[#1CB8A3] whitespace-nowrap mt-1">H${i+1}</span> 
-                        <div class="leading-relaxed prose prose-sm max-w-none">${marked.parse(h)}</div>
+                        <div class="leading-relaxed prose prose-sm max-w-none">${marked.parse(cleanH)}</div>
                     </div>`;
                 });
                 hideAll(); document.getElementById('step-10').classList.remove('hidden');
@@ -840,22 +864,26 @@
                 
                 const dList = document.getElementById('data-steps'); dList.innerHTML = ''; 
                 data.data_steps.forEach(s => {
+                    // Terapkan cleanText
+                    const cleanS = cleanText(s);
                     dList.innerHTML += `
                     <div class="flex items-start gap-3 group">
                         <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0 group-hover:scale-125 transition-transform"></div>
                         <div class="text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
-                            ${marked.parse(s)}
+                            ${marked.parse(cleanS)}
                         </div>
                     </div>`;
                 });
 
                 const aList = document.getElementById('analysis-steps'); aList.innerHTML = ''; 
                 data.analysis_steps.forEach(s => {
+                    // Terapkan cleanText
+                    const cleanS = cleanText(s);
                     aList.innerHTML += `
                     <div class="flex items-start gap-3 group">
                         <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0 group-hover:scale-125 transition-transform"></div>
                         <div class="text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
-                            ${marked.parse(s)}
+                            ${marked.parse(cleanS)}
                         </div>
                     </div>`;
                 });
@@ -887,7 +915,7 @@
                             <span class="p-1.5 bg-${color}-100 rounded text-${color}-600 text-xs"><i class="fas fa-${icon}"></i></span>
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${title}</span>
                         </div>
-                        <div class="text-xs text-slate-700 font-medium leading-relaxed prose prose-sm">${marked.parse(content)}</div>
+                        <div class="text-xs text-slate-700 font-medium leading-relaxed prose prose-sm">${marked.parse(cleanText(content))}</div>
                     </div>
                 `;
 
@@ -917,7 +945,7 @@
                 
                 const c = document.getElementById('instruments-content');
                 c.innerHTML = `<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1 font-heading">${data.type}</h5>`;
-                data.items.forEach((q,i) => c.innerHTML += `<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span> <div class="prose prose-sm">${marked.parseInline(q)}</div></div>`);
+                data.items.forEach((q,i) => c.innerHTML += `<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span> <div class="prose prose-sm">${marked.parseInline(cleanText(q))}</div></div>`);
                 
                 document.getElementById('generated-instruments').classList.remove('hidden');
                 instrumentsDone = true; btn.innerHTML = `<i class="fas fa-check"></i> Selesai`; btn.classList.add('bg-teal-100','text-[#1CB8A3]');
