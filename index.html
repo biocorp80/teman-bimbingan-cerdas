@@ -783,22 +783,90 @@
             }
         }
 
-        async function goToStep10() {
-            showLoading("Menyusun Variabel & Hipotesis", "Mengidentifikasi konsep..."); updateProgress(10);
-            try {
-                const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. Identifikasi:
-                1. Definisi Operasional Variabel/Konsep Utama (Nama, Peran/Jenis, Definisi Singkat).
-                2. Hipotesis Penelitian (Jika Kuantitatif) ATAU Pertanyaan Penelitian/Proposisi (Jika Kualitatif/Pustaka).
-                JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
-                const data = await fetchAI(prompt, "Output akademik.");
-                savedHypothesisData = data; document.getElementById('hypo-title-display').innerText = finalTitle;
-                const vList=document.getElementById('variable-list'); vList.innerHTML=''; 
-                data.variables.forEach(v=>vList.innerHTML+=`<div class="p-3 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm"><span class="text-[10px] font-bold text-[#1A4AB6] uppercase tracking-widest">${v.role}</span><h5 class="font-bold text-sm text-slate-800 font-heading">${v.name}</h5><p class="text-xs text-slate-500 text-justify mt-1 leading-relaxed">${v.def}</p></div>`);
-                const hList=document.getElementById('hypothesis-list'); hList.innerHTML=''; 
-                data.hypotheses.forEach((h, i)=>hList.innerHTML+=`<div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 font-medium text-justify border border-teal-100 flex gap-3"><span class="font-bold text-[#1CB8A3]">H${i+1}</span> <span>${h}</span></div>`);
-                hideAll(); document.getElementById('step-10').classList.remove('hidden');
-            } catch(e) { alert("Error."); goToStep11(); }
-        }
+        // --- UPDATE FUNGSI INI AGAR HASILNYA RAPIH (PARSE MARKDOWN) ---
+
+async function goToStep10() {
+    showLoading("Menyusun Variabel & Hipotesis", "Mengidentifikasi konsep..."); updateProgress(10);
+    try {
+        const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. Identifikasi:
+        1. Definisi Operasional Variabel/Konsep Utama (Nama, Peran/Jenis, Definisi Singkat).
+        2. Hipotesis Penelitian (Jika Kuantitatif) ATAU Pertanyaan Penelitian/Proposisi (Jika Kualitatif/Pustaka).
+        JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
+        
+        const data = await fetchAI(prompt, "Output akademik.");
+        savedHypothesisData = data; 
+        document.getElementById('hypo-title-display').innerText = finalTitle;
+        
+        const vList = document.getElementById('variable-list'); vList.innerHTML = ''; 
+        data.variables.forEach(v => {
+            // Gunakan marked.parse untuk merapikan teks definisi
+            vList.innerHTML += `
+            <div class="p-4 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <h5 class="font-bold text-sm text-slate-800 font-heading">${v.name}</h5>
+                    <span class="text-[10px] font-bold text-[#1A4AB6] bg-blue-50 px-2 py-1 rounded uppercase tracking-widest border border-blue-100">${v.role}</span>
+                </div>
+                <div class="text-xs text-slate-600 text-justify leading-relaxed prose prose-sm max-w-none">
+                    ${marked.parse(v.def)}
+                </div>
+            </div>`;
+        });
+
+        const hList = document.getElementById('hypothesis-list'); hList.innerHTML = ''; 
+        data.hypotheses.forEach((h, i) => {
+            hList.innerHTML += `
+            <div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 font-medium text-justify border border-teal-100 flex gap-3 items-start">
+                <span class="font-bold text-[#1CB8A3] whitespace-nowrap mt-1">H${i+1}</span> 
+                <div class="leading-relaxed prose prose-sm max-w-none">${marked.parse(h)}</div>
+            </div>`;
+        });
+        
+        hideAll(); document.getElementById('step-10').classList.remove('hidden');
+    } catch(e) { console.error(e); alert("Gagal memproses respons AI. Coba lagi."); goToStep11(); }
+}
+
+async function goToStep11() {
+    showLoading("Finalisasi Dokumen", "Menyusun blueprint..."); updateProgress(11);
+    try {
+        const prompt = `Buat Blueprint Riset untuk Judul: "${finalTitle}". Metode: ${userData.metode}.
+        1. Langkah Pengumpulan Data (Konkret).
+        2. Langkah Analisis Data (Sesuai Metode).
+        JSON: { data_steps: [string], analysis_steps: [string] }`;
+        
+        const data = await fetchAI(prompt, "Output langkah teknis.");
+        savedPlanData = data; 
+        document.getElementById('final-context-display').innerText = `${userData.metode} | ${userData.jurusan}`;
+        
+        const dList = document.getElementById('data-steps'); dList.innerHTML = ''; 
+        data.data_steps.forEach(s => {
+            dList.innerHTML += `
+            <div class="flex items-start gap-3 group">
+                <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                <div class="text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
+                    ${marked.parse(s)}
+                </div>
+            </div>`;
+        });
+
+        const aList = document.getElementById('analysis-steps'); aList.innerHTML = ''; 
+        data.analysis_steps.forEach(s => {
+            aList.innerHTML += `
+            <div class="flex items-start gap-3 group">
+                <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                <div class="text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
+                    ${marked.parse(s)}
+                </div>
+            </div>`;
+        });
+        
+        // Reset buttons
+        abstractDone = false; instrumentsDone = false;
+        document.getElementById('generated-abstract').classList.add('hidden');
+        document.getElementById('generated-instruments').classList.add('hidden');
+        
+        hideAll(); document.getElementById('step-11').classList.remove('hidden');
+    } catch(e) { console.error(e); alert("Error."); hideAll(); document.getElementById('step-10').classList.remove('hidden'); }
+}
 
         async function goToStep11() {
             showLoading("Finalisasi Dokumen", "Menyusun blueprint..."); updateProgress(11);
