@@ -5,54 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dosbing.ai - Research Path (Client Edition)</title>
     
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* BRAND COLORS */
+        /* ============================================
+           CSS VARIABLES & BASE STYLES
+           ============================================ */
         :root {
             --brand-blue: #1A4AB6;
             --brand-teal: #1CB8A3;
+            --transition-speed: 0.3s;
         }
 
-        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; color: #334155; }
-        h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Montserrat', sans-serif; }
-        
-        /* Custom Utilities */
+        * {
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f8fafc; 
+            color: #334155; 
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-heading { 
+            font-family: 'Montserrat', sans-serif; 
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
         .text-brand-blue { color: var(--brand-blue); }
         .text-brand-teal { color: var(--brand-teal); }
         .bg-brand-blue { background-color: var(--brand-blue); }
         .bg-brand-teal { background-color: var(--brand-teal); }
         .border-brand-blue { border-color: var(--brand-blue); }
-        
-        /* Gradient Button - Brand Style */
+
+        /* Gradient Button */
         .step-gradient { 
             background: linear-gradient(90deg, #1A4AB6 0%, #1CB8A3 100%); 
-            transition: all 0.3s ease;
+            transition: all var(--transition-speed) ease;
         }
         .step-gradient:hover {
             box-shadow: 0 10px 15px -3px rgba(26, 74, 182, 0.3);
             filter: brightness(1.05);
+            transform: translateY(-1px);
         }
 
-        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-        
-        /* Animations */
-        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+        .card-shadow { 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeIn { 
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
+
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+
+        .fade-in { 
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; 
+            opacity: 0; 
+        }
+
         .stagger-1 { animation-delay: 100ms; }
         .stagger-2 { animation-delay: 200ms; }
         .stagger-3 { animation-delay: 300ms; }
         .stagger-4 { animation-delay: 400ms; }
-        
-        /* Loading Spinner */
+
+        /* ============================================
+           LOADING SPINNER
+           ============================================ */
         .loading-spinner {
             border: 3px solid #e2e8f0;
             border-top: 3px solid var(--brand-blue);
@@ -61,25 +107,38 @@
             height: 40px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* UI Components from V2 (Restored) */
+        /* ============================================
+           TITLE OPTIONS & CARDS
+           ============================================ */
         .title-option {
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             border: 1px solid #e2e8f0;
             background: #fff;
         }
-        .title-option:hover { border-color: var(--brand-blue); background: #eff6ff; }
+        .title-option:hover { 
+            border-color: var(--brand-blue); 
+            background: #eff6ff; 
+        }
         .title-option.selected {
             border-color: var(--brand-blue);
             background: #eff6ff;
             box-shadow: 0 0 0 2px rgba(26, 74, 182, 0.1);
         }
 
-        .option-card { transition: all 0.2s ease; }
-        .option-card:hover { transform: translateY(-4px); border-color: var(--brand-blue); }
-        
+        .option-card { 
+            transition: all 0.2s ease; 
+        }
+        .option-card:hover { 
+            transform: translateY(-4px); 
+            border-color: var(--brand-blue); 
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ============================================
+           SCORE CIRCLES
+           ============================================ */
         .score-circle {
             width: 70px;
             height: 70px;
@@ -94,8 +153,10 @@
             position: relative;
             transition: border-color 1s ease, transform 0.3s ease;
         }
-        
-        /* Progress Bar (V2 Style with Brand Colors) */
+
+        /* ============================================
+           PROGRESS BAR
+           ============================================ */
         .progress-line-container {
             position: absolute;
             top: 7px; 
@@ -105,12 +166,14 @@
             background: #e2e8f0;
             z-index: 1;
         }
+
         .progress-line-fill {
             height: 100%;
             background: var(--brand-blue);
             width: 0%;
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .step-item {
             position: relative;
             z-index: 10;
@@ -119,6 +182,7 @@
             align-items: center;
             min-width: 50px;
         }
+
         .step-dot {
             width: 16px;
             height: 16px;
@@ -131,6 +195,7 @@
             color: white;
             border: 2px solid white;
         }
+
         .step-label {
             font-size: 9px;
             font-weight: 700;
@@ -141,898 +206,1513 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* 5W1H Cards */
+        /* ============================================
+           ANALYSIS CARDS
+           ============================================ */
         .analysis-card {
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 16px;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
-        .analysis-card:hover { border-color: var(--brand-blue); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .analysis-card:hover { 
+            border-color: var(--brand-blue); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+        }
 
-        /* Modal */
-        .modal { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; }
-        .modal.active { opacity: 1; pointer-events: auto; }
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal { 
+            transition: opacity var(--transition-speed) ease; 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+        .modal.active { 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
 
+        /* ============================================
+           SCROLLBAR
+           ============================================ */
+        ::-webkit-scrollbar { 
+            width: 6px; 
+            height: 6px; 
+        }
+        ::-webkit-scrollbar-track { 
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 3px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { 
+            background: #94a3b8; 
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
         @media (max-width: 640px) {
-            .score-circle { width: 60px; height: 60px; border-width: 3px; }
-            .score-val { font-size: 1rem; }
+            .score-circle { 
+                width: 60px; 
+                height: 60px; 
+                border-width: 3px; 
+            }
+            .score-val { 
+                font-size: 1rem; 
+            }
         }
-        
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* ============================================
+           PRINT STYLES
+           ============================================ */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
+
 <body class="text-slate-800 antialiased selection:bg-[#1A4AB6] selection:text-white">
 
-    <div class="min-h-screen flex flex-col">
-        <nav class="bg-white/90 backdrop-blur-lg border-b border-slate-200 px-6 py-4 sticky top-0 z-50 no-print">
-            <div class="max-w-6xl mx-auto flex justify-between items-center">
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="location.reload()">
-                    <div class="flex flex-col">
-                        <div class="font-heading font-extrabold text-2xl tracking-tighter leading-none">
-                            <span class="text-[#1A4AB6]">Dosbing</span><span class="text-[#1CB8A3]">.ai</span>
+    <!-- ============================================
+         NAVIGATION BAR
+         ============================================ -->
+    <nav class="bg-white/90 backdrop-blur-lg border-b border-slate-200 px-6 py-4 sticky top-0 z-50 no-print">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="location.reload()">
+                <div class="flex flex-col">
+                    <div class="font-heading font-extrabold text-2xl tracking-tighter leading-none">
+                        <span class="text-[#1A4AB6]">Dosbing</span><span class="text-[#1CB8A3]">.ai</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                        Teman Bimbingan Cerdas
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="flex-grow p-4 md:p-8 bg-slate-50/50">
+        <div class="max-w-5xl mx-auto">
+            
+            <!-- Progress Bar -->
+            <div class="mb-10 no-print overflow-x-auto pb-4 px-2">
+                <div class="min-w-[700px] relative"> 
+                    <div class="progress-line-container">
+                        <div id="progress-fill" class="progress-line-fill"></div>
+                    </div>
+                    <div class="flex justify-between w-full">
+                        <div class="step-item" id="step-node-1">
+                            <div class="step-dot bg-[#1A4AB6] ring-4 ring-blue-50" id="dot-1"></div>
+                            <span class="step-label text-[#1A4AB6]">Bio</span>
                         </div>
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Teman Bimbingan Cerdas</span>
+                        <div class="step-item" id="step-node-2">
+                            <div class="step-dot bg-slate-200" id="dot-2"></div>
+                            <span class="step-label text-slate-400">Objek</span>
+                        </div>
+                        <div class="step-item" id="step-node-3">
+                            <div class="step-dot bg-slate-200" id="dot-3"></div>
+                            <span class="step-label text-slate-400">Gap</span>
+                        </div>
+                        <div class="step-item" id="step-node-4">
+                            <div class="step-dot bg-slate-200" id="dot-4"></div>
+                            <span class="step-label text-slate-400">Validasi</span>
+                        </div>
+                        <div class="step-item" id="step-node-5">
+                            <div class="step-dot bg-slate-200" id="dot-5"></div>
+                            <span class="step-label text-slate-400">Metode</span>
+                        </div>
+                        <div class="step-item" id="step-node-6">
+                            <div class="step-dot bg-slate-200" id="dot-6"></div>
+                            <span class="step-label text-slate-400">Judul</span>
+                        </div>
+                        <div class="step-item" id="step-node-7">
+                            <div class="step-dot bg-slate-200" id="dot-7"></div>
+                            <span class="step-label text-slate-400">Revisi</span>
+                        </div>
+                        <div class="step-item" id="step-node-8">
+                            <div class="step-dot bg-slate-200" id="dot-8"></div>
+                            <span class="step-label text-slate-400">Baku</span>
+                        </div>
+                        <div class="step-item" id="step-node-9">
+                            <div class="step-dot bg-slate-200" id="dot-9"></div>
+                            <span class="step-label text-slate-400">Telaah</span>
+                        </div>
+                        <div class="step-item" id="step-node-10">
+                            <div class="step-dot bg-slate-200" id="dot-10"></div>
+                            <span class="step-label text-slate-400">Hipo</span>
+                        </div>
+                        <div class="step-item" id="step-node-11">
+                            <div class="step-dot bg-slate-200" id="dot-11"></div>
+                            <span class="step-label text-slate-400">Final</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </nav>
 
-        <main class="flex-grow p-4 md:p-8 bg-slate-50/50">
-            <div class="max-w-5xl mx-auto">
+            <!-- STEP 1: Identitas Peneliti -->
+            <div id="step-1" class="fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full -mr-32 -mt-32 opacity-50 blur-3xl pointer-events-none"></div>
                 
-                <div class="mb-10 no-print overflow-x-auto pb-4 px-2">
-                    <div class="min-w-[700px] relative"> 
-                        <div class="progress-line-container"><div id="progress-fill" class="progress-line-fill"></div></div>
-                        <div class="flex justify-between w-full">
-                            <div class="step-item" id="step-node-1"><div class="step-dot bg-[#1A4AB6] ring-4 ring-blue-50" id="dot-1"></div><span class="step-label text-[#1A4AB6]">Bio</span></div>
-                            <div class="step-item" id="step-node-2"><div class="step-dot bg-slate-200" id="dot-2"></div><span class="step-label text-slate-400">Objek</span></div>
-                            <div class="step-item" id="step-node-3"><div class="step-dot bg-slate-200" id="dot-3"></div><span class="step-label text-slate-400">Gap</span></div>
-                            <div class="step-item" id="step-node-4"><div class="step-dot bg-slate-200" id="dot-4"></div><span class="step-label text-slate-400">Validasi</span></div>
-                            <div class="step-item" id="step-node-5"><div class="step-dot bg-slate-200" id="dot-5"></div><span class="step-label text-slate-400">Metode</span></div>
-                            <div class="step-item" id="step-node-6"><div class="step-dot bg-slate-200" id="dot-6"></div><span class="step-label text-slate-400">Judul</span></div>
-                            <div class="step-item" id="step-node-7"><div class="step-dot bg-slate-200" id="dot-7"></div><span class="step-label text-slate-400">Revisi</span></div>
-                            <div class="step-item" id="step-node-8"><div class="step-dot bg-slate-200" id="dot-8"></div><span class="step-label text-slate-400">Baku</span></div>
-                            <div class="step-item" id="step-node-9"><div class="step-dot bg-slate-200" id="dot-9"></div><span class="step-label text-slate-400">Telaah</span></div>
-                            <div class="step-item" id="step-node-10"><div class="step-dot bg-slate-200" id="dot-10"></div><span class="step-label text-slate-400">Hipo</span></div>
-                            <div class="step-item" id="step-node-11"><div class="step-dot bg-slate-200" id="dot-11"></div><span class="step-label text-slate-400">Final</span></div>
+                <h2 class="text-2xl font-bold font-heading mb-6 text-slate-900 flex items-center">
+                    <i class="fas fa-user-graduate text-[#1A4AB6] mr-3"></i>
+                    Identitas Peneliti
+                </h2>
+                
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Nama Mahasiswa</label>
+                            <input type="text" id="nama" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] focus:ring-1 focus:ring-[#1A4AB6] outline-none transition-all">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Jenis Kelamin</label>
+                            <select id="gender" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none">
+                                <option value="" disabled selected>Pilih...</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
                         </div>
                     </div>
-                </div>
 
-                <div id="step-1" class="fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full -mr-32 -mt-32 opacity-50 blur-3xl pointer-events-none"></div>
-                    <h2 class="text-2xl font-bold font-heading mb-6 text-slate-900 flex items-center">
-                        <i class="fas fa-user-graduate text-[#1A4AB6] mr-3"></i>
-                        Identitas Peneliti
-                    </h2>
-                    
-                    <div class="space-y-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Nama Mahasiswa</label><input type="text" id="nama" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] focus:ring-1 focus:ring-[#1A4AB6] outline-none transition-all"></div>
-                            <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Jenis Kelamin</label><select id="gender" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none"><option value="" disabled selected>Pilih...</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Fakultas</label>
+                            <input type="text" id="fakultas" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none">
                         </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Jurusan / Prodi</label>
+                            <input type="text" id="jurusan" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none">
+                        </div>
+                    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Fakultas</label><input type="text" id="fakultas" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none"></div>
-                            <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Jurusan / Prodi</label><input type="text" id="jurusan" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none"></div>
-                        </div>
-
-                        <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Perguruan Tinggi</label><input type="text" id="universitas" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none"></div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-                             <div class="space-y-1">
-                                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1A4AB6]">Minat Kajian / Konsentrasi</label>
-                                <input type="text" id="minat" placeholder="Contoh: Audit, Psikologi Klinis, Hukum Pidana" class="w-full px-4 py-3 rounded-lg bg-white border-2 border-blue-50 focus:border-[#1A4AB6] outline-none">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1CB8A3]">Bahasa Penulisan</label>
-                                <select id="bahasa" class="w-full px-4 py-3 rounded-lg bg-teal-50 border border-teal-100 focus:border-[#1CB8A3] outline-none font-medium">
-                                    <option value="Indonesia" selected>Bahasa Indonesia</option>
-                                    <option value="Inggris">English (International)</option>
-                                    <option value="Arab">Bahasa Arab</option>
-                                    <option value="Asing Lainnya">Bahasa Asing Lainnya</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Perguruan Tinggi</label>
+                        <input type="text" id="universitas" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none">
                     </div>
                     
-                    <div class="mt-8 flex justify-end">
-                        <button onclick="goToStep2()" class="step-gradient text-white font-heading font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center space-x-2">
-                            <span>Mulai Riset</span><i class="fas fa-arrow-right text-sm"></i>
-                        </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1A4AB6]">Minat Kajian / Konsentrasi</label>
+                            <input type="text" id="minat" placeholder="Contoh: Audit, Psikologi Klinis, Hukum Pidana" class="w-full px-4 py-3 rounded-lg bg-white border-2 border-blue-50 focus:border-[#1A4AB6] outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1CB8A3]">Bahasa Penulisan</label>
+                            <select id="bahasa" class="w-full px-4 py-3 rounded-lg bg-teal-50 border border-teal-100 focus:border-[#1CB8A3] outline-none font-medium">
+                                <option value="Indonesia" selected>Bahasa Indonesia</option>
+                                <option value="Inggris">English (International)</option>
+                                <option value="Arab">Bahasa Arab</option>
+                                <option value="Asing Lainnya">Bahasa Asing Lainnya</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-
-                <div id="step-2" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Tentukan Objek Penelitian</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Pilih lokus atau subjek yang spesifik sesuai kajian Anda.</p>
-                    <div class="space-y-4 max-w-2xl mx-auto">
-                        <input type="text" id="custom-object" placeholder="Ketik objek..." class="w-full px-5 py-4 rounded-xl border border-slate-300 outline-none focus:border-[#1A4AB6] text-lg shadow-sm">
-                        <button id="ai-object-btn" onclick="fetchAIObjects()" class="w-full bg-blue-50 hover:bg-blue-100 text-[#1A4AB6] font-bold font-heading py-3 rounded-xl border border-blue-200 transition-colors flex items-center justify-center gap-2 text-sm"><i class="fas fa-robot"></i> Minta Rekomendasi AI</button>
-                        <div id="ai-objects-list" class="hidden grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-                    </div>
-                    <div class="flex justify-between mt-10"><button onclick="backToStep1()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep3()" class="bg-slate-900 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-black font-heading">Lanjut</button></div>
+                
+                <div class="mt-8 flex justify-end">
+                    <button onclick="App.goToStep2()" class="step-gradient text-white font-heading font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center space-x-2">
+                        <span>Mulai Riset</span>
+                        <i class="fas fa-arrow-right text-sm"></i>
+                    </button>
                 </div>
+            </div>
 
-                <div id="step-3" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Gap (Masalah)</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Fenomena atau kesenjangan yang terjadi di lapangan.</p>
-                    <div class="space-y-4 max-w-2xl mx-auto">
-                        <input type="text" id="custom-problem" placeholder="Ketik masalah..." class="w-full px-5 py-4 rounded-xl border border-slate-300 outline-none focus:border-[#1A4AB6] text-lg shadow-sm">
-                        <button id="ai-problem-btn" onclick="fetchAIMasalah()" class="w-full bg-blue-50 hover:bg-blue-100 text-[#1A4AB6] font-bold font-heading py-3 rounded-xl border border-blue-200 transition-colors flex items-center justify-center gap-2 text-sm"><i class="fas fa-search-plus"></i> Identifikasi Masalah AI</button>
-                        <div id="ai-problems-list" class="hidden grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-                    </div>
-                    <div class="flex justify-between mt-10"><button onclick="backToStep2()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep4()" class="bg-slate-900 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-black font-heading">Lanjut</button></div>
+            <!-- STEP 2: Objek Penelitian -->
+            <div id="step-2" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Tentukan Objek Penelitian</h2>
+                <p class="text-slate-500 mb-6 text-sm">Pilih lokus atau subjek yang spesifik sesuai kajian Anda.</p>
+                
+                <div class="space-y-4 max-w-2xl mx-auto">
+                    <input type="text" id="custom-object" placeholder="Ketik objek..." class="w-full px-5 py-4 rounded-xl border border-slate-300 outline-none focus:border-[#1A4AB6] text-lg shadow-sm">
+                    <button id="ai-object-btn" onclick="App.fetchAIObjects()" class="w-full bg-blue-50 hover:bg-blue-100 text-[#1A4AB6] font-bold font-heading py-3 rounded-xl border border-blue-200 transition-colors flex items-center justify-center gap-2 text-sm">
+                        <i class="fas fa-robot"></i> Minta Rekomendasi AI
+                    </button>
+                    <div id="ai-objects-list" class="hidden grid grid-cols-2 md:grid-cols-3 gap-3"></div>
                 </div>
+                
+                <div class="flex justify-between mt-10">
+                    <button onclick="App.backToStep1()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button>
+                    <button onclick="App.goToStep3()" class="bg-slate-900 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-black font-heading">Lanjut</button>
+                </div>
+            </div>
 
-                <div id="step-4" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Validasi Akademik</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Memastikan linieritas antara Prodi, Minat, dan Masalah.</p>
-                    <div class="space-y-6 max-w-2xl mx-auto text-center">
-                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl">
-                            <div class="flex flex-wrap justify-center items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
-                                <span class="bg-white text-slate-600 px-3 py-1 rounded border" id="display-jurusan"></span>
-                                <i class="fas fa-arrow-right text-slate-300"></i>
-                                <span class="bg-white text-slate-600 px-3 py-1 rounded border" id="display-objek"></span>
-                                <i class="fas fa-arrow-right text-slate-300"></i>
-                                <span class="bg-white text-slate-600 px-3 py-1 rounded border" id="display-masalah"></span>
+            <!-- STEP 3: Research Gap -->
+            <div id="step-3" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Gap (Masalah)</h2>
+                <p class="text-slate-500 mb-6 text-sm">Fenomena atau kesenjangan yang terjadi di lapangan.</p>
+                
+                <div class="space-y-4 max-w-2xl mx-auto">
+                    <input type="text" id="custom-problem" placeholder="Ketik masalah..." class="w-full px-5 py-4 rounded-xl border border-slate-300 outline-none focus:border-[#1A4AB6] text-lg shadow-sm">
+                    <button id="ai-problem-btn" onclick="App.fetchAIMasalah()" class="w-full bg-blue-50 hover:bg-blue-100 text-[#1A4AB6] font-bold font-heading py-3 rounded-xl border border-blue-200 transition-colors flex items-center justify-center gap-2 text-sm">
+                        <i class="fas fa-search-plus"></i> Identifikasi Masalah AI
+                    </button>
+                    <div id="ai-problems-list" class="hidden grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+                
+                <div class="flex justify-between mt-10">
+                    <button onclick="App.backToStep2()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button>
+                    <button onclick="App.goToStep4()" class="bg-slate-900 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-black font-heading">Lanjut</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Validasi -->
+            <div id="step-4" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Validasi Akademik</h2>
+                <p class="text-slate-500 mb-6 text-sm">Memastikan linieritas antara Prodi, Minat, dan Masalah.</p>
+                
+                <div class="space-y-6 max-w-2xl mx-auto text-center">
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl">
+                        <div class="flex flex-wrap justify-center items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
+                            <span class="bg-white text-slate-600 px-3 py-1 rounded border" id="display-jurusan"></span>
+                            <i class="fas fa-arrow-right text-slate-300"></i>
+                            <span class="bg-white text-slate-600 px-3 py-1 rounded border" id="display-objek"></span>
+                            <i class="fas fa-arrow-right text-slate-300"></i>
+                            <span class="bg-white text-slate-600 px-3 py-1 rounded border" id="display-masalah"></span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="App.fetchAIConnectionAnalysis()" id="btn-analisis-kaitan" class="w-full bg-slate-800 text-white font-bold font-heading py-4 rounded-xl shadow hover:bg-slate-900 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-check-double"></i> Cek Kelayakan
+                    </button>
+                    
+                    <div id="connection-analysis-result" class="hidden text-left p-5 rounded-xl text-sm leading-relaxed border transition-all"></div>
+                </div>
+                
+                <div class="flex justify-between mt-10">
+                    <button onclick="App.backToStep3()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button>
+                    <button id="btn-next-step-5" onclick="App.goToStep5()" disabled class="bg-slate-200 text-slate-400 font-bold font-heading py-3 px-8 rounded-lg cursor-not-allowed">Lanjut Metode</button>
+                </div>
+            </div>
+
+            <!-- STEP 5: Metode -->
+            <div id="step-5" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 text-center">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Pilih Pendekatan Riset</h2>
+                <p class="text-slate-500 mb-8 text-sm">Sesuaikan dengan data yang tersedia.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                    <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-kuanti" onclick="App.selectMethod('Kuantitatif')">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fas fa-chart-bar text-6xl text-[#1A4AB6]"></i>
+                        </div>
+                        <h4 class="font-bold font-heading text-slate-900 mb-1">Kuantitatif</h4>
+                        <p class="text-[11px] text-slate-500">Uji hipotesis, statistik, pengaruh/hubungan antar variabel.</p>
+                    </div>
+                    
+                    <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-kuali" onclick="App.selectMethod('Kualitatif')">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fas fa-comments text-6xl text-[#1CB8A3]"></i>
+                        </div>
+                        <h4 class="font-bold font-heading text-slate-900 mb-1">Kualitatif</h4>
+                        <p class="text-[11px] text-slate-500">Eksplorasi mendalam, wawancara, observasi, studi kasus.</p>
+                    </div>
+                    
+                    <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-mix" onclick="App.selectMethod('Mixed Method')">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fas fa-layer-group text-6xl text-purple-600"></i>
+                        </div>
+                        <h4 class="font-bold font-heading text-slate-900 mb-1">Mixed Method</h4>
+                        <p class="text-[11px] text-slate-500">Kombinasi Kualitatif & Kuantitatif untuk analisis komprehensif.</p>
+                    </div>
+                    
+                    <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-pustaka" onclick="App.selectMethod('Studi Pustaka')">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fas fa-book-open text-6xl text-amber-600"></i>
+                        </div>
+                        <h4 class="font-bold font-heading text-slate-900 mb-1">Studi Pustaka</h4>
+                        <p class="text-[11px] text-slate-500">Literature review sistematis (SLR) atau analisis bibliometrik.</p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-10">
+                    <button onclick="App.backToStep4()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button>
+                    <button onclick="App.goToStep6()" class="step-gradient text-white font-bold font-heading py-3 px-10 rounded-lg shadow-lg hover:shadow-xl">Generate Judul</button>
+                </div>
+            </div>
+
+            <!-- STEP 6: Pilih Judul -->
+            <div id="step-6" class="hidden space-y-6 pb-20 fade-in">
+                <div class="flex justify-between items-center bg-white p-6 rounded-2xl card-shadow border border-slate-200">
+                    <div>
+                        <h2 class="text-xl font-bold font-heading text-slate-900">Opsi Judul Skripsi</h2>
+                        <p id="context-summary" class="text-xs text-[#1A4AB6] font-bold uppercase tracking-wide mt-1"></p>
+                    </div>
+                </div>
+                
+                <div id="topics-list" class="space-y-6"></div>
+                
+                <div id="sticky-action" class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-200 p-4 shadow-2xl z-40 transform translate-y-full transition-transform duration-300">
+                    <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+                        <div class="flex-1 overflow-hidden">
+                            <p class="text-[10px] uppercase font-bold text-slate-400">Terpilih:</p>
+                            <p id="selected-title-preview" class="text-sm font-bold text-slate-900 truncate italic">Pilih satu judul...</p>
+                        </div>
+                        <button id="btn-to-step-7" onclick="App.goToStep7()" disabled class="px-6 py-3 bg-slate-200 text-slate-400 font-bold font-heading rounded-lg cursor-not-allowed transition-all text-sm">Lanjut</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 7: Refinement -->
+            <div id="step-7" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Refinement (Revisi)</h2>
+                <p class="text-slate-500 mb-6 text-sm">Sesuaikan narasi judul agar lebih tajam.</p>
+                
+                <div class="space-y-6">
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl">
+                        <p id="chosen-title-display" class="font-heading text-lg font-bold text-slate-800 leading-snug"></p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="App.setRepairInstruction('Persempit ruang lingkup')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">Persempit Lingkup</button>
+                        <button onclick="App.setRepairInstruction('Tambahkan lokasi spesifik')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">+ Lokasi</button>
+                        <button onclick="App.setRepairInstruction('Gunakan istilah yang lebih formal')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">Lebih Formal</button>
+                        <button onclick="App.setRepairInstruction('Ubah menjadi studi kasus')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">Studi Kasus</button>
+                    </div>
+                    
+                    <div id="repair-input-box" class="relative">
+                        <textarea id="repair-instruction" placeholder="Instruksi revisi (misal: ganti variabel X menjadi...)" class="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 outline-none focus:border-[#1A4AB6] h-24 text-sm"></textarea>
+                        <button id="btn-repair" onclick="App.repairTitle()" class="absolute bottom-3 right-3 bg-slate-800 text-white text-[10px] font-bold py-2 px-3 rounded hover:bg-black uppercase tracking-wider">Perbaiki AI</button>
+                    </div>
+                    
+                    <div id="comparison-area" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div id="opt-original" onclick="App.selectFinalTitle('original')" class="title-option p-4 rounded-xl cursor-pointer group">
+                            <span class="bg-slate-100 text-slate-500 rounded px-2 py-1 text-[9px] font-bold uppercase">Original</span>
+                            <p id="text-original" class="font-semibold text-slate-700 text-sm mt-2 font-heading"></p>
+                        </div>
+                        <div id="opt-repaired" onclick="App.selectFinalTitle('repaired')" class="title-option p-4 rounded-xl cursor-pointer group">
+                            <span class="bg-blue-100 text-[#1A4AB6] rounded px-2 py-1 text-[9px] font-bold uppercase">Revisi AI</span>
+                            <p id="text-repaired" class="font-semibold text-slate-900 text-sm mt-2 font-heading"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-10">
+                    <button onclick="App.backToStep6()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Pilih Lain</button>
+                    <button onclick="App.goToStep8()" class="bg-slate-900 text-white font-bold font-heading py-3 px-8 rounded-lg shadow-lg hover:bg-black">Standarisasi</button>
+                </div>
+            </div>
+
+            <!-- STEP 8: Standarisasi -->
+            <div id="step-8" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Standarisasi Bahasa</h2>
+                <p class="text-slate-500 mb-6 text-sm">Memastikan tata bahasa sesuai kaidah akademik.</p>
+                
+                <div id="standardization-loading" class="py-10 text-center">
+                    <div class="loading-spinner mb-4 mx-auto"></div>
+                    <p class="text-sm font-bold text-[#1A4AB6]">Checking grammar...</p>
+                </div>
+                
+                <div id="standardization-result" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div onclick="App.selectStandardization('raw')" id="std-opt-raw" class="title-option p-5 rounded-xl cursor-pointer border border-slate-200">
+                            <span class="bg-slate-100 text-slate-500 rounded px-2 py-1 text-[9px] font-bold uppercase">Draft Sebelumnya</span>
+                            <p id="std-title-raw" class="font-semibold text-slate-600 text-sm mt-2"></p>
+                        </div>
+                        <div onclick="App.selectStandardization('std')" id="std-opt-std" class="title-option p-5 rounded-xl cursor-pointer border border-[#1CB8A3] bg-teal-50/30">
+                            <span class="bg-teal-100 text-[#1CB8A3] rounded px-2 py-1 text-[9px] font-bold uppercase">Saran Baku ✨</span>
+                            <p id="std-title-std" class="font-heading font-bold text-slate-900 text-lg mt-2 leading-relaxed"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button onclick="App.goToStep9()" class="step-gradient text-white font-bold font-heading py-3 px-8 rounded-lg shadow-lg hover:shadow-xl">Lanjut Telaah</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 9: Telaah Akademik -->
+            <div id="step-9" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 text-center">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Telaah Akademik (Feasibility)</h2>
+                
+                <div id="analysis-loading" class="py-16">
+                    <div class="loading-spinner mb-6 mx-auto"></div>
+                    <p class="text-sm font-bold text-[#1A4AB6] animate-pulse">Deep Analysis...</p>
+                </div>
+                
+                <div id="analysis-result" class="hidden">
+                    <div class="bg-slate-50 p-6 rounded-xl mb-10 border border-slate-100">
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Judul Final</h3>
+                        <p id="analyzed-title" class="font-bold text-lg text-slate-800 font-heading"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                        <div class="flex flex-col items-center">
+                            <div id="score-circle-urgency" class="score-circle mb-3">
+                                <span id="score-urgency-val" class="text-lg font-extrabold text-slate-800">0%</span>
                             </div>
+                            <h4 class="font-bold text-slate-700 text-xs uppercase">Urgency</h4>
                         </div>
-                        <button onclick="fetchAIConnectionAnalysis()" id="btn-analisis-kaitan" class="w-full bg-slate-800 text-white font-bold font-heading py-4 rounded-xl shadow hover:bg-slate-900 transition-all flex items-center justify-center gap-2"><i class="fas fa-check-double"></i> Cek Kelayakan</button>
-                        <div id="connection-analysis-result" class="hidden text-left p-5 rounded-xl text-sm leading-relaxed border transition-all"></div>
+                        <div class="flex flex-col items-center">
+                            <div id="score-circle-novelty" class="score-circle mb-3">
+                                <span id="score-novelty-val" class="text-lg font-extrabold text-slate-800">0%</span>
+                            </div>
+                            <h4 class="font-bold text-slate-700 text-xs uppercase">Novelty</h4>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div id="score-circle-relevance" class="score-circle mb-3">
+                                <span id="score-relevance-val" class="text-lg font-extrabold text-slate-800">0%</span>
+                            </div>
+                            <h4 class="font-bold text-slate-700 text-xs uppercase">Relevance</h4>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div id="score-circle-feasibility" class="score-circle mb-3">
+                                <span id="score-feasibility-val" class="text-lg font-extrabold text-slate-800">0%</span>
+                            </div>
+                            <h4 class="font-bold text-slate-700 text-xs uppercase">Feasibility</h4>
+                        </div>
                     </div>
-                    <div class="flex justify-between mt-10"><button onclick="backToStep3()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button id="btn-next-step-5" onclick="goToStep5()" disabled class="bg-slate-200 text-slate-400 font-bold font-heading py-3 px-8 rounded-lg cursor-not-allowed">Lanjut Metode</button></div>
+                    
+                    <div id="analysis-feedback-container" class="text-left space-y-4"></div>
+                    
+                    <div id="analysis-conclusion" class="mt-8 p-5 bg-blue-50 rounded-xl border border-blue-100 text-left">
+                        <h4 class="font-bold text-[#1A4AB6] mb-2 text-sm">Kesimpulan Sintesis:</h4>
+                        <p id="synthesis-text" class="text-sm text-slate-700 text-justify italic"></p>
+                    </div>
+                    
+                    <div id="analysis-actions" class="space-y-4 mt-8"></div>
                 </div>
+            </div>
 
-                <div id="step-5" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 text-center">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Pilih Pendekatan Riset</h2>
-                    <p class="text-slate-500 mb-8 text-sm">Sesuaikan dengan data yang tersedia.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                        <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-kuanti" onclick="selectMethod('Kuantitatif')">
-                            <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-chart-bar text-6xl text-[#1A4AB6]"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Kuantitatif</h4>
-                            <p class="text-[11px] text-slate-500">Uji hipotesis, statistik, pengaruh/hubungan antar variabel.</p>
-                        </div>
-                        <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-kuali" onclick="selectMethod('Kualitatif')">
-                            <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-comments text-6xl text-[#1CB8A3]"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Kualitatif</h4>
-                            <p class="text-[11px] text-slate-500">Eksplorasi mendalam, wawancara, observasi, studi kasus.</p>
-                        </div>
-                        <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-mix" onclick="selectMethod('Mixed Method')">
-                             <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-layer-group text-6xl text-purple-600"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Mixed Method</h4>
-                            <p class="text-[11px] text-slate-500">Kombinasi Kualitatif & Kuantitatif untuk analisis komprehensif.</p>
-                        </div>
-                         <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-pustaka" onclick="selectMethod('Studi Pustaka')">
-                             <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-book-open text-6xl text-amber-600"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Studi Pustaka</h4>
-                            <p class="text-[11px] text-slate-500">Literature review sistematis (SLR) atau analisis bibliometrik.</p>
-                        </div>
+            <!-- STEP 10: Hipotesis -->
+            <div id="step-10" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
+                <h2 class="text-xl font-bold font-heading mb-6 text-slate-900">Konsep & Hipotesis</h2>
+                
+                <div id="hypothesis-container">
+                    <div class="mb-6">
+                        <h2 id="hypo-title-display" class="font-heading text-lg font-bold text-slate-900"></h2>
                     </div>
-                    <div class="flex justify-between mt-10"><button onclick="backToStep4()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep6()" class="step-gradient text-white font-bold font-heading py-3 px-10 rounded-lg shadow-lg hover:shadow-xl">Generate Judul</button></div>
-                </div>
-
-                <div id="step-6" class="hidden space-y-6 pb-20 fade-in">
-                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl card-shadow border border-slate-200">
-                        <div>
-                            <h2 class="text-xl font-bold font-heading text-slate-900">Opsi Judul Skripsi</h2>
-                            <p id="context-summary" class="text-xs text-[#1A4AB6] font-bold uppercase tracking-wide mt-1"></p>
-                        </div>
-                    </div>
-                    <div id="topics-list" class="space-y-6"></div>
-                    <div id="sticky-action" class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-200 p-4 shadow-2xl z-40 transform translate-y-full transition-transform duration-300">
-                        <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
-                            <div class="flex-1 overflow-hidden"><p class="text-[10px] uppercase font-bold text-slate-400">Terpilih:</p><p id="selected-title-preview" class="text-sm font-bold text-slate-900 truncate italic">Pilih satu judul...</p></div>
-                            <button id="btn-to-step-7" onclick="goToStep7()" disabled class="px-6 py-3 bg-slate-200 text-slate-400 font-bold font-heading rounded-lg cursor-not-allowed transition-all text-sm">Lanjut</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="step-7" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Refinement (Revisi)</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Sesuaikan narasi judul agar lebih tajam.</p>
+                    
                     <div class="space-y-6">
-                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl"><p id="chosen-title-display" class="font-heading text-lg font-bold text-slate-800 leading-snug"></p></div>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="setRepairInstruction('Persempit ruang lingkup')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">Persempit Lingkup</button>
-                            <button onclick="setRepairInstruction('Tambahkan lokasi spesifik')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">+ Lokasi</button>
-                            <button onclick="setRepairInstruction('Gunakan istilah yang lebih formal')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">Lebih Formal</button>
-                            <button onclick="setRepairInstruction('Ubah menjadi studi kasus')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-bold text-slate-600">Studi Kasus</button>
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">
+                                <i class="fas fa-cubes mr-2 text-[#1A4AB6]"></i> Definisi Operasional
+                            </h4>
+                            <div id="variable-list" class="grid grid-cols-1 gap-4"></div>
                         </div>
-                        <div id="repair-input-box" class="relative">
-                            <textarea id="repair-instruction" placeholder="Instruksi revisi (misal: ganti variabel X menjadi...)" class="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 outline-none focus:border-[#1A4AB6] h-24 text-sm"></textarea>
-                            <button id="btn-repair" onclick="repairTitle()" class="absolute bottom-3 right-3 bg-slate-800 text-white text-[10px] font-bold py-2 px-3 rounded hover:bg-black uppercase tracking-wider">Perbaiki AI</button>
+                        
+                        <div>
+                            <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">
+                                <i class="fas fa-list-ol mr-2 text-[#1CB8A3]"></i> Hipotesis / Proposisi
+                            </h4>
+                            <div id="hypothesis-list" class="space-y-3"></div>
                         </div>
-                        <div id="comparison-area" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div id="opt-original" onclick="selectFinalTitle('original')" class="title-option p-4 rounded-xl cursor-pointer group"><span class="bg-slate-100 text-slate-500 rounded px-2 py-1 text-[9px] font-bold uppercase">Original</span><p id="text-original" class="font-semibold text-slate-700 text-sm mt-2 font-heading"></p></div>
-                            <div id="opt-repaired" onclick="selectFinalTitle('repaired')" class="title-option p-4 rounded-xl cursor-pointer group"><span class="bg-blue-100 text-[#1A4AB6] rounded px-2 py-1 text-[9px] font-bold uppercase">Revisi AI</span><p id="text-repaired" class="font-semibold text-slate-900 text-sm mt-2 font-heading"></p></div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-10"><button onclick="backToStep6()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Pilih Lain</button><button onclick="goToStep8()" class="bg-slate-900 text-white font-bold font-heading py-3 px-8 rounded-lg shadow-lg hover:bg-black">Standarisasi</button></div>
-                </div>
-
-                <div id="step-8" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Standarisasi Bahasa</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Memastikan tata bahasa sesuai kaidah akademik.</p>
-                    <div id="standardization-loading" class="py-10 text-center"><div class="loading-spinner mb-4 mx-auto"></div><p class="text-sm font-bold text-[#1A4AB6]">Checking grammar...</p></div>
-                    <div id="standardization-result" class="hidden space-y-6">
-                        <div class="grid grid-cols-1 gap-4">
-                            <div onclick="selectStandardization('raw')" id="std-opt-raw" class="title-option p-5 rounded-xl cursor-pointer border border-slate-200"><span class="bg-slate-100 text-slate-500 rounded px-2 py-1 text-[9px] font-bold uppercase">Draft Sebelumnya</span><p id="std-title-raw" class="font-semibold text-slate-600 text-sm mt-2"></p></div>
-                            <div onclick="selectStandardization('std')" id="std-opt-std" class="title-option p-5 rounded-xl cursor-pointer border border-[#1CB8A3] bg-teal-50/30"><span class="bg-teal-100 text-[#1CB8A3] rounded px-2 py-1 text-[9px] font-bold uppercase">Saran Baku ✨</span><p id="std-title-std" class="font-heading font-bold text-slate-900 text-lg mt-2 leading-relaxed"></p></div>
-                        </div>
-                        <div class="flex justify-end"><button onclick="goToStep9()" class="step-gradient text-white font-bold font-heading py-3 px-8 rounded-lg shadow-lg hover:shadow-xl">Lanjut Telaah</button></div>
                     </div>
                 </div>
-
-                <div id="step-9" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 text-center">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Telaah Akademik (Feasibility)</h2>
-                    <div id="analysis-loading" class="py-16"><div class="loading-spinner mb-6 mx-auto"></div><p class="text-sm font-bold text-[#1A4AB6] animate-pulse">Deep Analysis...</p></div>
-                    <div id="analysis-result" class="hidden">
-                        <div class="bg-slate-50 p-6 rounded-xl mb-10 border border-slate-100"><h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Judul Final</h3><p id="analyzed-title" class="font-bold text-lg text-slate-800 font-heading"></p></div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-                            <div class="flex flex-col items-center"><div id="score-circle-urgency" class="score-circle mb-3"><span id="score-urgency-val" class="text-lg font-extrabold text-slate-800">0%</span></div><h4 class="font-bold text-slate-700 text-xs uppercase">Urgency</h4></div>
-                            <div class="flex flex-col items-center"><div id="score-circle-novelty" class="score-circle mb-3"><span id="score-novelty-val" class="text-lg font-extrabold text-slate-800">0%</span></div><h4 class="font-bold text-slate-700 text-xs uppercase">Novelty</h4></div>
-                            <div class="flex flex-col items-center"><div id="score-circle-relevance" class="score-circle mb-3"><span id="score-relevance-val" class="text-lg font-extrabold text-slate-800">0%</span></div><h4 class="font-bold text-slate-700 text-xs uppercase">Relevance</h4></div>
-                            <div class="flex flex-col items-center"><div id="score-circle-feasibility" class="score-circle mb-3"><span id="score-feasibility-val" class="text-lg font-extrabold text-slate-800">0%</span></div><h4 class="font-bold text-slate-700 text-xs uppercase">Feasibility</h4></div>
-                        </div>
-                        <div id="analysis-feedback-container" class="text-left space-y-4"></div>
-                        <div id="analysis-conclusion" class="mt-8 p-5 bg-blue-50 rounded-xl border border-blue-100 text-left"><h4 class="font-bold text-[#1A4AB6] mb-2 text-sm">Kesimpulan Sintesis:</h4><p id="synthesis-text" class="text-sm text-slate-700 text-justify italic"></p></div>
-                        <div id="analysis-actions" class="space-y-4 mt-8"></div>
-                    </div>
+                
+                <div class="mt-10">
+                    <button onclick="App.goToStep11()" class="w-full step-gradient text-white font-bold font-heading py-3 rounded-lg shadow-lg hover:shadow-xl">Finalisasi Rencana</button>
                 </div>
-
-                <div id="step-10" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
-                    <h2 class="text-xl font-bold font-heading mb-6 text-slate-900">Konsep & Hipotesis</h2>
-                    <div id="hypothesis-container">
-                        <div class="mb-6"><h2 id="hypo-title-display" class="font-heading text-lg font-bold text-slate-900"></h2></div>
-                        <div class="space-y-6">
-                            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                                <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider"><i class="fas fa-cubes mr-2 text-[#1A4AB6]"></i> Definisi Operasional</h4>
-                                <div id="variable-list" class="grid grid-cols-1 gap-4"></div>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider"><i class="fas fa-list-ol mr-2 text-[#1CB8A3]"></i> Hipotesis / Proposisi</h4>
-                                <div id="hypothesis-list" class="space-y-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-10"><button onclick="goToStep11()" class="w-full step-gradient text-white font-bold font-heading py-3 rounded-lg shadow-lg hover:shadow-xl">Finalisasi Rencana</button></div>
-                </div>
-
-                <div id="step-11" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 pb-20">
-                    <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Blueprint</h2>
-                    <p id="final-context-display" class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-8"></p>
-                    
-                    <div id="plan-container">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                            <div class="space-y-4"><h4 class="text-slate-900 font-bold uppercase text-xs tracking-widest border-b pb-2">Teknik Pengumpulan Data</h4><div id="data-steps" class="space-y-3"></div></div>
-                            <div class="space-y-4"><h4 class="text-slate-900 font-bold uppercase text-xs tracking-widest border-b pb-2">Teknik Analisis Data</h4><div id="analysis-steps" class="space-y-3"></div></div>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-6 no-print">
-                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                             <div class="flex justify-between items-center mb-4">
-                                 <h4 class="font-bold text-slate-800">1. Bedah Judul (5W + 1H)</h4>
-                                 <button id="btn-analysis" onclick="generateAnalysis5W1H()" class="bg-blue-50 text-[#1A4AB6] font-bold py-2 px-4 rounded-lg hover:bg-blue-100 flex items-center gap-2 text-xs transition-colors"><i class="fas fa-search"></i> Generate Analisis</button>
-                             </div>
-                             <div id="generated-abstract" class="hidden">
-                                 <div id="abstract-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                             </div>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                             <div class="flex justify-between items-center mb-4">
-                                 <h4 class="font-bold text-slate-800">2. Instrumen Penelitian</h4>
-                                 <button id="btn-instruments" onclick="generateInstruments()" class="bg-teal-50 text-[#1CB8A3] font-bold py-2 px-4 rounded-lg hover:bg-teal-100 flex items-center gap-2 text-xs transition-colors"><i class="fas fa-clipboard-list"></i> Buat Instrumen</button>
-                             </div>
-                             <div id="generated-instruments" class="hidden">
-                                 <div id="instruments-content" class="space-y-3"></div>
-                             </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center no-print pt-10 border-t mt-10">
-                        <button id="btn-finish" onclick="finishSession()" disabled class="bg-slate-200 text-slate-400 px-8 py-4 rounded-lg font-bold font-heading shadow-none transition-all flex items-center justify-center mx-auto gap-2 cursor-not-allowed">
-                            <i class="fas fa-file-word mr-2"></i> Download Naskah Lengkap (.docx)
-                        </button>
-                    </div>
-                </div>
-
-                <div id="success-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div class="bg-white rounded-2xl p-8 max-w-sm mx-4 text-center card-shadow">
-                        <div class="w-16 h-16 rounded-full bg-teal-100 text-[#1CB8A3] flex items-center justify-center mx-auto mb-4 text-3xl">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <h3 class="text-xl font-bold font-heading text-slate-900 mb-2">Dokumen Siap!</h3>
-                        <p class="text-slate-500 text-sm mb-6">File Word telah diunduh. Gunakan sebagai bahan diskusi dengan dosen pembimbing.</p>
-                        <button onclick="document.getElementById('success-modal').classList.remove('active')" class="text-slate-400 text-xs font-bold hover:text-slate-600">Tutup</button>
-                    </div>
-                </div>
-
-                <div id="loading" class="hidden fixed inset-0 bg-white/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center">
-                    <div class="loading-spinner mb-4"></div>
-                    <h3 id="loading-title" class="text-lg font-bold font-heading text-slate-900 mb-1">Menghubungkan ke AI</h3>
-                    <p id="loading-text" class="text-slate-500 text-xs italic">Mohon tunggu sebentar...</p>
-                </div>
-
             </div>
-        </main>
-    </div>
 
-    <script>
-        // --- KONFIGURASI CLIENT (AMAN) ---
-        // Tidak ada API Key di sini. Aplikasi akan bicara ke /api/chat
-        
-        // Simpan data user
-        let userData = { nama: "", gender: "", jurusan: "", fakultas: "", universitas: "", minat: "", objek: "", masalah: "", metode: "", analisisMasalah: "", bahasa: "Indonesia" };
-        let selectedTitle = "", originalTitle = "", repairedTitle = "", standardizedTitle = "", finalTitle = "";
-        let analysisAttempt = 0, savedHypothesisData = null, savedPlanData = null, savedAnalysisData = null, savedAnalysis5W1H = null, savedInstruments = null;
-        let abstractDone = false;
-        let instrumentsDone = false;
-        let currentTitleBase = "";
-        let savedTitles = [];
-
-        function getLangInstruction() {
-            return `PENTING: Gunakan Bahasa ${userData.bahasa} untuk seluruh output JSON dan teks.`;
-        }
-
-        function hideAll() {
-            ['step-1','step-2','step-3','step-4','step-5','step-6','step-7','step-8','step-9','step-10','step-11','loading'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
-            const s = document.getElementById('sticky-action'); if(s){s.classList.remove('translate-y-0');s.classList.add('translate-y-full');}
-        }
-
-        function updateProgress(step) {
-            const width = (step - 1) * 10; 
-            document.getElementById('progress-fill').style.width = `${width}%`;
-            for(let i=1; i<=11; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if (!dot) continue;
-                const label = dot.parentElement.querySelector('.step-label');
-                dot.className = "step-dot transition-all duration-300";
-                label.className = "step-label transition-colors duration-300";
+            <!-- STEP 11: Final Blueprint -->
+            <div id="step-11" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 pb-20">
+                <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Blueprint</h2>
+                <p id="final-context-display" class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-8"></p>
                 
-                if(i < step) { 
-                    dot.className = "step-dot bg-[#1CB8A3] text-white border-white"; 
-                    dot.innerHTML = `<i class="fas fa-check"></i>`; 
-                    label.classList.remove('text-slate-400');
-                    label.classList.add("text-[#1CB8A3]"); 
-                }
-                else if(i === step) { 
-                    dot.className = "step-dot bg-[#1A4AB6] ring-4 ring-blue-50 text-white scale-125"; 
-                    dot.innerHTML = ""; 
-                    label.classList.remove('text-slate-400');
-                    label.classList.add("text-[#1A4AB6]"); 
-                }
-                else { 
-                    dot.className = "step-dot bg-slate-200 text-white"; 
-                    dot.innerHTML = ""; 
-                    label.classList.remove('text-[#1CB8A3]', 'text-[#1A4AB6]');
-                    label.classList.add("text-slate-400"); 
-                }
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function showLoading(title, text) {
-            hideAll();
-            const l = document.getElementById('loading'); l.classList.remove('hidden');
-            document.getElementById('loading-title').innerText = title;
-            document.getElementById('loading-text').innerText = text;
-        }
-
-        // --- FUNGSI AI BARU (SERVERLESS) ---
-        async function fetchAI(prompt, system) {
-            const finalSystem = system + " " + getLangInstruction();
-            
-            try {
-                // Panggil Backend Internal (Serverless Function)
-                // Ini akan mengarah ke file api/chat.js yang sudah kita buat
-                const response = await fetch('/api/chat', { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        model: "google/gemini-2.0-flash-001", // Bisa request ganti model di sini
-                        messages: [
-                            { role: "system", content: finalSystem },
-                            { role: "user", content: prompt }
-                        ]
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error("Gagal menghubungi server AI. Pastikan Environment Variable sudah di-set di Vercel.");
-                }
-
-                const res = await response.json();
-                
-                // Parsing hasil dari Backend
-                // Struktur respons OpenRouter standar: choices[0].message.content
-                const content = res.choices[0].message.content;
-                
-                return JSON.parse(content);
-
-            } catch (e) { 
-                console.error(e);
-                alert("Terjadi kesalahan pada Server AI. Silakan coba lagi nanti.");
-                throw e; 
-            }
-        }
-
-        // --- SISA KODE LOGIKA (TIDAK BERUBAH) ---
-
-        function goToStep2() {
-            userData.nama = document.getElementById('nama').value; 
-            userData.gender = document.getElementById('gender').value;
-            userData.jurusan = document.getElementById('jurusan').value; 
-            userData.fakultas = document.getElementById('fakultas').value;
-            userData.universitas = document.getElementById('universitas').value; 
-            userData.minat = document.getElementById('minat').value;
-            userData.bahasa = document.getElementById('bahasa').value;
-            if(!userData.nama || !userData.gender || !userData.jurusan || !userData.fakultas) return alert("Mohon lengkapi data diri utama.");
-            hideAll(); document.getElementById('step-2').classList.remove('hidden'); updateProgress(2);
-        }
-        function backToStep1() { hideAll(); document.getElementById('step-1').classList.remove('hidden'); updateProgress(1); }
-
-        async function fetchAIObjects() {
-            const btn = document.getElementById('ai-object-btn'); btn.disabled = true; btn.innerHTML = "Processing...";
-            try {
-                const prompt = `Konteks: Jurusan ${userData.jurusan}, Fakultas ${userData.fakultas}. Minat Kajian: "${userData.minat}". Sebagai konsultan akademik, sebutkan 8 objek penelitian/lokus yang spesifik dan layak teliti. BATASAN: 2-6 kata. JSON: { objects: [string] }`;
-                const data = await fetchAI(prompt, "Output JSON.");
-                const list = document.getElementById('ai-objects-list'); list.innerHTML = '';
-                data.objects.forEach((obj, idx) => {
-                    const d = document.createElement('div'); 
-                    d.className = `p-3 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:border-[#1A4AB6] hover:text-[#1A4AB6] cursor-pointer text-center fade-in stagger-${(idx%4)+1} transition-all shadow-sm`;
-                    d.innerText = obj; 
-                    d.onclick = () => { document.getElementById('custom-object').value = obj; };
-                    list.appendChild(d);
-                });
-                list.classList.remove('hidden');
-            } catch(e){} finally { btn.disabled = false; btn.innerHTML = `<i class="fas fa-robot"></i> Minta Rekomendasi AI`; }
-        }
-        function goToStep3() {
-            userData.objek = document.getElementById('custom-object').value; if(!userData.objek) return alert("Isi objek penelitian!");
-            hideAll(); document.getElementById('step-3').classList.remove('hidden'); updateProgress(3);
-        }
-        function backToStep2() { hideAll(); document.getElementById('step-2').classList.remove('hidden'); updateProgress(2); }
-
-        async function fetchAIMasalah() {
-            const btn = document.getElementById('ai-problem-btn'); btn.disabled = true; btn.innerHTML = "Processing...";
-            try {
-                const prompt = `Konteks: Jurusan ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah/Fenomena) akademik yang valid. BATASAN: Kalimat singkat padat. JSON: { problems: [string] }`;
-                const data = await fetchAI(prompt, "Output JSON.");
-                const list = document.getElementById('ai-problems-list'); list.innerHTML = '';
-                data.problems.forEach((p, idx) => {
-                    const d = document.createElement('div'); 
-                    d.className = `p-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-blue-50 cursor-pointer text-left fade-in stagger-${(idx%4)+1} transition-all shadow-sm flex items-start gap-2`;
-                    d.innerHTML = `<i class="fas fa-exclamation-circle mt-1 text-slate-300"></i><span>${p}</span>`;
-                    d.onclick = () => { document.getElementById('custom-problem').value = p; };
-                    list.appendChild(d);
-                });
-                list.classList.remove('hidden');
-            } catch(e){} finally { btn.disabled = false; btn.innerHTML = `<i class="fas fa-search-plus"></i> Identifikasi Masalah AI`; }
-        }
-        function goToStep4() {
-            userData.masalah = document.getElementById('custom-problem').value; if(!userData.masalah) return alert("Isi masalah riset!");
-            hideAll(); document.getElementById('step-4').classList.remove('hidden');
-            document.getElementById('display-objek').innerText = userData.objek;
-            document.getElementById('display-masalah').innerText = userData.masalah;
-            document.getElementById('display-jurusan').innerText = userData.jurusan;
-            updateProgress(4);
-        }
-        function backToStep3() { hideAll(); document.getElementById('step-3').classList.remove('hidden'); updateProgress(3); }
-
-        async function fetchAIConnectionAnalysis() {
-            const btn = document.getElementById('btn-analisis-kaitan'); btn.disabled = true; btn.innerHTML = "Validasi...";
-            try {
-                const prompt = `Analisis Validasi Judul Skripsi. Mahasiswa: ${userData.jurusan} (${userData.fakultas}), Minat ${userData.minat}. Rencana: Objek "${userData.objek}", Masalah "${userData.masalah}". Apakah ini linier dan layak? JSON: { is_relevant: boolean, reason: string }`;
-                const data = await fetchAI(prompt, "Jawab jujur secara akademik.");
-                const resultDiv = document.getElementById('connection-analysis-result');
-                const nextBtn = document.getElementById('btn-next-step-5');
-                resultDiv.innerText = data.reason; resultDiv.classList.remove('hidden');
-                if (data.is_relevant) { 
-                    resultDiv.className = "text-left p-5 rounded-xl text-sm leading-relaxed border transition-all bg-teal-50 border-teal-200 text-[#1CB8A3]";
-                    userData.analisisMasalah = data.reason; nextBtn.disabled = false; 
-                    nextBtn.classList.remove('bg-slate-200','text-slate-400','cursor-not-allowed');
-                    nextBtn.classList.add('step-gradient','text-white','shadow-lg','hover:shadow-xl');
-                } else { 
-                    resultDiv.className = "text-left p-5 rounded-xl text-sm leading-relaxed border transition-all bg-red-50 border-red-200 text-red-800";
-                    nextBtn.disabled = true; 
-                    nextBtn.classList.add('bg-slate-200','text-slate-400','cursor-not-allowed');
-                }
-            } catch(e) { alert("Gagal analisis."); } finally { btn.disabled = false; btn.innerHTML = `<i class="fas fa-check-double"></i> Cek Kelayakan`; }
-        }
-        function goToStep5() { hideAll(); document.getElementById('step-5').classList.remove('hidden'); updateProgress(5); }
-        function backToStep4() { hideAll(); document.getElementById('step-4').classList.remove('hidden'); updateProgress(4); }
-
-        function selectMethod(val) { 
-            userData.metode = val; 
-            document.querySelectorAll('.option-card').forEach(e => e.classList.remove('border-[#1A4AB6]','ring-2','ring-blue-100')); 
-            const id = val === 'Kuantitatif' ? 'm-kuanti' : val === 'Kualitatif' ? 'm-kuali' : val === 'Mixed Method' ? 'm-mix' : 'm-pustaka';
-            document.getElementById(id).classList.add('border-[#1A4AB6]','ring-2','ring-blue-100'); 
-        }
-
-        async function goToStep6() {
-            if(!userData.metode) return alert("Pilih metode riset!");
-            showLoading("Merancang Judul Akademik", "Menyusun opsi berdasarkan variabel..."); updateProgress(6);
-            try {
-                const prompt = `Peran: Dosen Pembimbing Senior. Buat 3 rute penelitian Skripsi/Tesis. 
-                Data: Minat "${userData.minat}", Objek "${userData.objek}", Masalah "${userData.masalah}", Metode "${userData.metode}".
-                Output: 3 opsi judul yang sangat akademik dan formal.
-                JSON: { paths: [ { topic: 'Tema Besar', phenomenon: 'Context', analysis: 'Analytical Tool', titles: [string] } ] }`;
-                const data = await fetchAI(prompt, "Buat judul skripsi formal.");
-                renderResults(data.paths);
-            } catch(e) { hideAll(); document.getElementById('step-5').classList.remove('hidden'); }
-        }
-
-        function renderResults(paths) {
-            hideAll(); const c = document.getElementById('topics-list'); c.innerHTML = '';
-            savedTitles = paths;
-            paths.forEach((p, i) => {
-                let tHTML = p.titles.map(t => `<div class="title-option p-4 rounded-lg text-sm font-semibold text-slate-800 relative group" onclick="pickTitle(this, '${t.replace(/'/g, "\\'")}')"><div class="absolute right-4 opacity-0 group-[.selected]:opacity-100 text-[#1A4AB6]"><i class="fas fa-check-circle"></i></div>${t}</div>`).join('');
-                c.innerHTML += `<div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm fade-in stagger-${i+1}"><div class="flex items-center gap-2 mb-3"><span class="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider">Opsi ${i+1}</span><h3 class="font-bold text-base text-[#1A4AB6] font-heading">${p.topic}</h3></div><p class="text-xs text-slate-500 mb-4">${p.phenomenon} using ${p.analysis}</p><div class="space-y-2">${tHTML}</div></div>`;
-            });
-            document.getElementById('step-6').classList.remove('hidden');
-            document.getElementById('context-summary').innerText = `${userData.jurusan} • ${userData.metode}`;
-        }
-        function pickTitle(el, title) {
-            selectedTitle = title;
-            document.querySelectorAll('.title-option').forEach(e => e.classList.remove('selected')); el.classList.add('selected');
-            document.getElementById('selected-title-preview').innerText = title;
-            const btn = document.getElementById('btn-to-step-7'); btn.disabled = false; btn.classList.replace('bg-slate-200', 'step-gradient'); btn.classList.replace('text-slate-400', 'text-white'); btn.classList.remove('cursor-not-allowed');
-            document.getElementById('sticky-action').classList.remove('translate-y-full'); document.getElementById('sticky-action').classList.add('translate-y-0');
-        }
-        function backToStep5() { hideAll(); document.getElementById('step-5').classList.remove('hidden'); updateProgress(5); }
-
-        function goToStep7() {
-            originalTitle = selectedTitle; currentTitleBase = originalTitle;
-            document.getElementById('chosen-title-display').innerText = originalTitle;
-            document.getElementById('repair-input-box').classList.remove('hidden'); document.getElementById('comparison-area').classList.add('hidden');
-            selectFinalTitle('original');
-            hideAll(); document.getElementById('step-7').classList.remove('hidden'); updateProgress(7);
-        }
-        function backToStep6() { hideAll(); document.getElementById('step-6').classList.remove('hidden'); document.getElementById('sticky-action').classList.remove('translate-y-full'); updateProgress(6); }
-        function setRepairInstruction(text) { document.getElementById('repair-instruction').value = text; }
-        
-        async function repairTitle() {
-            const instr = document.getElementById('repair-instruction').value;
-            if(!instr) return alert("Isi instruksi!");
-            const btn = document.getElementById('btn-repair'); btn.disabled=true; btn.innerHTML="...";
-            try {
-                const data = await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}.`, `JSON: { repaired_title: string }`);
-                repairedTitle = data.repaired_title;
-                document.getElementById('text-repaired').innerText = repairedTitle; document.getElementById('text-original').innerText = originalTitle;
-                document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired');
-                btn.innerHTML = `Selesai`;
-            } catch(e) { btn.disabled=false; alert("Gagal"); }
-        }
-
-        function selectFinalTitle(type) {
-            document.getElementById('opt-original').classList.remove('selected', 'border-[#1A4AB6]'); document.getElementById('opt-repaired').classList.remove('selected', 'border-[#1A4AB6]');
-            if(type==='original') { currentTitleBase = originalTitle; document.getElementById('opt-original').classList.add('selected', 'border-[#1A4AB6]'); }
-            else { currentTitleBase = repairedTitle; document.getElementById('opt-repaired').classList.add('selected', 'border-[#1A4AB6]'); }
-        }
-
-        async function goToStep8() {
-            hideAll(); document.getElementById('step-8').classList.remove('hidden'); 
-            document.getElementById('standardization-loading').classList.remove('hidden'); document.getElementById('standardization-result').classList.add('hidden');
-            updateProgress(8);
-            try {
-                const data = await fetchAI(`Standarisasi akademik judul ini agar sesuai PUEBI/Academic Standard. Judul: "${currentTitleBase}".`, `JSON: { standardized_title: string }`);
-                document.getElementById('std-title-raw').innerText = currentTitleBase; 
-                document.getElementById('std-title-std').innerText = data.standardized_title;
-                standardizedTitle = data.standardized_title; 
-                selectStandardization('std'); 
-                document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden');
-            } catch(e) { alert("Gagal."); goToStep9(); }
-        }
-
-        function selectStandardization(type) {
-            document.getElementById('std-opt-raw').classList.remove('selected', 'border-[#1A4AB6]'); document.getElementById('std-opt-std').classList.remove('selected', 'border-[#1CB8A3]');
-            if(type==='raw') { finalTitle = currentTitleBase; document.getElementById('std-opt-raw').classList.add('selected', 'border-[#1A4AB6]'); }
-            else { finalTitle = standardizedTitle; document.getElementById('std-opt-std').classList.add('selected', 'border-[#1CB8A3]'); }
-        }
-
-        async function goToStep9() {
-            hideAll(); document.getElementById('step-9').classList.remove('hidden');
-            document.getElementById('analysis-loading').classList.remove('hidden'); document.getElementById('analysis-result').classList.add('hidden');
-            updateProgress(9); analysisAttempt++;
-            try {
-                const prompt = `Telaah Feasibility Study Judul: "${finalTitle}". Konteks: ${userData.jurusan}.
-                Berikan skor (0-100) dan alasan akademis:
-                1. Necessity (Urgensi Masalah)
-                2. Novelty (Kebaruan/Gap)
-                3. Relevance (Kesesuaian Prodi)
-                4. Feasibility (Ketersediaan Data/Waktu)
-                JSON: { necessity: {score: int, reason: string}, novelty: {score: int, reason: string}, relevance: {score: int, reason: string}, feasibility: {score: int, reason: string}, conclusion: string }`;
-                const data = await fetchAI(prompt, "Analisis kritis dosen.");
-                renderAnalysisResult(data); savedAnalysisData = data;
-            } catch(e) { alert("Gagal."); document.getElementById('step-8').classList.remove('hidden'); }
-        }
-
-        function renderAnalysisResult(data) {
-            document.getElementById('analysis-loading').classList.add('hidden'); document.getElementById('analysis-result').classList.remove('hidden');
-            document.getElementById('analyzed-title').innerText = finalTitle; 
-            document.getElementById('synthesis-text').innerText = data.conclusion;
-            
-            const createPillar = (id, label, item) => {
-                const el = document.getElementById(id);
-                let cur = 0; const interval = setInterval(() => { cur+=2; if(cur>=item.score){cur=item.score;clearInterval(interval);} el.innerText=Math.round(cur)+"%"; el.parentElement.style.borderColor = cur<60?"#ef4444":cur<80?"#eab308":"#1CB8A3"; }, 20);
-                return `<div class="mb-4 bg-white p-4 rounded-lg border border-slate-100"><h4 class="font-bold text-slate-900 text-sm mb-1">${label} <span class="float-right text-${item.score<70?'red':'emerald'}-600">${item.score}%</span></h4><p class="text-xs text-slate-600 text-justify leading-relaxed">${item.reason}</p></div>`;
-            };
-
-            let feedbackHTML = "";
-            feedbackHTML += createPillar('score-urgency-val', 'Urgency', data.necessity);
-            feedbackHTML += createPillar('score-novelty-val', 'Novelty', data.novelty);
-            feedbackHTML += createPillar('score-relevance-val', 'Relevance', data.relevance);
-            feedbackHTML += createPillar('score-feasibility-val', 'Feasibility', data.feasibility);
-
-            document.getElementById('analysis-feedback-container').innerHTML = feedbackHTML;
-            
-            const scores = [data.necessity.score, data.novelty.score, data.relevance.score, data.feasibility.score];
-            const avg = scores.reduce((a,b)=>a+b,0)/4;
-            const container = document.getElementById('analysis-actions');
-            if(Math.min(...scores) >= 40 && avg >= 50) {
-                container.innerHTML = `<button onclick="goToStep10()" class="w-full step-gradient text-white font-bold font-heading py-4 rounded-xl shadow-lg hover:shadow-xl transition-all">Lanjut ke Hipotesis</button>`;
-            } else {
-                 container.innerHTML = `<div class="text-amber-600 font-bold mb-2 text-sm text-center">Skor Feasibility Rendah. Disarankan Revisi.</div><div class="flex gap-2"><button onclick="goToStep7()" class="flex-1 bg-white border border-slate-300 py-3 rounded-lg text-sm font-bold text-slate-600">Revisi</button><button onclick="goToStep10()" class="flex-1 bg-slate-100 text-slate-400 text-sm py-3 rounded-lg">Paksa Lanjut</button></div>`;
-            }
-        }
-
-        // --- UPDATE FUNGSI INI AGAR HASILNYA RAPIH (PARSE MARKDOWN) ---
-
-async function goToStep10() {
-    showLoading("Menyusun Variabel & Hipotesis", "Mengidentifikasi konsep..."); updateProgress(10);
-    try {
-        const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. Identifikasi:
-        1. Definisi Operasional Variabel/Konsep Utama (Nama, Peran/Jenis, Definisi Singkat).
-        2. Hipotesis Penelitian (Jika Kuantitatif) ATAU Pertanyaan Penelitian/Proposisi (Jika Kualitatif/Pustaka).
-        JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
-        
-        const data = await fetchAI(prompt, "Output akademik.");
-        savedHypothesisData = data; 
-        document.getElementById('hypo-title-display').innerText = finalTitle;
-        
-        const vList = document.getElementById('variable-list'); vList.innerHTML = ''; 
-        data.variables.forEach(v => {
-            // Gunakan marked.parse untuk merapikan teks definisi
-            vList.innerHTML += `
-            <div class="p-4 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex justify-between items-start mb-2">
-                    <h5 class="font-bold text-sm text-slate-800 font-heading">${v.name}</h5>
-                    <span class="text-[10px] font-bold text-[#1A4AB6] bg-blue-50 px-2 py-1 rounded uppercase tracking-widest border border-blue-100">${v.role}</span>
-                </div>
-                <div class="text-xs text-slate-600 text-justify leading-relaxed prose prose-sm max-w-none">
-                    ${marked.parse(v.def)}
-                </div>
-            </div>`;
-        });
-
-        const hList = document.getElementById('hypothesis-list'); hList.innerHTML = ''; 
-        data.hypotheses.forEach((h, i) => {
-            hList.innerHTML += `
-            <div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 font-medium text-justify border border-teal-100 flex gap-3 items-start">
-                <span class="font-bold text-[#1CB8A3] whitespace-nowrap mt-1">H${i+1}</span> 
-                <div class="leading-relaxed prose prose-sm max-w-none">${marked.parse(h)}</div>
-            </div>`;
-        });
-        
-        hideAll(); document.getElementById('step-10').classList.remove('hidden');
-    } catch(e) { console.error(e); alert("Gagal memproses respons AI. Coba lagi."); goToStep11(); }
-}
-
-async function goToStep11() {
-    showLoading("Finalisasi Dokumen", "Menyusun blueprint..."); updateProgress(11);
-    try {
-        const prompt = `Buat Blueprint Riset untuk Judul: "${finalTitle}". Metode: ${userData.metode}.
-        1. Langkah Pengumpulan Data (Konkret).
-        2. Langkah Analisis Data (Sesuai Metode).
-        JSON: { data_steps: [string], analysis_steps: [string] }`;
-        
-        const data = await fetchAI(prompt, "Output langkah teknis.");
-        savedPlanData = data; 
-        document.getElementById('final-context-display').innerText = `${userData.metode} | ${userData.jurusan}`;
-        
-        const dList = document.getElementById('data-steps'); dList.innerHTML = ''; 
-        data.data_steps.forEach(s => {
-            dList.innerHTML += `
-            <div class="flex items-start gap-3 group">
-                <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0 group-hover:scale-125 transition-transform"></div>
-                <div class="text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
-                    ${marked.parse(s)}
-                </div>
-            </div>`;
-        });
-
-        const aList = document.getElementById('analysis-steps'); aList.innerHTML = ''; 
-        data.analysis_steps.forEach(s => {
-            aList.innerHTML += `
-            <div class="flex items-start gap-3 group">
-                <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0 group-hover:scale-125 transition-transform"></div>
-                <div class="text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
-                    ${marked.parse(s)}
-                </div>
-            </div>`;
-        });
-        
-        // Reset buttons
-        abstractDone = false; instrumentsDone = false;
-        document.getElementById('generated-abstract').classList.add('hidden');
-        document.getElementById('generated-instruments').classList.add('hidden');
-        
-        hideAll(); document.getElementById('step-11').classList.remove('hidden');
-    } catch(e) { console.error(e); alert("Error."); hideAll(); document.getElementById('step-10').classList.remove('hidden'); }
-}
-
-        async function goToStep11() {
-            showLoading("Finalisasi Dokumen", "Menyusun blueprint..."); updateProgress(11);
-            try {
-                const prompt = `Buat Blueprint Riset untuk Judul: "${finalTitle}". Metode: ${userData.metode}.
-                1. Langkah Pengumpulan Data (Konkret).
-                2. Langkah Analisis Data (Sesuai Metode).
-                JSON: { data_steps: [string], analysis_steps: [string] }`;
-                const data = await fetchAI(prompt, "Output langkah teknis.");
-                savedPlanData = data; 
-                document.getElementById('final-context-display').innerText = `${userData.metode} | ${userData.jurusan}`;
-                const dList=document.getElementById('data-steps'); dList.innerHTML=''; data.data_steps.forEach(s=>dList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0"></div><p class="text-sm text-slate-600 leading-relaxed">${s}</p></div>`);
-                const aList=document.getElementById('analysis-steps'); aList.innerHTML=''; data.analysis_steps.forEach(s=>aList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0"></div><p class="text-sm text-slate-600 leading-relaxed">${s}</p></div>`);
-                
-                // Reset buttons
-                abstractDone = false; instrumentsDone = false;
-                document.getElementById('generated-abstract').classList.add('hidden');
-                document.getElementById('generated-instruments').classList.add('hidden');
-                
-                hideAll(); document.getElementById('step-11').classList.remove('hidden');
-            } catch(e) { alert("Error."); hideAll(); document.getElementById('step-10').classList.remove('hidden'); }
-        }
-
-        async function generateAnalysis5W1H() {
-            const btn = document.getElementById('btn-analysis'); btn.disabled = true; btn.innerHTML = "Generating...";
-            try {
-                const prompt = `Analisis 5W+1H mendalam untuk judul: "${finalTitle}".
-                Output JSON: { what: "...", why: "...", who: "...", where: "...", when: "...", how: "..." }
-                Buat isinya analitis dan tajam.`;
-                const data = await fetchAI(prompt, "Analisis tajam.");
-                savedAnalysis5W1H = data;
-                
-                const grid = document.getElementById('abstract-content');
-                grid.innerHTML = '';
-                
-                const createCard = (title, content, color, icon) => `
-                    <div class="analysis-card border-l-4 border-${color}-500">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="p-1.5 bg-${color}-100 rounded text-${color}-600 text-xs"><i class="fas fa-${icon}"></i></span>
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${title}</span>
+                <div id="plan-container">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="space-y-4">
+                            <h4 class="text-slate-900 font-bold uppercase text-xs tracking-widest border-b pb-2">Teknik Pengumpulan Data</h4>
+                            <div id="data-steps" class="space-y-3"></div>
                         </div>
-                        <p class="text-xs text-slate-700 font-medium leading-relaxed">${content}</p>
+                        <div class="space-y-4">
+                            <h4 class="text-slate-900 font-bold uppercase text-xs tracking-widest border-b pb-2">Teknik Analisis Data</h4>
+                            <div id="analysis-steps" class="space-y-3"></div>
+                        </div>
                     </div>
+                </div>
+                
+                <div class="space-y-6 no-print">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-slate-800">1. Bedah Judul (5W + 1H)</h4>
+                            <button id="btn-analysis" onclick="App.generateAnalysis5W1H()" class="bg-blue-50 text-[#1A4AB6] font-bold py-2 px-4 rounded-lg hover:bg-blue-100 flex items-center gap-2 text-xs transition-colors">
+                                <i class="fas fa-search"></i> Generate Analisis
+                            </button>
+                        </div>
+                        <div id="generated-abstract" class="hidden">
+                            <div id="abstract-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-slate-800">2. Instrumen Penelitian</h4>
+                            <button id="btn-instruments" onclick="App.generateInstruments()" class="bg-teal-50 text-[#1CB8A3] font-bold py-2 px-4 rounded-lg hover:bg-teal-100 flex items-center gap-2 text-xs transition-colors">
+                                <i class="fas fa-clipboard-list"></i> Buat Instrumen
+                            </button>
+                        </div>
+                        <div id="generated-instruments" class="hidden">
+                            <div id="instruments-content" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center no-print pt-10 border-t mt-10">
+                    <button id="btn-finish" onclick="App.finishSession()" disabled class="bg-slate-200 text-slate-400 px-8 py-4 rounded-lg font-bold font-heading shadow-none transition-all flex items-center justify-center mx-auto gap-2 cursor-not-allowed">
+                        <i class="fas fa-file-word mr-2"></i> Download Naskah Lengkap (.docx)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Modal -->
+            <div id="success-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                <div class="bg-white rounded-2xl p-8 max-w-sm mx-4 text-center card-shadow">
+                    <div class="w-16 h-16 rounded-full bg-teal-100 text-[#1CB8A3] flex items-center justify-center mx-auto mb-4 text-3xl">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold font-heading text-slate-900 mb-2">Dokumen Siap!</h3>
+                    <p class="text-slate-500 text-sm mb-6">File Word telah diunduh. Gunakan sebagai bahan diskusi dengan dosen pembimbing.</p>
+                    <button onclick="Utils.closeModal('success-modal')" class="text-slate-400 text-xs font-bold hover:text-slate-600">Tutup</button>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loading" class="hidden fixed inset-0 bg-white/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center">
+                <div class="loading-spinner mb-4"></div>
+                <h3 id="loading-title" class="text-lg font-bold font-heading text-slate-900 mb-1">Menghubungkan ke AI</h3>
+                <p id="loading-text" class="text-slate-500 text-xs italic">Mohon tunggu sebentar...</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ============================================
+         JAVASCRIPT APPLICATION
+         ============================================ -->
+    <script>
+        /**
+         * ============================================
+         * APPLICATION STATE MANAGEMENT
+         * ============================================
+         */
+        const AppState = {
+            userData: {
+                nama: "",
+                gender: "",
+                jurusan: "",
+                fakultas: "",
+                universitas: "",
+                minat: "",
+                objek: "",
+                masalah: "",
+                metode: "",
+                analisisMasalah: "",
+                bahasa: "Indonesia"
+            },
+            
+            titles: {
+                selected: "",
+                original: "",
+                repaired: "",
+                standardized: "",
+                final: "",
+                currentBase: ""
+            },
+            
+            savedData: {
+                titles: [],
+                hypothesis: null,
+                plan: null,
+                analysis: null,
+                analysis5W1H: null,
+                instruments: null
+            },
+            
+            flags: {
+                abstractDone: false,
+                instrumentsDone: false,
+                analysisAttempt: 0
+            }
+        };
+
+        /**
+         * ============================================
+         * API COMMUNICATION MODULE
+         * ============================================
+         */
+        const API = {
+            async fetchAI(prompt, system) {
+                const finalSystem = system + " PENTING: Gunakan Bahasa " + AppState.userData.bahasa + " untuk seluruh output JSON dan teks.";
+                
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: "google/gemini-2.0-flash-001",
+                            messages: [
+                                { role: "system", content: finalSystem },
+                                { role: "user", content: prompt }
+                            ]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Gagal menghubungi server AI.");
+                    }
+
+                    const res = await response.json();
+                    const content = res.choices[0].message.content;
+                    return JSON.parse(content);
+
+                } catch (error) {
+                    console.error('API Error:', error);
+                    alert("Terjadi kesalahan pada Server AI. Silakan coba lagi.");
+                    throw error;
+                }
+            }
+        };
+
+        /**
+         * ============================================
+         * UI UTILITY FUNCTIONS
+         * ============================================
+         */
+        const UI = {
+            hideAll() {
+                const steps = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5', 'step-6', 'step-7', 'step-8', 'step-9', 'step-10', 'step-11', 'loading'];
+                steps.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+                
+                const stickyAction = document.getElementById('sticky-action');
+                if (stickyAction) {
+                    stickyAction.classList.remove('translate-y-0');
+                    stickyAction.classList.add('translate-y-full');
+                }
+            },
+
+            updateProgress(step) {
+                const width = (step - 1) * 10;
+                document.getElementById('progress-fill').style.width = `${width}%`;
+                
+                for (let i = 1; i <= 11; i++) {
+                    const dot = document.getElementById(`dot-${i}`);
+                    if (!dot) continue;
+                    
+                    const label = dot.parentElement.querySelector('.step-label');
+                    dot.className = "step-dot transition-all duration-300";
+                    label.className = "step-label transition-colors duration-300";
+                    
+                    if (i < step) {
+                        dot.className = "step-dot bg-[#1CB8A3] text-white border-white";
+                        dot.innerHTML = `<i class="fas fa-check"></i>`;
+                        label.classList.remove('text-slate-400');
+                        label.classList.add("text-[#1CB8A3]");
+                    } else if (i === step) {
+                        dot.className = "step-dot bg-[#1A4AB6] ring-4 ring-blue-50 text-white scale-125";
+                        dot.innerHTML = "";
+                        label.classList.remove('text-slate-400');
+                        label.classList.add("text-[#1A4AB6]");
+                    } else {
+                        dot.className = "step-dot bg-slate-200 text-white";
+                        dot.innerHTML = "";
+                        label.classList.remove('text-[#1CB8A3]', 'text-[#1A4AB6]');
+                        label.classList.add("text-slate-400");
+                    }
+                }
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+
+            showLoading(title, text) {
+                this.hideAll();
+                const loading = document.getElementById('loading');
+                loading.classList.remove('hidden');
+                document.getElementById('loading-title').innerText = title;
+                document.getElementById('loading-text').innerText = text;
+            },
+
+            showStep(stepId, stepNumber) {
+                this.hideAll();
+                document.getElementById(stepId).classList.remove('hidden');
+                this.updateProgress(stepNumber);
+            }
+        };
+
+        /**
+         * ============================================
+         * UTILITY FUNCTIONS
+         * ============================================
+         */
+        const Utils = {
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            },
+
+            animateScore(elementId, targetScore) {
+                const element = document.getElementById(elementId);
+                let current = 0;
+                const interval = setInterval(() => {
+                    current += 2;
+                    if (current >= targetScore) {
+                        current = targetScore;
+                        clearInterval(interval);
+                    }
+                    element.innerText = Math.round(current) + "%";
+                    
+                    const parent = element.parentElement;
+                    if (current < 60) {
+                        parent.style.borderColor = "#ef4444";
+                    } else if (current < 80) {
+                        parent.style.borderColor = "#eab308";
+                    } else {
+                        parent.style.borderColor = "#1CB8A3";
+                    }
+                }, 20);
+            }
+        };
+
+        /**
+         * ============================================
+         * MAIN APPLICATION LOGIC
+         * ============================================
+         */
+        const App = {
+            // STEP 1: Bio Data
+            goToStep2() {
+                const { userData } = AppState;
+                userData.nama = document.getElementById('nama').value.trim();
+                userData.gender = document.getElementById('gender').value;
+                userData.jurusan = document.getElementById('jurusan').value.trim();
+                userData.fakultas = document.getElementById('fakultas').value.trim();
+                userData.universitas = document.getElementById('universitas').value.trim();
+                userData.minat = document.getElementById('minat').value.trim();
+                userData.bahasa = document.getElementById('bahasa').value;
+
+                if (!userData.nama || !userData.gender || !userData.jurusan || !userData.fakultas) {
+                    return alert("Mohon lengkapi data diri utama.");
+                }
+
+                UI.showStep('step-2', 2);
+            },
+
+            backToStep1() {
+                UI.showStep('step-1', 1);
+            },
+
+            // STEP 2: Objek Penelitian
+            async fetchAIObjects() {
+                const btn = document.getElementById('ai-object-btn');
+                btn.disabled = true;
+                btn.innerHTML = "Processing...";
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Konteks: Jurusan ${userData.jurusan}, Fakultas ${userData.fakultas}. Minat Kajian: "${userData.minat}". Sebagai konsultan akademik, sebutkan 8 objek penelitian/lokus yang spesifik dan layak teliti. BATASAN: 2-6 kata. JSON: { objects: [string] }`;
+                    const data = await API.fetchAI(prompt, "Output JSON.");
+
+                    const list = document.getElementById('ai-objects-list');
+                    list.innerHTML = '';
+
+                    data.objects.forEach((obj, idx) => {
+                        const div = document.createElement('div');
+                        div.className = `p-3 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:border-[#1A4AB6] hover:text-[#1A4AB6] cursor-pointer text-center fade-in stagger-${(idx % 4) + 1} transition-all shadow-sm`;
+                        div.innerText = obj;
+                        div.onclick = () => {
+                            document.getElementById('custom-object').value = obj;
+                        };
+                        list.appendChild(div);
+                    });
+
+                    list.classList.remove('hidden');
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fas fa-robot"></i> Minta Rekomendasi AI`;
+                }
+            },
+
+            goToStep3() {
+                const objek = document.getElementById('custom-object').value.trim();
+                if (!objek) return alert("Isi objek penelitian!");
+                
+                AppState.userData.objek = objek;
+                UI.showStep('step-3', 3);
+            },
+
+            backToStep2() {
+                UI.showStep('step-2', 2);
+            },
+
+            // STEP 3: Research Gap
+            async fetchAIMasalah() {
+                const btn = document.getElementById('ai-problem-btn');
+                btn.disabled = true;
+                btn.innerHTML = "Processing...";
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Konteks: Jurusan ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah/Fenomena) akademik yang valid. BATASAN: Kalimat singkat padat. JSON: { problems: [string] }`;
+                    const data = await API.fetchAI(prompt, "Output JSON.");
+
+                    const list = document.getElementById('ai-problems-list');
+                    list.innerHTML = '';
+
+                    data.problems.forEach((problem, idx) => {
+                        const div = document.createElement('div');
+                        div.className = `p-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-blue-50 cursor-pointer text-left fade-in stagger-${(idx % 4) + 1} transition-all shadow-sm flex items-start gap-2`;
+                        div.innerHTML = `<i class="fas fa-exclamation-circle mt-1 text-slate-300"></i><span>${problem}</span>`;
+                        div.onclick = () => {
+                            document.getElementById('custom-problem').value = problem;
+                        };
+                        list.appendChild(div);
+                    });
+
+                    list.classList.remove('hidden');
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fas fa-search-plus"></i> Identifikasi Masalah AI`;
+                }
+            },
+
+            goToStep4() {
+                const masalah = document.getElementById('custom-problem').value.trim();
+                if (!masalah) return alert("Isi masalah riset!");
+
+                AppState.userData.masalah = masalah;
+                
+                UI.showStep('step-4', 4);
+                document.getElementById('display-objek').innerText = AppState.userData.objek;
+                document.getElementById('display-masalah').innerText = masalah;
+                document.getElementById('display-jurusan').innerText = AppState.userData.jurusan;
+            },
+
+            backToStep3() {
+                UI.showStep('step-3', 3);
+            },
+
+            // STEP 4: Validasi
+            async fetchAIConnectionAnalysis() {
+                const btn = document.getElementById('btn-analisis-kaitan');
+                btn.disabled = true;
+                btn.innerHTML = "Validasi...";
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Analisis Validasi Judul Skripsi. Mahasiswa: ${userData.jurusan} (${userData.fakultas}), Minat ${userData.minat}. Rencana: Objek "${userData.objek}", Masalah "${userData.masalah}". Apakah ini linier dan layak? JSON: { is_relevant: boolean, reason: string }`;
+                    const data = await API.fetchAI(prompt, "Jawab jujur secara akademik.");
+
+                    const resultDiv = document.getElementById('connection-analysis-result');
+                    const nextBtn = document.getElementById('btn-next-step-5');
+
+                    resultDiv.innerText = data.reason;
+                    resultDiv.classList.remove('hidden');
+
+                    if (data.is_relevant) {
+                        resultDiv.className = "text-left p-5 rounded-xl text-sm leading-relaxed border transition-all bg-teal-50 border-teal-200 text-[#1CB8A3]";
+                        userData.analisisMasalah = data.reason;
+                        
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                        nextBtn.classList.add('step-gradient', 'text-white', 'shadow-lg', 'hover:shadow-xl');
+                    } else {
+                        resultDiv.className = "text-left p-5 rounded-xl text-sm leading-relaxed border transition-all bg-red-50 border-red-200 text-red-800";
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                    }
+                } catch (error) {
+                    alert("Gagal analisis.");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fas fa-check-double"></i> Cek Kelayakan`;
+                }
+            },
+
+            goToStep5() {
+                UI.showStep('step-5', 5);
+            },
+
+            backToStep4() {
+                UI.showStep('step-4', 4);
+            },
+
+            // STEP 5: Metode
+            selectMethod(value) {
+                AppState.userData.metode = value;
+                
+                document.querySelectorAll('.option-card').forEach(el => {
+                    el.classList.remove('border-[#1A4AB6]', 'ring-2', 'ring-blue-100');
+                });
+
+                const cardMap = {
+                    'Kuantitatif': 'm-kuanti',
+                    'Kualitatif': 'm-kuali',
+                    'Mixed Method': 'm-mix',
+                    'Studi Pustaka': 'm-pustaka'
+                };
+
+                const selectedCard = document.getElementById(cardMap[value]);
+                if (selectedCard) {
+                    selectedCard.classList.add('border-[#1A4AB6]', 'ring-2', 'ring-blue-100');
+                }
+            },
+
+            async goToStep6() {
+                if (!AppState.userData.metode) {
+                    return alert("Pilih metode riset!");
+                }
+
+                UI.showLoading("Merancang Judul Akademik", "Menyusun opsi berdasarkan variabel...");
+                UI.updateProgress(6);
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Peran: Dosen Pembimbing Senior. Buat 3 rute penelitian Skripsi/Tesis. 
+                    Data: Minat "${userData.minat}", Objek "${userData.objek}", Masalah "${userData.masalah}", Metode "${userData.metode}".
+                    Output: 3 opsi judul yang sangat akademik dan formal.
+                    JSON: { paths: [ { topic: 'Tema Besar', phenomenon: 'Context', analysis: 'Analytical Tool', titles: [string] } ] }`;
+                    
+                    const data = await API.fetchAI(prompt, "Buat judul skripsi formal.");
+                    this.renderResults(data.paths);
+                } catch (error) {
+                    UI.showStep('step-5', 5);
+                }
+            },
+
+            renderResults(paths) {
+                UI.hideAll();
+                const container = document.getElementById('topics-list');
+                container.innerHTML = '';
+                AppState.savedData.titles = paths;
+
+                paths.forEach((path, index) => {
+                    const titlesHTML = path.titles.map(title => {
+                        const escapedTitle = title.replace(/'/g, "\\'");
+                        return `
+                            <div class="title-option p-4 rounded-lg text-sm font-semibold text-slate-800 relative group" onclick="App.pickTitle(this, '${escapedTitle}')">
+                                <div class="absolute right-4 opacity-0 group-[.selected]:opacity-100 text-[#1A4AB6]">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                ${title}
+                            </div>
+                        `;
+                    }).join('');
+
+                    container.innerHTML += `
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm fade-in stagger-${index + 1}">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider">Opsi ${index + 1}</span>
+                                <h3 class="font-bold text-base text-[#1A4AB6] font-heading">${path.topic}</h3>
+                            </div>
+                            <p class="text-xs text-slate-500 mb-4">${path.phenomenon} using ${path.analysis}</p>
+                            <div class="space-y-2">${titlesHTML}</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('step-6').classList.remove('hidden');
+                document.getElementById('context-summary').innerText = `${AppState.userData.jurusan} • ${AppState.userData.metode}`;
+            },
+
+            pickTitle(element, title) {
+                AppState.titles.selected = title;
+
+                document.querySelectorAll('.title-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                element.classList.add('selected');
+
+                document.getElementById('selected-title-preview').innerText = title;
+
+                const btn = document.getElementById('btn-to-step-7');
+                btn.disabled = false;
+                btn.classList.replace('bg-slate-200', 'step-gradient');
+                btn.classList.replace('text-slate-400', 'text-white');
+                btn.classList.remove('cursor-not-allowed');
+
+                const stickyAction = document.getElementById('sticky-action');
+                stickyAction.classList.remove('translate-y-full');
+                stickyAction.classList.add('translate-y-0');
+            },
+
+            backToStep5() {
+                UI.showStep('step-5', 5);
+            },
+
+            // STEP 7: Refinement
+            goToStep7() {
+                AppState.titles.original = AppState.titles.selected;
+                AppState.titles.currentBase = AppState.titles.original;
+
+                document.getElementById('chosen-title-display').innerText = AppState.titles.original;
+                document.getElementById('repair-input-box').classList.remove('hidden');
+                document.getElementById('comparison-area').classList.add('hidden');
+
+                this.selectFinalTitle('original');
+                UI.showStep('step-7', 7);
+            },
+
+            backToStep6() {
+                UI.showStep('step-6', 6);
+                document.getElementById('sticky-action').classList.remove('translate-y-full');
+            },
+
+            setRepairInstruction(text) {
+                document.getElementById('repair-instruction').value = text;
+            },
+
+            async repairTitle() {
+                const instruction = document.getElementById('repair-instruction').value.trim();
+                if (!instruction) return alert("Isi instruksi!");
+
+                const btn = document.getElementById('btn-repair');
+                btn.disabled = true;
+                btn.innerHTML = "...";
+
+                try {
+                    const prompt = `Judul: ${AppState.titles.original}. Revisi: ${instruction}.`;
+                    const data = await API.fetchAI(prompt, `JSON: { repaired_title: string }`);
+
+                    AppState.titles.repaired = data.repaired_title;
+                    document.getElementById('text-repaired').innerText = data.repaired_title;
+                    document.getElementById('text-original').innerText = AppState.titles.original;
+                    document.getElementById('comparison-area').classList.remove('hidden');
+
+                    this.selectFinalTitle('repaired');
+                    btn.innerHTML = "Selesai";
+                } catch (error) {
+                    btn.disabled = false;
+                    alert("Gagal");
+                }
+            },
+
+            selectFinalTitle(type) {
+                document.getElementById('opt-original').classList.remove('selected', 'border-[#1A4AB6]');
+                document.getElementById('opt-repaired').classList.remove('selected', 'border-[#1A4AB6]');
+
+                if (type === 'original') {
+                    AppState.titles.currentBase = AppState.titles.original;
+                    document.getElementById('opt-original').classList.add('selected', 'border-[#1A4AB6]');
+                } else {
+                    AppState.titles.currentBase = AppState.titles.repaired;
+                    document.getElementById('opt-repaired').classList.add('selected', 'border-[#1A4AB6]');
+                }
+            },
+
+            // STEP 8: Standarisasi
+            async goToStep8() {
+                UI.showStep('step-8', 8);
+                document.getElementById('standardization-loading').classList.remove('hidden');
+                document.getElementById('standardization-result').classList.add('hidden');
+
+                try {
+                    const prompt = `Standarisasi akademik judul ini agar sesuai PUEBI/Academic Standard. Judul: "${AppState.titles.currentBase}".`;
+                    const data = await API.fetchAI(prompt, `JSON: { standardized_title: string }`);
+
+                    document.getElementById('std-title-raw').innerText = AppState.titles.currentBase;
+                    document.getElementById('std-title-std').innerText = data.standardized_title;
+                    AppState.titles.standardized = data.standardized_title;
+
+                    this.selectStandardization('std');
+
+                    document.getElementById('standardization-loading').classList.add('hidden');
+                    document.getElementById('standardization-result').classList.remove('hidden');
+                } catch (error) {
+                    alert("Gagal.");
+                    this.goToStep9();
+                }
+            },
+
+            selectStandardization(type) {
+                document.getElementById('std-opt-raw').classList.remove('selected', 'border-[#1A4AB6]');
+                document.getElementById('std-opt-std').classList.remove('selected', 'border-[#1CB8A3]');
+
+                if (type === 'raw') {
+                    AppState.titles.final = AppState.titles.currentBase;
+                    document.getElementById('std-opt-raw').classList.add('selected', 'border-[#1A4AB6]');
+                } else {
+                    AppState.titles.final = AppState.titles.standardized;
+                    document.getElementById('std-opt-std').classList.add('selected', 'border-[#1CB8A3]');
+                }
+            },
+
+            // STEP 9: Telaah Akademik
+            async goToStep9() {
+                UI.showStep('step-9', 9);
+                document.getElementById('analysis-loading').classList.remove('hidden');
+                document.getElementById('analysis-result').classList.add('hidden');
+                AppState.flags.analysisAttempt++;
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Telaah Feasibility Study Judul: "${AppState.titles.final}". Konteks: ${userData.jurusan}.
+                    Berikan skor (0-100) dan alasan akademis:
+                    1. Necessity (Urgensi Masalah)
+                    2. Novelty (Kebaruan/Gap)
+                    3. Relevance (Kesesuaian Prodi)
+                    4. Feasibility (Ketersediaan Data/Waktu)
+                    JSON: { necessity: {score: int, reason: string}, novelty: {score: int, reason: string}, relevance: {score: int, reason: string}, feasibility: {score: int, reason: string}, conclusion: string }`;
+                    
+                    const data = await API.fetchAI(prompt, "Analisis kritis dosen.");
+                    this.renderAnalysisResult(data);
+                    AppState.savedData.analysis = data;
+                } catch (error) {
+                    alert("Gagal.");
+                    UI.showStep('step-8', 8);
+                }
+            },
+
+            renderAnalysisResult(data) {
+                document.getElementById('analysis-loading').classList.add('hidden');
+                document.getElementById('analysis-result').classList.remove('hidden');
+                document.getElementById('analyzed-title').innerText = AppState.titles.final;
+                document.getElementById('synthesis-text').innerText = data.conclusion;
+
+                const createPillar = (id, label, item) => {
+                    Utils.animateScore(id, item.score);
+                    const colorClass = item.score < 70 ? 'red' : 'emerald';
+                    return `
+                        <div class="mb-4 bg-white p-4 rounded-lg border border-slate-100">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">
+                                ${label} 
+                                <span class="float-right text-${colorClass}-600">${item.score}%</span>
+                            </h4>
+                            <p class="text-xs text-slate-600 text-justify leading-relaxed">${item.reason}</p>
+                        </div>
+                    `;
+                };
+
+                let feedbackHTML = "";
+                feedbackHTML += createPillar('score-urgency-val', 'Urgency', data.necessity);
+                feedbackHTML += createPillar('score-novelty-val', 'Novelty', data.novelty);
+                feedbackHTML += createPillar('score-relevance-val', 'Relevance', data.relevance);
+                feedbackHTML += createPillar('score-feasibility-val', 'Feasibility', data.feasibility);
+
+                document.getElementById('analysis-feedback-container').innerHTML = feedbackHTML;
+
+                const scores = [data.necessity.score, data.novelty.score, data.relevance.score, data.feasibility.score];
+                const avg = scores.reduce((a, b) => a + b, 0) / 4;
+                const container = document.getElementById('analysis-actions');
+
+                if (Math.min(...scores) >= 40 && avg >= 50) {
+                    container.innerHTML = `
+                        <button onclick="App.goToStep10()" class="w-full step-gradient text-white font-bold font-heading py-4 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                            Lanjut ke Hipotesis
+                        </button>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="text-amber-600 font-bold mb-2 text-sm text-center">Skor Feasibility Rendah. Disarankan Revisi.</div>
+                        <div class="flex gap-2">
+                            <button onclick="App.goToStep7()" class="flex-1 bg-white border border-slate-300 py-3 rounded-lg text-sm font-bold text-slate-600">Revisi</button>
+                            <button onclick="App.goToStep10()" class="flex-1 bg-slate-100 text-slate-400 text-sm py-3 rounded-lg">Paksa Lanjut</button>
+                        </div>
+                    `;
+                }
+            },
+
+            // STEP 10: Hipotesis
+            async goToStep10() {
+                UI.showLoading("Menyusun Variabel & Hipotesis", "Mengidentifikasi konsep...");
+                UI.updateProgress(10);
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Judul: "${AppState.titles.final}". Metode: ${userData.metode}. Identifikasi:
+                    1. Definisi Operasional Variabel/Konsep Utama (Nama, Peran/Jenis, Definisi Singkat).
+                    2. Hipotesis Penelitian (Jika Kuantitatif) ATAU Pertanyaan Penelitian/Proposisi (Jika Kualitatif/Pustaka).
+                    JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
+                    
+                    const data = await API.fetchAI(prompt, "Output akademik.");
+                    AppState.savedData.hypothesis = data;
+                    document.getElementById('hypo-title-display').innerText = AppState.titles.final;
+
+                    const vList = document.getElementById('variable-list');
+                    vList.innerHTML = '';
+                    data.variables.forEach(v => {
+                        vList.innerHTML += `
+                            <div class="p-3 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm">
+                                <span class="text-[10px] font-bold text-[#1A4AB6] uppercase tracking-widest">${v.role}</span>
+                                <h5 class="font-bold text-sm text-slate-800 font-heading">${v.name}</h5>
+                                <p class="text-xs text-slate-500 text-justify mt-1 leading-relaxed">${v.def}</p>
+                            </div>
+                        `;
+                    });
+
+                    const hList = document.getElementById('hypothesis-list');
+                    hList.innerHTML = '';
+                    data.hypotheses.forEach((h, i) => {
+                        hList.innerHTML += `
+                            <div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 font-medium text-justify border border-teal-100 flex gap-3">
+                                <span class="font-bold text-[#1CB8A3]">H${i + 1}</span> 
+                                <span>${h}</span>
+                            </div>
+                        `;
+                    });
+
+                    UI.showStep('step-10', 10);
+                } catch (error) {
+                    alert("Error.");
+                    this.goToStep11();
+                }
+            },
+
+            // STEP 11: Blueprint
+            async goToStep11() {
+                UI.showLoading("Finalisasi Dokumen", "Menyusun blueprint...");
+                UI.updateProgress(11);
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Buat Blueprint Riset untuk Judul: "${AppState.titles.final}". Metode: ${userData.metode}.
+                    1. Langkah Pengumpulan Data (Konkret).
+                    2. Langkah Analisis Data (Sesuai Metode).
+                    JSON: { data_steps: [string], analysis_steps: [string] }`;
+                    
+                    const data = await API.fetchAI(prompt, "Output langkah teknis.");
+                    AppState.savedData.plan = data;
+                    document.getElementById('final-context-display').innerText = `${userData.metode} | ${userData.jurusan}`;
+
+                    const dList = document.getElementById('data-steps');
+                    dList.innerHTML = '';
+                    data.data_steps.forEach(step => {
+                        dList.innerHTML += `
+                            <div class="flex items-start gap-3">
+                                <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0"></div>
+                                <p class="text-sm text-slate-600 leading-relaxed">${step}</p>
+                            </div>
+                        `;
+                    });
+
+                    const aList = document.getElementById('analysis-steps');
+                    aList.innerHTML = '';
+                    data.analysis_steps.forEach(step => {
+                        aList.innerHTML += `
+                            <div class="flex items-start gap-3">
+                                <div class="mt-1 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0"></div>
+                                <p class="text-sm text-slate-600 leading-relaxed">${step}</p>
+                            </div>
+                        `;
+                    });
+
+                    // Reset buttons
+                    AppState.flags.abstractDone = false;
+                    AppState.flags.instrumentsDone = false;
+                    document.getElementById('generated-abstract').classList.add('hidden');
+                    document.getElementById('generated-instruments').classList.add('hidden');
+
+                    UI.showStep('step-11', 11);
+                } catch (error) {
+                    alert("Error.");
+                    UI.showStep('step-10', 10);
+                }
+            },
+
+            // Generate 5W1H
+            async generateAnalysis5W1H() {
+                const btn = document.getElementById('btn-analysis');
+                btn.disabled = true;
+                btn.innerHTML = "Generating...";
+
+                try {
+                    const prompt = `Analisis 5W+1H mendalam untuk judul: "${AppState.titles.final}".
+                    Output JSON: { what: "...", why: "...", who: "...", where: "...", when: "...", how: "..." }
+                    Buat isinya analitis dan tajam.`;
+                    
+                    const data = await API.fetchAI(prompt, "Analisis tajam.");
+                    AppState.savedData.analysis5W1H = data;
+
+                    const grid = document.getElementById('abstract-content');
+                    grid.innerHTML = '';
+
+                    const createCard = (title, content, color, icon) => `
+                        <div class="analysis-card border-l-4 border-${color}-500">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="p-1.5 bg-${color}-100 rounded text-${color}-600 text-xs">
+                                    <i class="fas fa-${icon}"></i>
+                                </span>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${title}</span>
+                            </div>
+                            <p class="text-xs text-slate-700 font-medium leading-relaxed">${content}</p>
+                        </div>
+                    `;
+
+                    grid.innerHTML += createCard('What (Fokus)', data.what, 'blue', 'microscope');
+                    grid.innerHTML += createCard('Why (Urgensi)', data.why, 'red', 'exclamation-circle');
+                    grid.innerHTML += createCard('Who (Subjek)', data.who, 'amber', 'users');
+                    grid.innerHTML += createCard('Where (Lokasi)', data.where, 'emerald', 'map-marker-alt');
+                    grid.innerHTML += createCard('When (Waktu)', data.when, 'purple', 'clock');
+                    grid.innerHTML += createCard('How (Metode)', data.how, 'slate', 'cogs');
+
+                    document.getElementById('generated-abstract').classList.remove('hidden');
+                    AppState.flags.abstractDone = true;
+                    btn.innerHTML = `<i class="fas fa-check"></i> Selesai`;
+                    btn.classList.add('bg-blue-100', 'text-[#1A4AB6]');
+                    this.updateFinishButton();
+                } catch (error) {
+                    btn.disabled = false;
+                    btn.innerText = "Coba Lagi";
+                }
+            },
+
+            // Generate Instruments
+            async generateInstruments() {
+                const btn = document.getElementById('btn-instruments');
+                btn.disabled = true;
+                btn.innerHTML = "Generating...";
+
+                try {
+                    const { userData } = AppState;
+                    const prompt = `Buat Instrumen Penelitian (Kisi-kisi / Daftar Pertanyaan) untuk: "${AppState.titles.final}".
+                    Metode: ${userData.metode}.
+                    Jika Kuantitatif: Daftar item pernyataan kuesioner.
+                    Jika Kualitatif: Daftar pertanyaan wawancara mendalam.
+                    JSON: { type: "Jenis Instrumen", items: [string] }`;
+                    
+                    const data = await API.fetchAI(prompt, "Instrumen akademik.");
+                    AppState.savedData.instruments = data;
+
+                    const container = document.getElementById('instruments-content');
+                    container.innerHTML = `<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1 font-heading">${data.type}</h5>`;
+                    
+                    data.items.forEach((item, i) => {
+                        container.innerHTML += `
+                            <div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded">
+                                <span class="font-bold text-slate-400 select-none">${i + 1}.</span> 
+                                <p>${item}</p>
+                            </div>
+                        `;
+                    });
+
+                    document.getElementById('generated-instruments').classList.remove('hidden');
+                    AppState.flags.instrumentsDone = true;
+                    btn.innerHTML = `<i class="fas fa-check"></i> Selesai`;
+                    btn.classList.add('bg-teal-100', 'text-[#1CB8A3]');
+                    this.updateFinishButton();
+                } catch (error) {
+                    btn.disabled = false;
+                    btn.innerText = "Coba Lagi";
+                }
+            },
+
+            updateFinishButton() {
+                if (AppState.flags.abstractDone && AppState.flags.instrumentsDone) {
+                    const btn = document.getElementById('btn-finish');
+                    btn.disabled = false;
+                    btn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                    btn.classList.add('step-gradient', 'text-white', 'hover:bg-black', 'transform', 'hover:scale-105', 'shadow-xl');
+                    btn.innerHTML = `<i class="fas fa-file-word mr-2"></i> Download Naskah Lengkap (.docx)`;
+                }
+            },
+
+            // Download Document
+            downloadDocx() {
+                const { userData } = AppState;
+                const { hypothesis, analysis5W1H, instruments, analysis } = AppState.savedData;
+
+                const varList = hypothesis?.variables?.map(v => `<b>${v.name} (${v.role})</b>: ${v.def}`).join('<br>') || "-";
+                const hipoList = hypothesis?.hypotheses?.map(h => `${h}`).join('<br>') || "-";
+
+                let w1hTable = "";
+                if (analysis5W1H) {
+                    w1hTable = `
+                        <table border="1" style="width:100%; border-collapse:collapse; font-size:11pt;">
+                            <tr><td style="padding:5px; background:#f0f0f0;"><b>What</b></td><td style="padding:5px;">${analysis5W1H.what}</td></tr>
+                            <tr><td style="padding:5px; background:#f0f0f0;"><b>Why</b></td><td style="padding:5px;">${analysis5W1H.why}</td></tr>
+                            <tr><td style="padding:5px; background:#f0f0f0;"><b>Who</b></td><td style="padding:5px;">${analysis5W1H.who}</td></tr>
+                            <tr><td style="padding:5px; background:#f0f0f0;"><b>Where</b></td><td style="padding:5px;">${analysis5W1H.where}</td></tr>
+                            <tr><td style="padding:5px; background:#f0f0f0;"><b>When</b></td><td style="padding:5px;">${analysis5W1H.when}</td></tr>
+                            <tr><td style="padding:5px; background:#f0f0f0;"><b>How</b></td><td style="padding:5px;">${analysis5W1H.how}</td></tr>
+                        </table>
+                    `;
+                }
+
+                const instList = instruments?.items?.map(i => `<li>${i}</li>`).join('') || "-";
+
+                const content = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <style>
+                            body{font-family:'Times New Roman',serif;font-size:12pt;line-height:1.5}
+                            h1{text-align:center;font-size:14pt;font-weight:bold;margin-bottom:0;}
+                            h2{text-align:center;font-size:12pt;margin-top:0;margin-bottom:20px;border-bottom:1px solid #000;padding-bottom:10px}
+                            h3{font-size:12pt;font-weight:bold;margin-top:15px;text-transform:uppercase;background:#eee;padding:3px}
+                            p{text-align:justify; margin: 5px 0;}
+                            table{width:100%;border-collapse:collapse;margin-bottom:10px}
+                            td{padding:4px;vertical-align:top;text-align:left}
+                            .label{width:180px;font-weight:bold}
+                        </style>
+                    </head>
+                    <body>
+                        <h1>DRAFT PROPOSAL PENELITIAN</h1>
+                        <h2>Dosbing.ai Assistant Report</h2>
+                        
+                        <h3>A. Identitas Peneliti</h3>
+                        <table>
+                            <tr><td class="label">Nama</td><td>: ${userData.nama}</td></tr>
+                            <tr><td class="label">Jenis Kelamin</td><td>: ${userData.gender}</td></tr>
+                            <tr><td class="label">Fakultas</td><td>: ${userData.fakultas}</td></tr>
+                            <tr><td class="label">Jurusan / Prodi</td><td>: ${userData.jurusan}</td></tr>
+                            <tr><td class="label">Perguruan Tinggi</td><td>: ${userData.universitas}</td></tr>
+                            <tr><td class="label">Minat Kajian</td><td>: ${userData.minat}</td></tr>
+                        </table>
+
+                        <h3>B. Fokus Masalah</h3>
+                        <table>
+                            <tr><td class="label">Objek Penelitian</td><td>: ${userData.objek}</td></tr>
+                            <tr><td class="label">Research Gap</td><td>: ${userData.masalah}</td></tr>
+                            <tr><td class="label">Pendekatan</td><td>: ${userData.metode}</td></tr>
+                            <tr><td class="label">Bahasa</td><td>: ${userData.bahasa}</td></tr>
+                        </table>
+
+                        <h3>C. Judul Final</h3>
+                        <p style="text-align:center; font-weight:bold; font-size:13pt; padding:10px; border:1px solid #000;">${AppState.titles.final}</p>
+                        <p><b>Telaah Kelayakan:</b> ${analysis?.conclusion || '-'}</p>
+
+                        <h3>D. Analisis Bedah Judul (5W + 1H)</h3>
+                        ${w1hTable}
+
+                        <h3>E. Konsep & Hipotesis</h3>
+                        <p><b>Variabel / Definisi Konseptual:</b><br>${varList}</p>
+                        <p><b>Hipotesis / Proposisi:</b><br>${hipoList}</p>
+
+                        <h3>F. Instrumen Penelitian (${instruments?.type || 'Draft'})</h3>
+                        <ol>${instList}</ol>
+                        
+                        <br>
+                        <p style="text-align: center; font-size: 10pt; color: #666;">Dicetak otomatis oleh Dosbing.ai</p>
+                    </body>
+                    </html>
                 `;
 
-                grid.innerHTML += createCard('What (Fokus)', data.what, 'blue', 'microscope');
-                grid.innerHTML += createCard('Why (Urgensi)', data.why, 'red', 'exclamation-circle');
-                grid.innerHTML += createCard('Who (Subjek)', data.who, 'amber', 'users');
-                grid.innerHTML += createCard('Where (Lokasi)', data.where, 'emerald', 'map-marker-alt');
-                grid.innerHTML += createCard('When (Waktu)', data.when, 'purple', 'clock');
-                grid.innerHTML += createCard('How (Metode)', data.how, 'slate', 'cogs');
-
-                document.getElementById('generated-abstract').classList.remove('hidden');
-                abstractDone = true; btn.innerHTML = `<i class="fas fa-check"></i> Selesai`; btn.classList.add('bg-blue-100','text-[#1A4AB6]');
-                updateFinishButton();
-            } catch(e) { btn.disabled = false; btn.innerText = "Coba Lagi"; }
-        }
-
-        async function generateInstruments() {
-            const btn = document.getElementById('btn-instruments'); btn.disabled = true; btn.innerHTML = "Generating...";
-            try {
-                const prompt = `Buat Instrumen Penelitian (Kisi-kisi / Daftar Pertanyaan) untuk: "${finalTitle}".
-                Metode: ${userData.metode}.
-                Jika Kuantitatif: Daftar item pernyataan kuesioner.
-                Jika Kualitatif: Daftar pertanyaan wawancara mendalam.
-                JSON: { type: "Jenis Instrumen", items: [string] }`;
-                const data = await fetchAI(prompt, "Instrumen akademik.");
-                savedInstruments = data;
+                const converted = htmlDocx.asBlob(content, {
+                    orientation: 'portrait',
+                    margins: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+                });
                 
-                const c = document.getElementById('instruments-content');
-                c.innerHTML = `<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1 font-heading">${data.type}</h5>`;
-                data.items.forEach((q,i) => c.innerHTML += `<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span> <p>${q}</p></div>`);
-                
-                document.getElementById('generated-instruments').classList.remove('hidden');
-                instrumentsDone = true; btn.innerHTML = `<i class="fas fa-check"></i> Selesai`; btn.classList.add('bg-teal-100','text-[#1CB8A3]');
-                updateFinishButton();
-            } catch(e) { btn.disabled = false; btn.innerText = "Coba Lagi"; }
-        }
+                saveAs(converted, `Proposal_Riset_${userData.nama.replace(/\s+/g, '_')}.docx`);
+            },
 
-        function updateFinishButton() {
-            if (abstractDone && instrumentsDone) {
-                const btn = document.getElementById('btn-finish');
-                btn.disabled = false;
-                btn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
-                btn.classList.add('step-gradient', 'text-white', 'hover:bg-black', 'transform', 'hover:scale-105', 'shadow-xl');
-                btn.innerHTML = `<i class="fas fa-file-word mr-2"></i> Download Naskah Lengkap (.docx)`;
+            finishSession() {
+                this.downloadDocx();
+                document.getElementById('success-modal').classList.add('active');
             }
-        }
+        };
 
-        function downloadDocx() {
-            let varList = savedHypothesisData?.variables?.map(v => `<b>${v.name} (${v.role})</b>: ${v.def}`).join('<br>') || "-";
-            let hipoList = savedHypothesisData?.hypotheses?.map(h => `${h}`).join('<br>') || "-";
-            
-            // Format 5W1H for Word Table
-            let w1hTable = "";
-            if (savedAnalysis5W1H) {
-                w1hTable = `<table border="1" style="width:100%; border-collapse:collapse; font-size:11pt;">
-                    <tr><td style="padding:5px; background:#f0f0f0;"><b>What</b></td><td style="padding:5px;">${savedAnalysis5W1H.what}</td></tr>
-                    <tr><td style="padding:5px; background:#f0f0f0;"><b>Why</b></td><td style="padding:5px;">${savedAnalysis5W1H.why}</td></tr>
-                    <tr><td style="padding:5px; background:#f0f0f0;"><b>Who</b></td><td style="padding:5px;">${savedAnalysis5W1H.who}</td></tr>
-                    <tr><td style="padding:5px; background:#f0f0f0;"><b>Where</b></td><td style="padding:5px;">${savedAnalysis5W1H.where}</td></tr>
-                    <tr><td style="padding:5px; background:#f0f0f0;"><b>When</b></td><td style="padding:5px;">${savedAnalysis5W1H.when}</td></tr>
-                    <tr><td style="padding:5px; background:#f0f0f0;"><b>How</b></td><td style="padding:5px;">${savedAnalysis5W1H.how}</td></tr>
-                </table>`;
-            }
-
-            // Instruments
-            let instList = savedInstruments?.items?.map(i => `<li>${i}</li>`).join('') || "-";
-
-            const content = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-                body{font-family:'Times New Roman',serif;font-size:12pt;line-height:1.5}
-                h1{text-align:center;font-size:14pt;font-weight:bold;margin-bottom:0;}
-                h2{text-align:center;font-size:12pt;margin-top:0;margin-bottom:20px;border-bottom:1px solid #000;padding-bottom:10px}
-                h3{font-size:12pt;font-weight:bold;margin-top:15px;text-transform:uppercase;background:#eee;padding:3px}
-                p{text-align:justify; margin: 5px 0;}
-                table{width:100%;border-collapse:collapse;margin-bottom:10px}
-                td{padding:4px;vertical-align:top;text-align:left}
-                .label{width:180px;font-weight:bold}
-            </style></head><body>
-                <h1>DRAFT PROPOSAL PENELITIAN</h1>
-                <h2>Dosbing.ai Assistant Report</h2>
-                
-                <h3>A. Identitas Peneliti</h3>
-                <table>
-                    <tr><td class="label">Nama</td><td>: ${userData.nama}</td></tr>
-                    <tr><td class="label">Jenis Kelamin</td><td>: ${userData.gender}</td></tr>
-                    <tr><td class="label">Fakultas</td><td>: ${userData.fakultas}</td></tr>
-                    <tr><td class="label">Jurusan / Prodi</td><td>: ${userData.jurusan}</td></tr>
-                    <tr><td class="label">Perguruan Tinggi</td><td>: ${userData.universitas}</td></tr>
-                    <tr><td class="label">Minat Kajian</td><td>: ${userData.minat}</td></tr>
-                </table>
-
-                <h3>B. Fokus Masalah</h3>
-                <table>
-                    <tr><td class="label">Objek Penelitian</td><td>: ${userData.objek}</td></tr>
-                    <tr><td class="label">Research Gap</td><td>: ${userData.masalah}</td></tr>
-                    <tr><td class="label">Pendekatan</td><td>: ${userData.metode}</td></tr>
-                    <tr><td class="label">Bahasa</td><td>: ${userData.bahasa}</td></tr>
-                </table>
-
-                <h3>C. Judul Final</h3>
-                <p style="text-align:center; font-weight:bold; font-size:13pt; padding:10px; border:1px solid #000;">${finalTitle}</p>
-                <p><b>Telaah Kelayakan:</b> ${savedAnalysisData?.conclusion || '-'}</p>
-
-                <h3>D. Analisis Bedah Judul (5W + 1H)</h3>
-                ${w1hTable}
-
-                <h3>E. Konsep & Hipotesis</h3>
-                <p><b>Variabel / Definisi Konseptual:</b><br>${varList}</p>
-                <p><b>Hipotesis / Proposisi:</b><br>${hipoList}</p>
-
-                <h3>F. Instrumen Penelitian (${savedInstruments?.type || 'Draft'})</h3>
-                <ol>${instList}</ol>
-                
-                <br>
-                <p style="text-align: center; font-size: 10pt; color: #666;">Dicetak otomatis oleh Dosbing.ai</p>
-            </body></html>`;
-            
-            const converted = htmlDocx.asBlob(content, {orientation: 'portrait', margins: {top: 1440, right: 1440, bottom: 1440, left: 1440}}); 
-            saveAs(converted, `Proposal_Riset_${userData.nama.replace(/\s+/g, '_')}.docx`);
-        }
-
-        function finishSession() {
-            downloadDocx(); 
-            document.getElementById('success-modal').classList.add('active');
-        }
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Dosbing.ai initialized successfully');
+        });
     </script>
 </body>
 </html>
