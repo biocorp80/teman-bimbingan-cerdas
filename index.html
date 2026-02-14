@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dosbing.ai - Research Path (Brand Edition)</title>
+    <title>Dosbing.ai - Research Path (Client Edition)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
@@ -465,7 +465,8 @@
     </div>
 
     <script>
-        // --- KONFIGURASI OPENROUTER ---
+        // --- KONFIGURASI CLIENT (AMAN) ---
+        // Tidak ada API Key di sini. Aplikasi akan bicara ke /api/chat
         
         // Simpan data user
         let userData = { nama: "", gender: "", jurusan: "", fakultas: "", universitas: "", minat: "", objek: "", masalah: "", metode: "", analisisMasalah: "", bahasa: "Indonesia" };
@@ -524,78 +525,41 @@
             document.getElementById('loading-text').innerText = text;
         }
 
-        // --- FUNGSI AI BARU (OPENROUTER) ---
+        // --- FUNGSI AI BARU (SERVERLESS) ---
         async function fetchAI(prompt, system) {
-            // Cek API Key di LocalStorage
-            let apiKey = localStorage.getItem("openrouter_key");
-            
-            // Jika belum ada, minta input user
-            if (!apiKey) {
-                apiKey = prompt("Masukkan API Key OpenRouter Anda (sk-or-v1...):");
-                if (apiKey) {
-                    localStorage.setItem("openrouter_key", apiKey);
-                } else {
-                    alert("API Key diperlukan agar aplikasi berjalan!");
-                    throw new Error("No API Key provided");
-                }
-            }
-
-            // Endpoint OpenRouter
-            const url = "https://openrouter.ai/api/v1/chat/completions";
-            
-            // Model: Google Gemini Flash 2.0 (Cepat & Bagus)
-            // Anda bisa ganti string ini dengan model lain jika mau (misal: "deepseek/deepseek-r1")
-            const modelName = "google/gemini-2.0-flash-001"; 
-
             const finalSystem = system + " " + getLangInstruction();
-            const delays = [1000, 2000, 4000];
+            
+            try {
+                // Panggil Backend Internal (Serverless Function)
+                // Ini akan mengarah ke file api/chat.js yang sudah kita buat
+                const response = await fetch('/api/chat', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        model: "google/gemini-2.0-flash-001", // Bisa request ganti model di sini
+                        messages: [
+                            { role: "system", content: finalSystem },
+                            { role: "user", content: prompt }
+                        ]
+                    })
+                });
 
-            for (let i = 0; i <= delays.length; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 
-                            'Authorization': `Bearer ${apiKey}`,
-                            'Content-Type': 'application/json',
-                            'HTTP-Referer': window.location.href, // Disarankan OpenRouter
-                            'X-Title': 'Dosbing AI' // Disarankan OpenRouter
-                        },
-                        body: JSON.stringify({ 
-                            model: modelName,
-                            messages: [
-                                { role: "system", content: finalSystem },
-                                { role: "user", content: prompt }
-                            ],
-                            // Penting: Memaksa output JSON agar aplikasi tidak error
-                            response_format: { type: "json_object" } 
-                        })
-                    });
-
-                    if (!response.ok) { 
-                        if (response.status === 429 && i < delays.length) { 
-                            await new Promise(r => setTimeout(r, delays[i])); 
-                            continue; 
-                        }
-                        // Hapus key jika unauthorized (401) agar user bisa input ulang
-                        if (response.status === 401) {
-                            localStorage.removeItem("openrouter_key");
-                            alert("API Key tidak valid. Silakan refresh dan masukkan ulang.");
-                        }
-                        throw new Error(`API Error: ${response.statusText}`); 
-                    }
-
-                    const res = await response.json();
-                    // Parsing hasil dari OpenRouter
-                    const content = res.choices[0].message.content;
-                    return JSON.parse(content);
-
-                } catch (e) { 
-                    console.error(e);
-                    if (i === delays.length) { 
-                        alert("AI sedang sibuk atau error koneksi. Coba lagi."); 
-                        throw e; 
-                    } 
+                if (!response.ok) {
+                    throw new Error("Gagal menghubungi server AI. Pastikan Environment Variable sudah di-set di Vercel.");
                 }
+
+                const res = await response.json();
+                
+                // Parsing hasil dari Backend
+                // Struktur respons OpenRouter standar: choices[0].message.content
+                const content = res.choices[0].message.content;
+                
+                return JSON.parse(content);
+
+            } catch (e) { 
+                console.error(e);
+                alert("Terjadi kesalahan pada Server AI. Silakan coba lagi nanti.");
+                throw e; 
             }
         }
 
