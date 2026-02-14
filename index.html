@@ -3,39 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dosbing.ai - Research Path (Professional Doc)</title>
+    <title>Dosbing.ai - Research Path (Professional)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* BRAND COLORS */
         :root { --brand-blue: #1A4AB6; --brand-teal: #1CB8A3; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; color: #334155; }
-        h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, .font-heading { font-family: 'Montserrat', sans-serif; }
         
-        /* Custom Utilities */
-        .text-brand-blue { color: var(--brand-blue); } .text-brand-teal { color: var(--brand-teal); }
-        .bg-brand-blue { background-color: var(--brand-blue); } .bg-brand-teal { background-color: var(--brand-teal); }
-        .border-brand-blue { border-color: var(--brand-blue); }
-        
-        /* CSS Clean Text */
-        .prose { font-size: 0.875rem; line-height: 1.6; color: #334155; }
-        .prose p { margin-bottom: 0.5em; text-align: justify; }
-        .prose a { display: none !important; }
-        .prose strong { color: #1e293b; font-weight: 700; }
-
-        /* Gradient Button */
         .step-gradient { background: linear-gradient(90deg, #1A4AB6 0%, #1CB8A3 100%); transition: all 0.3s ease; }
         .step-gradient:hover { box-shadow: 0 10px 15px -3px rgba(26, 74, 182, 0.3); filter: brightness(1.05); }
-
         .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -43,23 +26,30 @@
         .loading-spinner { border: 3px solid #e2e8f0; border-top: 3px solid var(--brand-blue); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .title-option { cursor: pointer; transition: all 0.2s; border: 1px solid #e2e8f0; background: #fff; }
+        .title-option { cursor: pointer; border: 1px solid #e2e8f0; background: #fff; transition: all 0.2s; }
         .title-option:hover { border-color: var(--brand-blue); background: #eff6ff; }
         .title-option.selected { border-color: var(--brand-blue); background: #eff6ff; box-shadow: 0 0 0 2px rgba(26, 74, 182, 0.1); }
+        
         .option-card { transition: all 0.2s ease; }
         .option-card:hover { transform: translateY(-4px); border-color: var(--brand-blue); }
         
-        .score-circle { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 4px solid #e2e8f0; margin: 0 auto; background: #fff; position: relative; transition: border-color 1s ease, transform 0.3s ease; }
+        .score-circle { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 4px solid #e2e8f0; margin: 0 auto; background: #fff; position: relative; transition: border-color 1s ease; }
+        
         .progress-line-container { position: absolute; top: 7px; left: 25px; right: 25px; height: 2px; background: #e2e8f0; z-index: 1; }
         .progress-line-fill { height: 100%; background: var(--brand-blue); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .step-item { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; min-width: 50px; }
-        .step-dot { width: 16px; height: 16px; border-radius: 50%; transition: all 0.4s ease; display: flex; align-items: center; justify-content: center; font-size: 9px; color: white; border: 2px solid white; }
-        .step-label { font-size: 9px; font-weight: 700; text-transform: uppercase; margin-top: 6px; letter-spacing: 0.05em; transition: color 0.4s ease; font-family: 'Montserrat', sans-serif; }
-        .analysis-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; transition: all 0.2s; }
-        .analysis-card:hover { border-color: var(--brand-blue); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .step-dot { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: white; border: 2px solid white; transition: all 0.4s ease; }
+        .step-label { font-size: 9px; font-weight: 700; text-transform: uppercase; margin-top: 6px; letter-spacing: 0.05em; font-family: 'Montserrat', sans-serif; transition: color 0.4s ease; }
+        
         .modal { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; }
         .modal.active { opacity: 1; pointer-events: auto; }
-        @media (max-width: 640px) { .score-circle { width: 60px; height: 60px; border-width: 3px; } .score-val { font-size: 1rem; } }
+        
+        /* Clean Prose for AI Text */
+        .prose { font-size: 0.875rem; line-height: 1.6; color: #334155; }
+        .prose p { margin-bottom: 0.5em; text-align: justify; }
+        .prose a { display: none !important; } /* Sembunyikan link */
+        .prose strong { color: #1e293b; font-weight: 700; }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -89,7 +79,7 @@
                         <div class="flex justify-between w-full">
                             <div class="step-item" id="step-node-1"><div class="step-dot bg-[#1A4AB6] ring-4 ring-blue-50" id="dot-1"></div><span class="step-label text-[#1A4AB6]">Bio</span></div>
                             <div class="step-item" id="step-node-2"><div class="step-dot bg-slate-200" id="dot-2"></div><span class="step-label text-slate-400">Objek</span></div>
-                            <div class="step-item" id="step-node-3"><div class="step-dot bg-slate-200" id="dot-3"></div><span class="step-label text-slate-400">Gap</span></div>
+                            <div class="step-item" id="step-node-3"><div class="step-dot bg-slate-200" id="dot-3"></div><span class="step-label text-slate-400">Masalah</span></div>
                             <div class="step-item" id="step-node-4"><div class="step-dot bg-slate-200" id="dot-4"></div><span class="step-label text-slate-400">Validasi</span></div>
                             <div class="step-item" id="step-node-5"><div class="step-dot bg-slate-200" id="dot-5"></div><span class="step-label text-slate-400">Metode</span></div>
                             <div class="step-item" id="step-node-6"><div class="step-dot bg-slate-200" id="dot-6"></div><span class="step-label text-slate-400">Judul</span></div>
@@ -333,9 +323,21 @@
                 if (!response.ok) throw new Error("Server AI Error.");
                 const res = await response.json();
                 const content = res.choices[0].message.content;
-                const cleanJson = content.replace(/```json/g, '').replace(/```/g, '').trim();
-                return JSON.parse(cleanJson);
-            } catch (e) { console.error(e); alert("Server AI sibuk. Coba lagi."); throw e; }
+                
+                // PARSING JSON LEBIH KUAT (Anti-Gagal)
+                const jsonStart = content.indexOf('{');
+                const jsonEnd = content.lastIndexOf('}');
+                if (jsonStart !== -1 && jsonEnd !== -1) {
+                    const jsonStr = content.substring(jsonStart, jsonEnd + 1);
+                    return JSON.parse(jsonStr);
+                } else {
+                    return JSON.parse(content); // Coba parse langsung jika tidak ada teks sampah
+                }
+            } catch (e) { 
+                console.error(e); 
+                // Jangan throw error agar user bisa coba lagi tanpa reload
+                return null;
+            }
         }
 
         // --- LOGIC ---
@@ -347,10 +349,11 @@
             try {
                 const prompt = `Konteks: ${userData.jurusan}, ${userData.fakultas}. Minat: "${userData.minat}". Sebutkan 8 objek penelitian spesifik. DILARANG KERAS MENYERTAKAN SUMBER/SITASI. JSON: { objects: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih.");
+                if(!data) throw new Error("Gagal");
                 const list = document.getElementById('ai-objects-list'); list.innerHTML='';
                 data.objects.forEach(obj => { const d=document.createElement('div'); d.className="p-3 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:border-[#1A4AB6] cursor-pointer text-center fade-in"; d.innerHTML=marked.parseInline(cleanText(obj)); d.onclick=()=>{document.getElementById('custom-object').value=cleanText(obj)}; list.appendChild(d); });
                 list.classList.remove('hidden');
-            } catch(e){} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-robot"></i> Rekomendasi AI'; }
+            } catch(e){ alert("AI Gagal. Coba lagi."); } finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-robot"></i> Rekomendasi AI'; }
         }
         function goToStep3() { userData.objek=document.getElementById('custom-object').value; if(!userData.objek) return alert("Isi objek!"); hideAll(); document.getElementById('step-3').classList.remove('hidden'); updateProgress(3); }
         function backToStep2() { hideAll(); document.getElementById('step-2').classList.remove('hidden'); updateProgress(2); }
@@ -360,10 +363,11 @@
             try {
                 const prompt = `Konteks: ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah). DILARANG MENYERTAKAN SUMBER, SITASI, NAMA JURNAL, ATAU LINK APAPUN. JSON: { problems: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih tanpa sumber.");
+                if(!data) throw new Error("Gagal");
                 const list = document.getElementById('ai-problems-list'); list.innerHTML='';
                 data.problems.forEach(p => { const d=document.createElement('div'); d.className="p-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-blue-50 cursor-pointer text-left fade-in flex gap-2"; const cleanP=cleanText(p); d.innerHTML=`<i class="fas fa-exclamation-circle mt-1 text-slate-300 flex-shrink-0"></i><div class="prose prose-sm">${marked.parseInline(cleanP)}</div>`; d.onclick=()=>{document.getElementById('custom-problem').value=cleanP}; list.appendChild(d); });
                 list.classList.remove('hidden');
-            } catch(e){} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-search-plus"></i> Identifikasi Masalah'; }
+            } catch(e){ alert("AI Gagal. Coba lagi."); } finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-search-plus"></i> Identifikasi Masalah'; }
         }
         function goToStep4() { userData.masalah=document.getElementById('custom-problem').value; if(!userData.masalah) return alert("Isi masalah!"); hideAll(); document.getElementById('step-4').classList.remove('hidden'); document.getElementById('display-objek').innerText=userData.objek; document.getElementById('display-masalah').innerText=userData.masalah; document.getElementById('display-jurusan').innerText=userData.jurusan; updateProgress(4); }
         function backToStep3() { hideAll(); document.getElementById('step-3').classList.remove('hidden'); updateProgress(3); }
@@ -373,13 +377,14 @@
             try {
                 const prompt = `Validasi Judul. Mahasiswa: ${userData.jurusan}. Rencana: "${userData.objek}", Masalah "${userData.masalah}". Apakah linier? JANGAN sertakan link/sumber. JSON: { is_relevant: boolean, reason: string }`;
                 const data = await fetchAI(prompt, "Analisis dosen.");
+                if(!data) throw new Error("Gagal");
                 const div = document.getElementById('connection-analysis-result');
                 const next = document.getElementById('btn-next-step-5');
                 div.innerHTML = `<div class="prose prose-sm max-w-none">${marked.parse(cleanText(data.reason))}</div>`;
                 div.classList.remove('hidden');
                 if(data.is_relevant) { div.className="text-left p-5 rounded-xl text-sm border bg-teal-50 border-teal-200"; userData.analisisMasalah=cleanText(data.reason); next.disabled=false; next.classList.replace('bg-slate-200','step-gradient'); next.classList.replace('text-slate-400','text-white'); next.classList.remove('cursor-not-allowed'); }
                 else { div.className="text-left p-5 rounded-xl text-sm border bg-red-50 border-red-200 text-red-800"; next.disabled=true; }
-            } catch(e){alert("Error");} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-check-double"></i> Cek Kelayakan'; }
+            } catch(e){alert("Error Validasi. Coba lagi.");} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-check-double"></i> Cek Kelayakan'; }
         }
         function goToStep5() { hideAll(); document.getElementById('step-5').classList.remove('hidden'); updateProgress(5); }
         function backToStep4() { hideAll(); document.getElementById('step-4').classList.remove('hidden'); updateProgress(4); }
@@ -390,13 +395,14 @@
             try {
                 const prompt = `Buat 3 opsi judul skripsi formal. Data: "${userData.minat}", "${userData.objek}", "${userData.masalah}", "${userData.metode}". JANGAN sertakan nama jurnal/sumber dalam kurung. HANYA JUDUL MURNI. JSON: { paths: [ { topic: 'Tema', phenomenon: 'Konteks', analysis: 'Alat', titles: [string] } ] }`;
                 const data = await fetchAI(prompt, "Judul formal bersih.");
+                if(!data) throw new Error("Gagal");
                 const list=document.getElementById('topics-list'); list.innerHTML='';
                 data.paths.forEach((p,i) => {
                     let tHTML = p.titles.map(t => `<div class="title-option p-4 rounded-lg text-sm font-semibold text-slate-800 relative group" onclick="pickTitle(this, '${cleanText(t).replace(/'/g,"\\'")}')"><div class="absolute right-4 opacity-0 group-[.selected]:opacity-100 text-[#1A4AB6]"><i class="fas fa-check-circle"></i></div>${cleanText(t)}</div>`).join('');
                     list.innerHTML += `<div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm fade-in stagger-${i+1}"><div class="flex items-center gap-2 mb-3"><span class="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-1 rounded uppercase">Opsi ${i+1}</span><h3 class="font-bold text-base text-[#1A4AB6]">${p.topic}</h3></div><p class="text-xs text-slate-500 mb-4">${cleanText(p.phenomenon)}</p><div class="space-y-2">${tHTML}</div></div>`;
                 });
                 hideAll(); document.getElementById('step-6').classList.remove('hidden'); document.getElementById('context-summary').innerText = `${userData.jurusan} • ${userData.metode}`;
-            } catch(e) { hideAll(); document.getElementById('step-5').classList.remove('hidden'); }
+            } catch(e) { hideAll(); document.getElementById('step-5').classList.remove('hidden'); alert("Gagal generate judul. Coba lagi."); }
         }
         function pickTitle(el, t) { selectedTitle=t; document.querySelectorAll('.title-option').forEach(e=>e.classList.remove('selected')); el.classList.add('selected'); document.getElementById('selected-title-preview').innerText=t; const b=document.getElementById('btn-to-step-7'); b.disabled=false; b.classList.replace('bg-slate-200','step-gradient'); b.classList.replace('text-slate-400','text-white'); b.classList.remove('cursor-not-allowed'); document.getElementById('sticky-action').classList.remove('translate-y-full'); }
         function backToStep5() { hideAll(); document.getElementById('step-5').classList.remove('hidden'); updateProgress(5); }
@@ -407,13 +413,13 @@
         
         async function repairTitle() {
             const instr=document.getElementById('repair-instruction').value; if(!instr) return alert("Isi instruksi!"); const btn=document.getElementById('btn-repair'); btn.disabled=true; btn.innerText="...";
-            try { const data=await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}. JANGAN sertakan sumber. JSON: { repaired_title: string }`, "Revisi judul."); repairedTitle=cleanText(data.repaired_title); document.getElementById('text-repaired').innerText=repairedTitle; document.getElementById('text-original').innerText=originalTitle; document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired'); btn.innerText="Selesai"; } catch(e){btn.disabled=false;}
+            try { const data=await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}. JANGAN sertakan sumber. JSON: { repaired_title: string }`, "Revisi judul."); if(!data) throw new Error("Gagal"); repairedTitle=cleanText(data.repaired_title); document.getElementById('text-repaired').innerText=repairedTitle; document.getElementById('text-original').innerText=originalTitle; document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired'); btn.innerText="Selesai"; } catch(e){btn.disabled=false; alert("Gagal revisi.");}
         }
         function selectFinalTitle(t) { document.getElementById('opt-original').classList.remove('selected','border-[#1A4AB6]'); document.getElementById('opt-repaired').classList.remove('selected','border-[#1A4AB6]'); if(t==='original'){currentTitleBase=originalTitle; document.getElementById('opt-original').classList.add('selected','border-[#1A4AB6]');} else {currentTitleBase=repairedTitle; document.getElementById('opt-repaired').classList.add('selected','border-[#1A4AB6]');} }
 
         async function goToStep8() {
             hideAll(); document.getElementById('step-8').classList.remove('hidden'); document.getElementById('standardization-loading').classList.remove('hidden'); document.getElementById('standardization-result').classList.add('hidden'); updateProgress(8);
-            try { const data=await fetchAI(`Standarisasi judul: "${currentTitleBase}". JANGAN sertakan sumber. JSON: { standardized_title: string }`, "Baku PUEBI."); document.getElementById('std-title-raw').innerText=currentTitleBase; standardizedTitle=cleanText(data.standardized_title); document.getElementById('std-title-std').innerText=standardizedTitle; selectStandardization('std'); document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden'); } catch(e){goToStep9();}
+            try { const data=await fetchAI(`Standarisasi judul: "${currentTitleBase}". JANGAN sertakan sumber. JSON: { standardized_title: string }`, "Baku PUEBI."); if(!data) throw new Error("Gagal"); document.getElementById('std-title-raw').innerText=currentTitleBase; standardizedTitle=cleanText(data.standardized_title); document.getElementById('std-title-std').innerText=standardizedTitle; selectStandardization('std'); document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden'); } catch(e){goToStep9();}
         }
         function selectStandardization(t) { document.getElementById('std-opt-raw').classList.remove('selected','border-[#1A4AB6]'); document.getElementById('std-opt-std').classList.remove('selected','border-[#1CB8A3]'); if(t==='raw'){finalTitle=currentTitleBase; document.getElementById('std-opt-raw').classList.add('selected','border-[#1A4AB6]');} else {finalTitle=standardizedTitle; document.getElementById('std-opt-std').classList.add('selected','border-[#1CB8A3]');} }
 
@@ -422,6 +428,7 @@
             try {
                 const prompt = `Telaah Feasibility Judul: "${finalTitle}". Konteks: ${userData.jurusan}. JANGAN sertakan sumber/sitasi. JSON: { necessity: {score: int, reason: string}, novelty: {score: int, reason: string}, relevance: {score: int, reason: string}, feasibility: {score: int, reason: string}, conclusion: string }`;
                 const data=await fetchAI(prompt, "Analisis dosen.");
+                if(!data) throw new Error("Gagal");
                 document.getElementById('analysis-loading').classList.add('hidden'); document.getElementById('analysis-result').classList.remove('hidden'); document.getElementById('analyzed-title').innerText=finalTitle; document.getElementById('synthesis-text').innerHTML=`<div class="prose prose-sm">${marked.parse(cleanText(data.conclusion))}</div>`;
                 
                 const pill=(id,l,item)=>{ const el=document.getElementById(id); let c=0; const i=setInterval(()=>{c+=2;if(c>=item.score){c=item.score;clearInterval(i);}el.innerText=c+"%";el.parentElement.style.borderColor=c<60?"#ef4444":c<80?"#eab308":"#1CB8A3";},20); return `<div class="mb-4 bg-white p-4 rounded-lg border border-slate-100"><h4 class="font-bold text-slate-900 text-sm mb-1">${l} <span class="float-right">${item.score}%</span></h4><div class="text-xs text-slate-600 prose prose-sm">${marked.parse(cleanText(item.reason))}</div></div>`; };
@@ -430,14 +437,16 @@
                 savedAnalysisData = data;
                 const sc=[data.necessity.score,data.novelty.score,data.relevance.score,data.feasibility.score]; const avg=sc.reduce((a,b)=>a+b,0)/4;
                 const c=document.getElementById('analysis-actions'); c.innerHTML = (Math.min(...sc)>=40 && avg>=50) ? `<button onclick="goToStep10()" class="w-full step-gradient text-white font-bold font-heading py-4 rounded-xl shadow-lg hover:shadow-xl">Lanjut Hipotesis</button>` : `<div class="text-amber-600 font-bold mb-2 text-sm text-center">Skor Rendah.</div><div class="flex gap-2"><button onclick="goToStep7()" class="flex-1 bg-white border py-3 rounded-lg text-sm font-bold">Revisi</button><button onclick="goToStep10()" class="flex-1 bg-slate-100 text-sm py-3 rounded-lg">Paksa Lanjut</button></div>`;
-            } catch(e){document.getElementById('step-8').classList.remove('hidden');}
+            } catch(e){ console.error(e); document.getElementById('step-8').classList.remove('hidden'); alert("Gagal mengambil telaah. Coba lagi.");}
         }
 
         async function goToStep10() {
             showLoading("Menyusun Variabel", "Identifikasi konsep..."); updateProgress(10);
             try {
                 const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. JANGAN sertakan sumber. JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
-                const data=await fetchAI(prompt, "Output akademik."); savedHypothesisData=data; document.getElementById('hypo-title-display').innerText=finalTitle;
+                const data=await fetchAI(prompt, "Output akademik."); 
+                if(!data) throw new Error("Gagal");
+                savedHypothesisData=data; document.getElementById('hypo-title-display').innerText=finalTitle;
                 const vList=document.getElementById('variable-list'); vList.innerHTML=''; data.variables.forEach(v=>{ vList.innerHTML+=`<div class="p-4 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm"><div class="flex justify-between mb-2"><h5 class="font-bold text-sm">${v.name}</h5><span class="text-[10px] bg-blue-50 px-2 py-1 rounded border">${v.role}</span></div><div class="text-xs text-slate-600 prose prose-sm">${marked.parse(cleanText(v.def))}</div></div>`; });
                 const hList=document.getElementById('hypothesis-list'); hList.innerHTML=''; data.hypotheses.forEach((h,i)=>{ hList.innerHTML+=`<div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 border border-teal-100 flex gap-3"><span class="font-bold text-[#1CB8A3] whitespace-nowrap">H${i+1}</span><div class="prose prose-sm">${marked.parse(cleanText(h))}</div></div>`; });
                 hideAll(); document.getElementById('step-10').classList.remove('hidden');
@@ -448,7 +457,9 @@
             showLoading("Finalisasi", "Menyusun blueprint..."); updateProgress(11);
             try {
                 const prompt = `Blueprint Riset Judul: "${finalTitle}". Metode: ${userData.metode}. JANGAN sertakan sumber. JSON: { data_steps: [string], analysis_steps: [string] }`;
-                const data=await fetchAI(prompt, "Langkah teknis."); savedPlanData=data; document.getElementById('final-context-display').innerText=`${userData.metode} | ${userData.jurusan}`;
+                const data=await fetchAI(prompt, "Langkah teknis."); 
+                if(!data) throw new Error("Gagal");
+                savedPlanData=data; document.getElementById('final-context-display').innerText=`${userData.metode} | ${userData.jurusan}`;
                 const dList=document.getElementById('data-steps'); dList.innerHTML=''; data.data_steps.forEach(s=>{ dList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0"></div><div class="text-sm text-slate-600 prose prose-sm">${marked.parse(cleanText(s))}</div></div>`; });
                 const aList=document.getElementById('analysis-steps'); aList.innerHTML=''; data.analysis_steps.forEach(s=>{ aList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0"></div><div class="text-sm text-slate-600 prose prose-sm">${marked.parse(cleanText(s))}</div></div>`; });
                 abstractDone=false; instrumentsDone=false; document.getElementById('generated-abstract').classList.add('hidden'); document.getElementById('generated-instruments').classList.add('hidden'); hideAll(); document.getElementById('step-11').classList.remove('hidden');
@@ -459,7 +470,9 @@
             const btn=document.getElementById('btn-analysis'); btn.disabled=true; btn.innerText="Generating...";
             try {
                 const prompt = `Analisis 5W+1H judul: "${finalTitle}". DILARANG KERAS MENYERTAKAN SUMBER/SITASI. JSON: { what: "...", why: "...", who: "...", where: "...", when: "...", how: "..." }`;
-                const data=await fetchAI(prompt, "Analisis tajam."); savedAnalysis5W1H=data;
+                const data=await fetchAI(prompt, "Analisis tajam."); 
+                if(!data) throw new Error("Gagal");
+                savedAnalysis5W1H=data;
                 const g=document.getElementById('abstract-content'); g.innerHTML='';
                 const c=(t,c,cl,i)=>`<div class="analysis-card border-l-4 border-${cl}-500"><div class="flex items-center gap-2 mb-2"><span class="p-1.5 bg-${cl}-100 rounded text-${cl}-600 text-xs"><i class="fas fa-${i}"></i></span><span class="text-xs font-bold text-slate-400 uppercase">${t}</span></div><div class="text-xs text-slate-700 prose prose-sm">${marked.parse(cleanText(c))}</div></div>`;
                 g.innerHTML+=c('What',data.what,'blue','microscope'); g.innerHTML+=c('Why',data.why,'red','exclamation-circle'); g.innerHTML+=c('Who',data.who,'amber','users'); g.innerHTML+=c('Where',data.where,'emerald','map-marker-alt'); g.innerHTML+=c('When',data.when,'purple','clock'); g.innerHTML+=c('How',data.how,'slate','cogs');
@@ -471,17 +484,15 @@
             const btn=document.getElementById('btn-instruments'); btn.disabled=true; btn.innerText="Generating...";
             try {
                 const prompt = `Instrumen Penelitian judul: "${finalTitle}". Metode: ${userData.metode}. Strict JSON. JANGAN sertakan sumber. JSON: { type: "Jenis", items: [string] }`;
-                const data=await fetchAI(prompt, "Instrumen."); savedInstruments=data;
+                const data=await fetchAI(prompt, "Instrumen."); 
+                if(!data) throw new Error("Gagal");
+                savedInstruments=data;
                 const c=document.getElementById('instruments-content'); c.innerHTML=`<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1">${data.type}</h5>`;
                 if (data.items && Array.isArray(data.items)) {
                     data.items.forEach((q,i)=>{ c.innerHTML+=`<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span><div class="prose prose-sm">${marked.parseInline(cleanText(q))}</div></div>`; });
                 }
                 document.getElementById('generated-instruments').classList.remove('hidden'); instrumentsDone=true; btn.innerHTML='<i class="fas fa-check"></i> Selesai'; updateFinishButton();
-            } catch(e){
-                console.error(e);
-                btn.disabled=false; btn.innerText="Coba Lagi";
-                alert("Gagal memuat instrumen. Coba lagi.");
-            }
+            } catch(e){ console.error(e); btn.disabled=false; btn.innerText="Coba Lagi"; alert("Gagal memuat instrumen. Coba lagi."); }
         }
 
         function updateFinishButton() { if(abstractDone && instrumentsDone) { const b=document.getElementById('btn-finish'); b.disabled=false; b.classList.remove('bg-slate-200','text-slate-400','cursor-not-allowed'); b.classList.add('step-gradient','text-white','shadow-xl'); } }
@@ -578,7 +589,7 @@
             </body></html>`;
 
             const converted = htmlDocx.asBlob(content, {orientation: 'portrait', margins: {top: 1440, right: 1440, bottom: 1440, left: 1440}});
-            saveAs(converted, `Proposal_Riset_${userData.nama.replace(/\s+/g, '_')}.docx`);
+            saveAs(converted, `Deskripsi_Judul_${userData.nama.replace(/\s+/g, '_')}.docx`);
         }
 
         function finishSession() { downloadDocx(); document.getElementById('success-modal').classList.add('active'); }
