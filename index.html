@@ -5,66 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dosbing.ai - Research Path (Client Edition)</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="[https://unpkg.com/html-docx-js/dist/html-docx.js](https://unpkg.com/html-docx-js/dist/html-docx.js)"></script>
+    <script src="[https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js](https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js)"></script>
+    <script src="[https://cdn.jsdelivr.net/npm/marked/marked.min.js](https://cdn.jsdelivr.net/npm/marked/marked.min.js)"></script>
+    <link href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)" rel="stylesheet">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap)" rel="stylesheet">
 
     <style>
         /* BRAND COLORS */
-        :root {
-            --brand-blue: #1A4AB6;
-            --brand-teal: #1CB8A3;
-        }
-
+        :root { --brand-blue: #1A4AB6; --brand-teal: #1CB8A3; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; color: #334155; }
         h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Montserrat', sans-serif; }
         
         /* Custom Utilities */
-        .text-brand-blue { color: var(--brand-blue); }
-        .text-brand-teal { color: var(--brand-teal); }
-        .bg-brand-blue { background-color: var(--brand-blue); }
-        .bg-brand-teal { background-color: var(--brand-teal); }
+        .text-brand-blue { color: var(--brand-blue); } .text-brand-teal { color: var(--brand-teal); }
+        .bg-brand-blue { background-color: var(--brand-blue); } .bg-brand-teal { background-color: var(--brand-teal); }
         .border-brand-blue { border-color: var(--brand-blue); }
         
         /* CSS Clean Text */
         .prose { font-size: 0.875rem; line-height: 1.6; color: #334155; }
         .prose p { margin-bottom: 0.5em; text-align: justify; }
-        .prose a { display: none !important; } /* Paksa sembunyikan link jika masih lolos */
+        .prose a { display: none !important; }
         .prose strong { color: #1e293b; font-weight: 700; }
 
         /* Gradient Button */
-        .step-gradient { 
-            background: linear-gradient(90deg, #1A4AB6 0%, #1CB8A3 100%); 
-            transition: all 0.3s ease;
-        }
-        .step-gradient:hover {
-            box-shadow: 0 10px 15px -3px rgba(26, 74, 182, 0.3);
-            filter: brightness(1.05);
-        }
+        .step-gradient { background: linear-gradient(90deg, #1A4AB6 0%, #1CB8A3 100%); transition: all 0.3s ease; }
+        .step-gradient:hover { box-shadow: 0 10px 15px -3px rgba(26, 74, 182, 0.3); filter: brightness(1.05); }
 
         .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .stagger-1 { animation-delay: 100ms; }
-        .stagger-2 { animation-delay: 200ms; }
-        .stagger-3 { animation-delay: 300ms; }
-        .stagger-4 { animation-delay: 400ms; }
+        .stagger-1 { animation-delay: 100ms; } .stagger-2 { animation-delay: 200ms; }
+        .stagger-3 { animation-delay: 300ms; } .stagger-4 { animation-delay: 400ms; }
         
-        .loading-spinner {
-            border: 3px solid #e2e8f0;
-            border-top: 3px solid var(--brand-blue);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
+        .loading-spinner { border: 3px solid #e2e8f0; border-top: 3px solid var(--brand-blue); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .title-option { cursor: pointer; transition: all 0.2s; border: 1px solid #e2e8f0; background: #fff; }
@@ -328,9 +307,9 @@
         let analysisAttempt = 0, savedHypothesisData = null, savedPlanData = null, savedAnalysisData = null, savedAnalysis5W1H = null, savedInstruments = null;
         let abstractDone = false, instrumentsDone = false, currentTitleBase = "", savedTitles = [];
 
-        function getLangInstruction() { return `PENTING: Gunakan Bahasa ${userData.bahasa} untuk output JSON.`; }
+        function getLangInstruction() { return `PENTING: Gunakan Bahasa ${userData.bahasa} untuk output JSON. DILARANG KERAS MENYERTAKAN CITASI, SUMBER, NAMA JURNAL, ATAU LINK DALAM BENTUK APAPUN. HANYA KALIMAT INTI SAJA.`; }
 
-        // --- PEMBERSIH TEKS SUPER AGRESIF ---
+        // --- PEMBERSIH TEKS EKSTRA AGRESIF ---
         function cleanText(text) {
             if (!text) return "";
             return text
@@ -339,6 +318,7 @@
                 .replace(/\(https?:\/\/.*?\)/g, '') // Hapus URL dalam kurung (http...)
                 .replace(/\(www\..*?\)/g, '')       // Hapus URL www dalam kurung
                 .replace(/https?:\/\/\S+/g, '')     // Hapus raw link http
+                .replace(/\(.*?\)/g, '')            // Hapus APAPUN dalam kurung (misal nama tahun)
                 .replace(/\s+([,.])/g, '$1')        // Rapikan spasi
                 .replace(/\s{2,}/g, ' ')            // Hapus spasi ganda
                 .trim();
@@ -358,7 +338,10 @@
                 });
                 if (!response.ok) throw new Error("Server AI Error.");
                 const res = await response.json();
-                return JSON.parse(res.choices[0].message.content);
+                const content = res.choices[0].message.content;
+                // Bersihkan Markdown Code Block jika ada
+                const cleanJson = content.replace(/```json/g, '').replace(/```/g, '').trim();
+                return JSON.parse(cleanJson);
             } catch (e) { console.error(e); alert("Server AI sibuk. Coba lagi."); throw e; }
         }
 
@@ -369,7 +352,7 @@
         async function fetchAIObjects() {
             const btn=document.getElementById('ai-object-btn'); btn.disabled=true; btn.innerText="Processing...";
             try {
-                const prompt = `Konteks: ${userData.jurusan}, ${userData.fakultas}. Minat: "${userData.minat}". Sebutkan 8 objek penelitian spesifik. JANGAN sertakan sumber/sitasi. JSON: { objects: [string] }`;
+                const prompt = `Konteks: ${userData.jurusan}, ${userData.fakultas}. Minat: "${userData.minat}". Sebutkan 8 objek penelitian spesifik. DILARANG KERAS MENYERTAKAN SUMBER/SITASI. JSON: { objects: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih.");
                 const list = document.getElementById('ai-objects-list'); list.innerHTML='';
                 data.objects.forEach(obj => { const d=document.createElement('div'); d.className="p-3 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:border-[#1A4AB6] cursor-pointer text-center fade-in"; d.innerHTML=marked.parseInline(cleanText(obj)); d.onclick=()=>{document.getElementById('custom-object').value=cleanText(obj)}; list.appendChild(d); });
@@ -383,7 +366,7 @@
             const btn=document.getElementById('ai-problem-btn'); btn.disabled=true; btn.innerText="Processing...";
             try {
                 // UPDATE PROMPT: DILARANG SITASI
-                const prompt = `Konteks: ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah). DILARANG MENYERTAKAN SUMBER, SITASI, NAMA JURNAL, ATAU LINK APAPUN. Hanya kalimat masalahnya saja. JSON: { problems: [string] }`;
+                const prompt = `Konteks: ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah). DILARANG MENYERTAKAN SUMBER, SITASI, NAMA JURNAL, ATAU LINK APAPUN. JSON: { problems: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih tanpa sumber.");
                 const list = document.getElementById('ai-problems-list'); list.innerHTML='';
                 data.problems.forEach(p => { const d=document.createElement('div'); d.className="p-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-blue-50 cursor-pointer text-left fade-in flex gap-2"; const cleanP=cleanText(p); d.innerHTML=`<i class="fas fa-exclamation-circle mt-1 text-slate-300 flex-shrink-0"></i><div class="prose prose-sm">${marked.parseInline(cleanP)}</div>`; d.onclick=()=>{document.getElementById('custom-problem').value=cleanP}; list.appendChild(d); });
@@ -434,20 +417,20 @@
         
         async function repairTitle() {
             const instr=document.getElementById('repair-instruction').value; if(!instr) return alert("Isi instruksi!"); const btn=document.getElementById('btn-repair'); btn.disabled=true; btn.innerText="...";
-            try { const data=await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}. JSON: { repaired_title: string }`, "Revisi judul."); repairedTitle=cleanText(data.repaired_title); document.getElementById('text-repaired').innerText=repairedTitle; document.getElementById('text-original').innerText=originalTitle; document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired'); btn.innerText="Selesai"; } catch(e){btn.disabled=false;}
+            try { const data=await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}. JANGAN sertakan sumber. JSON: { repaired_title: string }`, "Revisi judul."); repairedTitle=cleanText(data.repaired_title); document.getElementById('text-repaired').innerText=repairedTitle; document.getElementById('text-original').innerText=originalTitle; document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired'); btn.innerText="Selesai"; } catch(e){btn.disabled=false;}
         }
         function selectFinalTitle(t) { document.getElementById('opt-original').classList.remove('selected','border-[#1A4AB6]'); document.getElementById('opt-repaired').classList.remove('selected','border-[#1A4AB6]'); if(t==='original'){currentTitleBase=originalTitle; document.getElementById('opt-original').classList.add('selected','border-[#1A4AB6]');} else {currentTitleBase=repairedTitle; document.getElementById('opt-repaired').classList.add('selected','border-[#1A4AB6]');} }
 
         async function goToStep8() {
             hideAll(); document.getElementById('step-8').classList.remove('hidden'); document.getElementById('standardization-loading').classList.remove('hidden'); document.getElementById('standardization-result').classList.add('hidden'); updateProgress(8);
-            try { const data=await fetchAI(`Standarisasi judul: "${currentTitleBase}". JSON: { standardized_title: string }`, "Baku PUEBI."); document.getElementById('std-title-raw').innerText=currentTitleBase; standardizedTitle=cleanText(data.standardized_title); document.getElementById('std-title-std').innerText=standardizedTitle; selectStandardization('std'); document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden'); } catch(e){goToStep9();}
+            try { const data=await fetchAI(`Standarisasi judul: "${currentTitleBase}". JANGAN sertakan sumber. JSON: { standardized_title: string }`, "Baku PUEBI."); document.getElementById('std-title-raw').innerText=currentTitleBase; standardizedTitle=cleanText(data.standardized_title); document.getElementById('std-title-std').innerText=standardizedTitle; selectStandardization('std'); document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden'); } catch(e){goToStep9();}
         }
         function selectStandardization(t) { document.getElementById('std-opt-raw').classList.remove('selected','border-[#1A4AB6]'); document.getElementById('std-opt-std').classList.remove('selected','border-[#1CB8A3]'); if(t==='raw'){finalTitle=currentTitleBase; document.getElementById('std-opt-raw').classList.add('selected','border-[#1A4AB6]');} else {finalTitle=standardizedTitle; document.getElementById('std-opt-std').classList.add('selected','border-[#1CB8A3]');} }
 
         async function goToStep9() {
             hideAll(); document.getElementById('step-9').classList.remove('hidden'); document.getElementById('analysis-loading').classList.remove('hidden'); document.getElementById('analysis-result').classList.add('hidden'); updateProgress(9);
             try {
-                const prompt = `Telaah Feasibility Judul: "${finalTitle}". Konteks: ${userData.jurusan}. Skor 0-100. JSON: { necessity: {score: int, reason: string}, novelty: {score: int, reason: string}, relevance: {score: int, reason: string}, feasibility: {score: int, reason: string}, conclusion: string }`;
+                const prompt = `Telaah Feasibility Judul: "${finalTitle}". Konteks: ${userData.jurusan}. JANGAN sertakan sumber/sitasi. JSON: { necessity: {score: int, reason: string}, novelty: {score: int, reason: string}, relevance: {score: int, reason: string}, feasibility: {score: int, reason: string}, conclusion: string }`;
                 const data=await fetchAI(prompt, "Analisis dosen.");
                 document.getElementById('analysis-loading').classList.add('hidden'); document.getElementById('analysis-result').classList.remove('hidden'); document.getElementById('analyzed-title').innerText=finalTitle; document.getElementById('synthesis-text').innerHTML=`<div class="prose prose-sm">${marked.parse(cleanText(data.conclusion))}</div>`;
                 
@@ -463,7 +446,7 @@
         async function goToStep10() {
             showLoading("Menyusun Variabel", "Identifikasi konsep..."); updateProgress(10);
             try {
-                const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
+                const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. JANGAN sertakan sumber. JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
                 const data=await fetchAI(prompt, "Output akademik."); savedHypothesisData=data; document.getElementById('hypo-title-display').innerText=finalTitle;
                 const vList=document.getElementById('variable-list'); vList.innerHTML=''; data.variables.forEach(v=>{ vList.innerHTML+=`<div class="p-4 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm"><div class="flex justify-between mb-2"><h5 class="font-bold text-sm">${v.name}</h5><span class="text-[10px] bg-blue-50 px-2 py-1 rounded border">${v.role}</span></div><div class="text-xs text-slate-600 prose prose-sm">${marked.parse(cleanText(v.def))}</div></div>`; });
                 const hList=document.getElementById('hypothesis-list'); hList.innerHTML=''; data.hypotheses.forEach((h,i)=>{ hList.innerHTML+=`<div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 border border-teal-100 flex gap-3"><span class="font-bold text-[#1CB8A3] whitespace-nowrap">H${i+1}</span><div class="prose prose-sm">${marked.parse(cleanText(h))}</div></div>`; });
@@ -474,7 +457,7 @@
         async function goToStep11() {
             showLoading("Finalisasi", "Menyusun blueprint..."); updateProgress(11);
             try {
-                const prompt = `Blueprint Riset Judul: "${finalTitle}". Metode: ${userData.metode}. JSON: { data_steps: [string], analysis_steps: [string] }`;
+                const prompt = `Blueprint Riset Judul: "${finalTitle}". Metode: ${userData.metode}. JANGAN sertakan sumber. JSON: { data_steps: [string], analysis_steps: [string] }`;
                 const data=await fetchAI(prompt, "Langkah teknis."); savedPlanData=data; document.getElementById('final-context-display').innerText=`${userData.metode} | ${userData.jurusan}`;
                 const dList=document.getElementById('data-steps'); dList.innerHTML=''; data.data_steps.forEach(s=>{ dList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0"></div><div class="text-sm text-slate-600 prose prose-sm">${marked.parse(cleanText(s))}</div></div>`; });
                 const aList=document.getElementById('analysis-steps'); aList.innerHTML=''; data.analysis_steps.forEach(s=>{ aList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0"></div><div class="text-sm text-slate-600 prose prose-sm">${marked.parse(cleanText(s))}</div></div>`; });
@@ -485,7 +468,7 @@
         async function generateAnalysis5W1H() {
             const btn=document.getElementById('btn-analysis'); btn.disabled=true; btn.innerText="Generating...";
             try {
-                const prompt = `Analisis 5W+1H judul: "${finalTitle}". JANGAN sertakan link/sumber. JSON: { what: "...", why: "...", who: "...", where: "...", when: "...", how: "..." }`;
+                const prompt = `Analisis 5W+1H judul: "${finalTitle}". DILARANG KERAS MENYERTAKAN SUMBER/SITASI. JSON: { what: "...", why: "...", who: "...", where: "...", when: "...", how: "..." }`;
                 const data=await fetchAI(prompt, "Analisis tajam."); savedAnalysis5W1H=data;
                 const g=document.getElementById('abstract-content'); g.innerHTML='';
                 const c=(t,c,cl,i)=>`<div class="analysis-card border-l-4 border-${cl}-500"><div class="flex items-center gap-2 mb-2"><span class="p-1.5 bg-${cl}-100 rounded text-${cl}-600 text-xs"><i class="fas fa-${i}"></i></span><span class="text-xs font-bold text-slate-400 uppercase">${t}</span></div><div class="text-xs text-slate-700 prose prose-sm">${marked.parse(cleanText(c))}</div></div>`;
@@ -497,12 +480,19 @@
         async function generateInstruments() {
             const btn=document.getElementById('btn-instruments'); btn.disabled=true; btn.innerText="Generating...";
             try {
-                const prompt = `Instrumen Penelitian judul: "${finalTitle}". Metode: ${userData.metode}. JSON: { type: "Jenis", items: [string] }`;
+                const prompt = `Instrumen Penelitian judul: "${finalTitle}". Metode: ${userData.metode}. Strict JSON. JANGAN sertakan sumber. JSON: { type: "Jenis", items: [string] }`;
                 const data=await fetchAI(prompt, "Instrumen."); savedInstruments=data;
                 const c=document.getElementById('instruments-content'); c.innerHTML=`<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1">${data.type}</h5>`;
-                data.items.forEach((q,i)=>{ c.innerHTML+=`<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span><div class="prose prose-sm">${marked.parseInline(cleanText(q))}</div></div>`; });
+                // Pastikan data.items ada dan berupa array
+                if (data.items && Array.isArray(data.items)) {
+                    data.items.forEach((q,i)=>{ c.innerHTML+=`<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span><div class="prose prose-sm">${marked.parseInline(cleanText(q))}</div></div>`; });
+                }
                 document.getElementById('generated-instruments').classList.remove('hidden'); instrumentsDone=true; btn.innerHTML='<i class="fas fa-check"></i> Selesai'; updateFinishButton();
-            } catch(e){btn.disabled=false; btn.innerText="Coba Lagi";}
+            } catch(e){
+                console.error(e);
+                btn.disabled=false; btn.innerText="Coba Lagi";
+                alert("Gagal memuat instrumen. Coba lagi.");
+            }
         }
 
         function updateFinishButton() { if(abstractDone && instrumentsDone) { const b=document.getElementById('btn-finish'); b.disabled=false; b.classList.remove('bg-slate-200','text-slate-400','cursor-not-allowed'); b.classList.add('step-gradient','text-white','shadow-xl'); } }
