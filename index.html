@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dosbing.ai - Research Path (Brand Edition)</title>
     
-    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Typography: Montserrat & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -170,12 +168,10 @@
 <body class="text-slate-800 antialiased selection:bg-[#1A4AB6] selection:text-white">
 
     <div class="min-h-screen flex flex-col">
-        <!-- Navigation (Updated Logo Colors) -->
         <nav class="bg-white/90 backdrop-blur-lg border-b border-slate-200 px-6 py-4 sticky top-0 z-50 no-print">
             <div class="max-w-6xl mx-auto flex justify-between items-center">
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="location.reload()">
                     <div class="flex flex-col">
-                        <!-- Brand Logo Typography -->
                         <div class="font-heading font-extrabold text-2xl tracking-tighter leading-none">
                             <span class="text-[#1A4AB6]">Dosbing</span><span class="text-[#1CB8A3]">.ai</span>
                         </div>
@@ -188,7 +184,6 @@
         <main class="flex-grow p-4 md:p-8 bg-slate-50/50">
             <div class="max-w-5xl mx-auto">
                 
-                <!-- Progress Bar (Structure V2, Colors Brand) -->
                 <div class="mb-10 no-print overflow-x-auto pb-4 px-2">
                     <div class="min-w-[700px] relative"> 
                         <div class="progress-line-container"><div id="progress-fill" class="progress-line-fill"></div></div>
@@ -208,7 +203,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 1: Data Diri (Layout V2, Brand Colors) -->
                 <div id="step-1" class="fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full -mr-32 -mt-32 opacity-50 blur-3xl pointer-events-none"></div>
                     <h2 class="text-2xl font-bold font-heading mb-6 text-slate-900 flex items-center">
@@ -253,7 +247,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 2: Objek -->
                 <div id="step-2" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Tentukan Objek Penelitian</h2>
                     <p class="text-slate-500 mb-6 text-sm">Pilih lokus atau subjek yang spesifik sesuai kajian Anda.</p>
@@ -265,7 +258,6 @@
                     <div class="flex justify-between mt-10"><button onclick="backToStep1()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep3()" class="bg-slate-900 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-black font-heading">Lanjut</button></div>
                 </div>
 
-                <!-- STEP 3: Masalah -->
                 <div id="step-3" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Gap (Masalah)</h2>
                     <p class="text-slate-500 mb-6 text-sm">Fenomena atau kesenjangan yang terjadi di lapangan.</p>
@@ -277,7 +269,6 @@
                     <div class="flex justify-between mt-10"><button onclick="backToStep2()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep4()" class="bg-slate-900 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-black font-heading">Lanjut</button></div>
                 </div>
 
-                <!-- STEP 4: Analisis Kaitan -->
                 <div id="step-4" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Validasi Akademik</h2>
                     <p class="text-slate-500 mb-6 text-sm">Memastikan linieritas antara Prodi, Minat, dan Masalah.</p>
@@ -297,7 +288,6 @@
                     <div class="flex justify-between mt-10"><button onclick="backToStep3()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button id="btn-next-step-5" onclick="goToStep5()" disabled class="bg-slate-200 text-slate-400 font-bold font-heading py-3 px-8 rounded-lg cursor-not-allowed">Lanjut Metode</button></div>
                 </div>
 
-                <!-- STEP 5: Metode -->
                 <div id="step-5" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 text-center">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Pilih Pendekatan Riset</h2>
                     <p class="text-slate-500 mb-8 text-sm">Sesuaikan dengan data yang tersedia.</p>
@@ -326,7 +316,6 @@
                     <div class="flex justify-between mt-10"><button onclick="backToStep4()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep6()" class="step-gradient text-white font-bold font-heading py-3 px-10 rounded-lg shadow-lg hover:shadow-xl">Generate Judul</button></div>
                 </div>
 
-                <!-- STEP 6: Pilihan Judul -->
                 <div id="step-6" class="hidden space-y-6 pb-20 fade-in">
                     <div class="flex justify-between items-center bg-white p-6 rounded-2xl card-shadow border border-slate-200">
                         <div>
@@ -343,7 +332,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 7: Klarifikasi -->
                 <div id="step-7" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Refinement (Revisi)</h2>
                     <p class="text-slate-500 mb-6 text-sm">Sesuaikan narasi judul agar lebih tajam.</p>
@@ -367,7 +355,6 @@
                     <div class="flex justify-between mt-10"><button onclick="backToStep6()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Pilih Lain</button><button onclick="goToStep8()" class="bg-slate-900 text-white font-bold font-heading py-3 px-8 rounded-lg shadow-lg hover:bg-black">Standarisasi</button></div>
                 </div>
 
-                <!-- STEP 8: Standarisasi -->
                 <div id="step-8" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Standarisasi Bahasa</h2>
                     <p class="text-slate-500 mb-6 text-sm">Memastikan tata bahasa sesuai kaidah akademik.</p>
@@ -381,7 +368,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 9: Telaah -->
                 <div id="step-9" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 text-center">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Telaah Akademik (Feasibility)</h2>
                     <div id="analysis-loading" class="py-16"><div class="loading-spinner mb-6 mx-auto"></div><p class="text-sm font-bold text-[#1A4AB6] animate-pulse">Deep Analysis...</p></div>
@@ -399,7 +385,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 10: Hipotesis -->
                 <div id="step-10" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-6 text-slate-900">Konsep & Hipotesis</h2>
                     <div id="hypothesis-container">
@@ -418,7 +403,6 @@
                     <div class="mt-10"><button onclick="goToStep11()" class="w-full step-gradient text-white font-bold font-heading py-3 rounded-lg shadow-lg hover:shadow-xl">Finalisasi Rencana</button></div>
                 </div>
 
-                <!-- STEP 11: Plan & Final Output -->
                 <div id="step-11" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200 pb-20">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Blueprint</h2>
                     <p id="final-context-display" class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-8"></p>
@@ -431,19 +415,16 @@
                     </div>
                     
                     <div class="space-y-6 no-print">
-                        <!-- 5W1H Analysis Card -->
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                              <div class="flex justify-between items-center mb-4">
                                  <h4 class="font-bold text-slate-800">1. Bedah Judul (5W + 1H)</h4>
                                  <button id="btn-analysis" onclick="generateAnalysis5W1H()" class="bg-blue-50 text-[#1A4AB6] font-bold py-2 px-4 rounded-lg hover:bg-blue-100 flex items-center gap-2 text-xs transition-colors"><i class="fas fa-search"></i> Generate Analisis</button>
                              </div>
                              <div id="generated-abstract" class="hidden">
-                                 <!-- New 5W1H Grid Layout -->
                                  <div id="abstract-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                              </div>
                         </div>
 
-                        <!-- Instruments Card -->
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                              <div class="flex justify-between items-center mb-4">
                                  <h4 class="font-bold text-slate-800">2. Instrumen Penelitian</h4>
@@ -462,7 +443,6 @@
                     </div>
                 </div>
 
-                <!-- Success Modal -->
                 <div id="success-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
                     <div class="bg-white rounded-2xl p-8 max-w-sm mx-4 text-center card-shadow">
                         <div class="w-16 h-16 rounded-full bg-teal-100 text-[#1CB8A3] flex items-center justify-center mx-auto mb-4 text-3xl">
@@ -474,7 +454,6 @@
                     </div>
                 </div>
 
-                <!-- Loading Overlay -->
                 <div id="loading" class="hidden fixed inset-0 bg-white/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center">
                     <div class="loading-spinner mb-4"></div>
                     <h3 id="loading-title" class="text-lg font-bold font-heading text-slate-900 mb-1">Menghubungkan ke AI</h3>
@@ -486,8 +465,9 @@
     </div>
 
     <script>
-        const apiKey = ""; 
+        // --- KONFIGURASI OPENROUTER ---
         
+        // Simpan data user
         let userData = { nama: "", gender: "", jurusan: "", fakultas: "", universitas: "", minat: "", objek: "", masalah: "", metode: "", analisisMasalah: "", bahasa: "Indonesia" };
         let selectedTitle = "", originalTitle = "", repairedTitle = "", standardizedTitle = "", finalTitle = "";
         let analysisAttempt = 0, savedHypothesisData = null, savedPlanData = null, savedAnalysisData = null, savedAnalysis5W1H = null, savedInstruments = null;
@@ -515,7 +495,6 @@
                 dot.className = "step-dot transition-all duration-300";
                 label.className = "step-label transition-colors duration-300";
                 
-                // Revert to simple circle logic
                 if(i < step) { 
                     dot.className = "step-dot bg-[#1CB8A3] text-white border-white"; 
                     dot.innerHTML = `<i class="fas fa-check"></i>`; 
@@ -545,23 +524,82 @@
             document.getElementById('loading-text').innerText = text;
         }
 
+        // --- FUNGSI AI BARU (OPENROUTER) ---
         async function fetchAI(prompt, system) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            // Cek API Key di LocalStorage
+            let apiKey = localStorage.getItem("openrouter_key");
+            
+            // Jika belum ada, minta input user
+            if (!apiKey) {
+                apiKey = prompt("Masukkan API Key OpenRouter Anda (sk-or-v1...):");
+                if (apiKey) {
+                    localStorage.setItem("openrouter_key", apiKey);
+                } else {
+                    alert("API Key diperlukan agar aplikasi berjalan!");
+                    throw new Error("No API Key provided");
+                }
+            }
+
+            // Endpoint OpenRouter
+            const url = "https://openrouter.ai/api/v1/chat/completions";
+            
+            // Model: Google Gemini Flash 2.0 (Cepat & Bagus)
+            // Anda bisa ganti string ini dengan model lain jika mau (misal: "deepseek/deepseek-r1")
+            const modelName = "google/gemini-2.0-flash-001"; 
+
             const finalSystem = system + " " + getLangInstruction();
             const delays = [1000, 2000, 4000];
+
             for (let i = 0; i <= delays.length; i++) {
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: finalSystem }] }, generationConfig: { responseMimeType: "application/json" } })
+                        headers: { 
+                            'Authorization': `Bearer ${apiKey}`,
+                            'Content-Type': 'application/json',
+                            'HTTP-Referer': window.location.href, // Disarankan OpenRouter
+                            'X-Title': 'Dosbing AI' // Disarankan OpenRouter
+                        },
+                        body: JSON.stringify({ 
+                            model: modelName,
+                            messages: [
+                                { role: "system", content: finalSystem },
+                                { role: "user", content: prompt }
+                            ],
+                            // Penting: Memaksa output JSON agar aplikasi tidak error
+                            response_format: { type: "json_object" } 
+                        })
                     });
-                    if (!response.ok) { if (response.status === 429 && i < delays.length) { await new Promise(r => setTimeout(r, delays[i])); continue; } throw new Error(`API Error: ${response.statusText}`); }
+
+                    if (!response.ok) { 
+                        if (response.status === 429 && i < delays.length) { 
+                            await new Promise(r => setTimeout(r, delays[i])); 
+                            continue; 
+                        }
+                        // Hapus key jika unauthorized (401) agar user bisa input ulang
+                        if (response.status === 401) {
+                            localStorage.removeItem("openrouter_key");
+                            alert("API Key tidak valid. Silakan refresh dan masukkan ulang.");
+                        }
+                        throw new Error(`API Error: ${response.statusText}`); 
+                    }
+
                     const res = await response.json();
-                    return JSON.parse(res.candidates?.[0]?.content?.parts?.[0]?.text);
-                } catch (e) { if (i === delays.length) { alert("AI Busy. Try again."); throw e; } }
+                    // Parsing hasil dari OpenRouter
+                    const content = res.choices[0].message.content;
+                    return JSON.parse(content);
+
+                } catch (e) { 
+                    console.error(e);
+                    if (i === delays.length) { 
+                        alert("AI sedang sibuk atau error koneksi. Coba lagi."); 
+                        throw e; 
+                    } 
+                }
             }
         }
+
+        // --- SISA KODE LOGIKA (TIDAK BERUBAH) ---
 
         function goToStep2() {
             userData.nama = document.getElementById('nama').value; 
