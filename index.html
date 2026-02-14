@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dosbing.ai - Research Path (Client Edition)</title>
+    <title>Dosbing.ai - Research Path (Professional Doc)</title>
     
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-    <script src="[https://unpkg.com/html-docx-js/dist/html-docx.js](https://unpkg.com/html-docx-js/dist/html-docx.js)"></script>
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js](https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js)"></script>
-    <script src="[https://cdn.jsdelivr.net/npm/marked/marked.min.js](https://cdn.jsdelivr.net/npm/marked/marked.min.js)"></script>
-    <link href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap)" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         /* BRAND COLORS */
@@ -39,9 +39,6 @@
         .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .stagger-1 { animation-delay: 100ms; } .stagger-2 { animation-delay: 200ms; }
-        .stagger-3 { animation-delay: 300ms; } .stagger-4 { animation-delay: 400ms; }
         
         .loading-spinner { border: 3px solid #e2e8f0; border-top: 3px solid var(--brand-blue); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -119,8 +116,8 @@
                         </div>
                         <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Perguruan Tinggi</label><input type="text" id="universitas" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-[#1A4AB6] outline-none"></div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-                             <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1A4AB6]">Minat Kajian / Konsentrasi</label><input type="text" id="minat" placeholder="Contoh: Audit, Psikologi Klinis, Hukum Pidana" class="w-full px-4 py-3 rounded-lg bg-white border-2 border-blue-50 focus:border-[#1A4AB6] outline-none"></div>
-                            <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1CB8A3]">Bahasa Penulisan</label><select id="bahasa" class="w-full px-4 py-3 rounded-lg bg-teal-50 border border-teal-100 focus:border-[#1CB8A3] outline-none font-medium"><option value="Indonesia" selected>Bahasa Indonesia</option><option value="Inggris">English (International)</option></select></div>
+                             <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1A4AB6]">Minat Kajian / Konsentrasi</label><input type="text" id="minat" placeholder="Contoh: Audit, Psikologi Klinis" class="w-full px-4 py-3 rounded-lg bg-white border-2 border-blue-50 focus:border-[#1A4AB6] outline-none"></div>
+                            <div class="space-y-1"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-[#1CB8A3]">Bahasa Penulisan</label><select id="bahasa" class="w-full px-4 py-3 rounded-lg bg-teal-50 border border-teal-100 focus:border-[#1CB8A3] outline-none font-medium"><option value="Indonesia" selected>Bahasa Indonesia</option><option value="Inggris">English</option></select></div>
                         </div>
                     </div>
                     <div class="mt-8 flex justify-end"><button onclick="goToStep2()" class="step-gradient text-white font-heading font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center space-x-2"><span>Mulai Riset</span><i class="fas fa-arrow-right text-sm"></i></button></div>
@@ -128,7 +125,6 @@
 
                 <div id="step-2" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Tentukan Objek Penelitian</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Pilih lokus atau subjek yang spesifik sesuai kajian Anda.</p>
                     <div class="space-y-4 max-w-2xl mx-auto">
                         <input type="text" id="custom-object" placeholder="Ketik objek..." class="w-full px-5 py-4 rounded-xl border border-slate-300 outline-none focus:border-[#1A4AB6] text-lg shadow-sm">
                         <button id="ai-object-btn" onclick="fetchAIObjects()" class="w-full bg-blue-50 hover:bg-blue-100 text-[#1A4AB6] font-bold font-heading py-3 rounded-xl border border-blue-200 transition-colors flex items-center justify-center gap-2 text-sm"><i class="fas fa-robot"></i> Minta Rekomendasi AI</button>
@@ -139,7 +135,6 @@
 
                 <div id="step-3" class="hidden fade-in bg-white rounded-2xl p-8 card-shadow border border-slate-200">
                     <h2 class="text-xl font-bold font-heading mb-2 text-slate-900">Research Gap (Masalah)</h2>
-                    <p class="text-slate-500 mb-6 text-sm">Fenomena atau kesenjangan yang terjadi di lapangan.</p>
                     <div class="space-y-4 max-w-2xl mx-auto">
                         <input type="text" id="custom-problem" placeholder="Ketik masalah..." class="w-full px-5 py-4 rounded-xl border border-slate-300 outline-none focus:border-[#1A4AB6] text-lg shadow-sm">
                         <button id="ai-problem-btn" onclick="fetchAIMasalah()" class="w-full bg-blue-50 hover:bg-blue-100 text-[#1A4AB6] font-bold font-heading py-3 rounded-xl border border-blue-200 transition-colors flex items-center justify-center gap-2 text-sm"><i class="fas fa-search-plus"></i> Identifikasi Masalah AI</button>
@@ -169,19 +164,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                         <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-kuanti" onclick="selectMethod('Kuantitatif')">
                             <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-chart-bar text-6xl text-[#1A4AB6]"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Kuantitatif</h4><p class="text-[11px] text-slate-500">Uji hipotesis, statistik, pengaruh/hubungan.</p>
+                            <h4 class="font-bold font-heading text-slate-900 mb-1">Kuantitatif</h4><p class="text-[11px] text-slate-500">Uji hipotesis, statistik.</p>
                         </div>
                         <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-kuali" onclick="selectMethod('Kualitatif')">
                             <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-comments text-6xl text-[#1CB8A3]"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Kualitatif</h4><p class="text-[11px] text-slate-500">Eksplorasi mendalam, wawancara, studi kasus.</p>
+                            <h4 class="font-bold font-heading text-slate-900 mb-1">Kualitatif</h4><p class="text-[11px] text-slate-500">Eksplorasi mendalam.</p>
                         </div>
                         <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-mix" onclick="selectMethod('Mixed Method')">
                              <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-layer-group text-6xl text-purple-600"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Mixed Method</h4><p class="text-[11px] text-slate-500">Kombinasi Kualitatif & Kuantitatif.</p>
+                            <h4 class="font-bold font-heading text-slate-900 mb-1">Mixed Method</h4><p class="text-[11px] text-slate-500">Kombinasi.</p>
                         </div>
                          <div class="option-card p-5 rounded-xl border border-slate-200 bg-white cursor-pointer group text-left relative overflow-hidden" id="m-pustaka" onclick="selectMethod('Studi Pustaka')">
                              <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fas fa-book-open text-6xl text-amber-600"></i></div>
-                            <h4 class="font-bold font-heading text-slate-900 mb-1">Studi Pustaka</h4><p class="text-[11px] text-slate-500">Literature review (SLR) atau bibliometrik.</p>
+                            <h4 class="font-bold font-heading text-slate-900 mb-1">Studi Pustaka</h4><p class="text-[11px] text-slate-500">Literature review.</p>
                         </div>
                     </div>
                     <div class="flex justify-between mt-10"><button onclick="backToStep4()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">Kembali</button><button onclick="goToStep6()" class="step-gradient text-white font-bold font-heading py-3 px-10 rounded-lg shadow-lg hover:shadow-xl">Generate Judul</button></div>
@@ -309,18 +304,17 @@
 
         function getLangInstruction() { return `PENTING: Gunakan Bahasa ${userData.bahasa} untuk output JSON. DILARANG KERAS MENYERTAKAN CITASI, SUMBER, NAMA JURNAL, ATAU LINK DALAM BENTUK APAPUN. HANYA KALIMAT INTI SAJA.`; }
 
-        // --- PEMBERSIH TEKS EKSTRA AGRESIF ---
         function cleanText(text) {
             if (!text) return "";
             return text
-                .replace(/\[.*?\]\(.*?\)/g, '') // Hapus markdown link [Text](URL)
-                .replace(/\[.*?\]/g, '')        // Hapus sitasi [Jurnal X]
-                .replace(/\(https?:\/\/.*?\)/g, '') // Hapus URL dalam kurung (http...)
-                .replace(/\(www\..*?\)/g, '')       // Hapus URL www dalam kurung
-                .replace(/https?:\/\/\S+/g, '')     // Hapus raw link http
-                .replace(/\(.*?\)/g, '')            // Hapus APAPUN dalam kurung (misal nama tahun)
-                .replace(/\s+([,.])/g, '$1')        // Rapikan spasi
-                .replace(/\s{2,}/g, ' ')            // Hapus spasi ganda
+                .replace(/\[.*?\]\(.*?\)/g, '')
+                .replace(/\[.*?\]/g, '')
+                .replace(/\(https?:\/\/.*?\)/g, '')
+                .replace(/\(www\..*?\)/g, '')
+                .replace(/https?:\/\/\S+/g, '')
+                .replace(/\(.*?\)/g, '')
+                .replace(/\s+([,.])/g, '$1')
+                .replace(/\s{2,}/g, ' ')
                 .trim();
         }
 
@@ -339,7 +333,6 @@
                 if (!response.ok) throw new Error("Server AI Error.");
                 const res = await response.json();
                 const content = res.choices[0].message.content;
-                // Bersihkan Markdown Code Block jika ada
                 const cleanJson = content.replace(/```json/g, '').replace(/```/g, '').trim();
                 return JSON.parse(cleanJson);
             } catch (e) { console.error(e); alert("Server AI sibuk. Coba lagi."); throw e; }
@@ -365,7 +358,6 @@
         async function fetchAIMasalah() {
             const btn=document.getElementById('ai-problem-btn'); btn.disabled=true; btn.innerText="Processing...";
             try {
-                // UPDATE PROMPT: DILARANG SITASI
                 const prompt = `Konteks: ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah). DILARANG MENYERTAKAN SUMBER, SITASI, NAMA JURNAL, ATAU LINK APAPUN. JSON: { problems: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih tanpa sumber.");
                 const list = document.getElementById('ai-problems-list'); list.innerHTML='';
@@ -379,7 +371,6 @@
         async function fetchAIConnectionAnalysis() {
             const btn=document.getElementById('btn-analisis-kaitan'); btn.disabled=true; btn.innerText="Validasi...";
             try {
-                // UPDATE PROMPT: DILARANG SITASI
                 const prompt = `Validasi Judul. Mahasiswa: ${userData.jurusan}. Rencana: "${userData.objek}", Masalah "${userData.masalah}". Apakah linier? JANGAN sertakan link/sumber. JSON: { is_relevant: boolean, reason: string }`;
                 const data = await fetchAI(prompt, "Analisis dosen.");
                 const div = document.getElementById('connection-analysis-result');
@@ -397,7 +388,6 @@
         async function goToStep6() {
             if(!userData.metode) return alert("Pilih metode!"); showLoading("Merancang Judul", "Menyusun opsi..."); updateProgress(6);
             try {
-                // UPDATE PROMPT: DILARANG SITASI
                 const prompt = `Buat 3 opsi judul skripsi formal. Data: "${userData.minat}", "${userData.objek}", "${userData.masalah}", "${userData.metode}". JANGAN sertakan nama jurnal/sumber dalam kurung. HANYA JUDUL MURNI. JSON: { paths: [ { topic: 'Tema', phenomenon: 'Konteks', analysis: 'Alat', titles: [string] } ] }`;
                 const data = await fetchAI(prompt, "Judul formal bersih.");
                 const list=document.getElementById('topics-list'); list.innerHTML='';
@@ -437,7 +427,7 @@
                 const pill=(id,l,item)=>{ const el=document.getElementById(id); let c=0; const i=setInterval(()=>{c+=2;if(c>=item.score){c=item.score;clearInterval(i);}el.innerText=c+"%";el.parentElement.style.borderColor=c<60?"#ef4444":c<80?"#eab308":"#1CB8A3";},20); return `<div class="mb-4 bg-white p-4 rounded-lg border border-slate-100"><h4 class="font-bold text-slate-900 text-sm mb-1">${l} <span class="float-right">${item.score}%</span></h4><div class="text-xs text-slate-600 prose prose-sm">${marked.parse(cleanText(item.reason))}</div></div>`; };
                 let h=""; h+=pill('score-urgency-val','Urgency',data.necessity); h+=pill('score-novelty-val','Novelty',data.novelty); h+=pill('score-relevance-val','Relevance',data.relevance); h+=pill('score-feasibility-val','Feasibility',data.feasibility);
                 document.getElementById('analysis-feedback-container').innerHTML=h;
-                
+                savedAnalysisData = data;
                 const sc=[data.necessity.score,data.novelty.score,data.relevance.score,data.feasibility.score]; const avg=sc.reduce((a,b)=>a+b,0)/4;
                 const c=document.getElementById('analysis-actions'); c.innerHTML = (Math.min(...sc)>=40 && avg>=50) ? `<button onclick="goToStep10()" class="w-full step-gradient text-white font-bold font-heading py-4 rounded-xl shadow-lg hover:shadow-xl">Lanjut Hipotesis</button>` : `<div class="text-amber-600 font-bold mb-2 text-sm text-center">Skor Rendah.</div><div class="flex gap-2"><button onclick="goToStep7()" class="flex-1 bg-white border py-3 rounded-lg text-sm font-bold">Revisi</button><button onclick="goToStep10()" class="flex-1 bg-slate-100 text-sm py-3 rounded-lg">Paksa Lanjut</button></div>`;
             } catch(e){document.getElementById('step-8').classList.remove('hidden');}
@@ -483,7 +473,6 @@
                 const prompt = `Instrumen Penelitian judul: "${finalTitle}". Metode: ${userData.metode}. Strict JSON. JANGAN sertakan sumber. JSON: { type: "Jenis", items: [string] }`;
                 const data=await fetchAI(prompt, "Instrumen."); savedInstruments=data;
                 const c=document.getElementById('instruments-content'); c.innerHTML=`<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1">${data.type}</h5>`;
-                // Pastikan data.items ada dan berupa array
                 if (data.items && Array.isArray(data.items)) {
                     data.items.forEach((q,i)=>{ c.innerHTML+=`<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span><div class="prose prose-sm">${marked.parseInline(cleanText(q))}</div></div>`; });
                 }
@@ -498,13 +487,100 @@
         function updateFinishButton() { if(abstractDone && instrumentsDone) { const b=document.getElementById('btn-finish'); b.disabled=false; b.classList.remove('bg-slate-200','text-slate-400','cursor-not-allowed'); b.classList.add('step-gradient','text-white','shadow-xl'); } }
         
         function downloadDocx() {
-            const content = `<!DOCTYPE html><html><head><style>body{font-family:'Times New Roman';}</style></head><body>
-            <h1>DRAFT PROPOSAL</h1><h2>${finalTitle}</h2><p><b>Identitas:</b> ${userData.nama}</p>
-            <h3>Konsep</h3>${savedHypothesisData?.variables?.map(v=>`<p><b>${v.name}:</b> ${cleanText(v.def)}</p>`).join('')}
-            <h3>Instrumen</h3><ul>${savedInstruments?.items?.map(i=>`<li>${cleanText(i)}</li>`).join('')}</ul>
+            const styles = `
+                body { font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 1.5; color: #000; }
+                h1, h2, h3 { text-align: center; text-transform: uppercase; font-weight: bold; margin-bottom: 12px; }
+                h1 { font-size: 14pt; } h2 { font-size: 13pt; } h3 { font-size: 12pt; text-align: left; border-bottom: 1px solid #000; padding-bottom: 5px; margin-top: 20px; }
+                .table-data { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+                .table-data td { padding: 4px; vertical-align: top; }
+                .label { width: 200px; font-weight: bold; }
+                .section-title { font-weight: bold; text-decoration: underline; margin-top: 10px; display: block; }
+                ul, ol { margin-left: 20px; } li { margin-bottom: 5px; }
+                .score-box { border: 1px solid #000; padding: 10px; margin: 10px 0; }
+            `;
+
+            let content = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${styles}</style></head><body>
+                <h1>Dosbing.ai<br>DESKRIPSI JUDUL PENELITIAN</h1>
+                <br>
+
+                <h3>I. DATA PENELITI</h3>
+                <table class="table-data">
+                    <tr><td class="label">Nama</td><td>: ${userData.nama}</td></tr>
+                    <tr><td class="label">Jenis Kelamin</td><td>: ${userData.gender}</td></tr>
+                    <tr><td class="label">Jurusan</td><td>: ${userData.jurusan}</td></tr>
+                    <tr><td class="label">Fakultas</td><td>: ${userData.fakultas}</td></tr>
+                    <tr><td class="label">Perguruan Tinggi</td><td>: ${userData.universitas}</td></tr>
+                    <tr><td class="label">Minat Khusus</td><td>: ${userData.minat}</td></tr>
+                </table>
+
+                <h3>II. FOKUS PENELITIAN</h3>
+                <table class="table-data">
+                    <tr><td class="label">Objek</td><td>: ${userData.objek}</td></tr>
+                    <tr><td class="label">Masalah</td><td>: ${userData.masalah}</td></tr>
+                    <tr><td class="label">Analisis Kaitan</td><td>: ${cleanText(userData.analisisMasalah)}</td></tr>
+                    <tr><td class="label">Metode</td><td>: ${userData.metode}</td></tr>
+                </table>
+
+                <h3>III. JUDUL FINAL & TELAAH</h3>
+                <p><strong>${finalTitle}</strong></p>
+                <br>
+                ${savedAnalysisData ? `
+                    <p><strong>1. Necessity (Kebutuhan): ${savedAnalysisData.necessity.score}/100</strong><br>${cleanText(savedAnalysisData.necessity.reason)}</p>
+                    <p><strong>2. Novelty (Kebaruan): ${savedAnalysisData.novelty.score}/100</strong><br>${cleanText(savedAnalysisData.novelty.reason)}</p>
+                    <p><strong>3. Relevance (Relevansi): ${savedAnalysisData.relevance.score}/100</strong><br>${cleanText(savedAnalysisData.relevance.reason)}</p>
+                    <p><strong>4. Feasibility (Kelayakan): ${savedAnalysisData.feasibility.score}/100</strong><br>${cleanText(savedAnalysisData.feasibility.reason)}</p>
+                    <div class="score-box">
+                        <strong>Kesimpulan:</strong> ${cleanText(savedAnalysisData.conclusion)}
+                    </div>
+                ` : ''}
+
+                <h3>IV. HIPOTESIS & VARIABEL</h3>
+                <span class="section-title">Variabel:</span>
+                <ul>
+                    ${savedHypothesisData?.variables?.map(v => `<li><strong>${v.name} (${v.role}):</strong> ${cleanText(v.def)}</li>`).join('') || ''}
+                </ul>
+                <span class="section-title">Hipotesis / Pertanyaan Penelitian:</span>
+                <ul>
+                    ${savedHypothesisData?.hypotheses?.map(h => `<li>${cleanText(h)}</li>`).join('') || ''}
+                </ul>
+
+                <h3>V. RENCANA PELAKSANAAN</h3>
+                <span class="section-title">Pengumpulan Data:</span>
+                <ul>${savedPlanData?.data_steps?.map(s => `<li>${cleanText(s)}</li>`).join('') || ''}</ul>
+                <span class="section-title">Analisis Data:</span>
+                <ul>${savedPlanData?.analysis_steps?.map(s => `<li>${cleanText(s)}</li>`).join('') || ''}</ul>
+
+                <h3>VI. ANALISIS JUDUL (5W 1H)</h3>
+                ${savedAnalysis5W1H ? `
+                    <ul>
+                        <li><strong>What:</strong> ${cleanText(savedAnalysis5W1H.what)}</li>
+                        <li><strong>Why:</strong> ${cleanText(savedAnalysis5W1H.why)}</li>
+                        <li><strong>Who:</strong> ${cleanText(savedAnalysis5W1H.who)}</li>
+                        <li><strong>Where:</strong> ${cleanText(savedAnalysis5W1H.where)}</li>
+                        <li><strong>When:</strong> ${cleanText(savedAnalysis5W1H.when)}</li>
+                        <li><strong>How:</strong> ${cleanText(savedAnalysis5W1H.how)}</li>
+                    </ul>
+                ` : ''}
+
+                <h3>VII. INSTRUMEN RISET</h3>
+                <p><strong>Jenis: ${savedInstruments?.type || '-'}</strong></p>
+                <ol>
+                    ${savedInstruments?.items?.map(i => `<li>${cleanText(i)}</li>`).join('') || ''}
+                </ol>
+
+                <h3>LAMPIRAN: OPSI JUDUL</h3>
+                <ul>
+                    ${savedTitles?.map(t => `<li>${cleanText(t.titles[0])}</li>`).join('') || ''}
+                </ul>
+
+                <br><br>
+                <p style="text-align: center; font-size: 10pt; color: #666;">Generated by Dosbing.ai</p>
             </body></html>`;
-            saveAs(htmlDocx.asBlob(content), `Proposal_${userData.nama}.docx`);
+
+            const converted = htmlDocx.asBlob(content, {orientation: 'portrait', margins: {top: 1440, right: 1440, bottom: 1440, left: 1440}});
+            saveAs(converted, `Proposal_Riset_${userData.nama.replace(/\s+/g, '_')}.docx`);
         }
+
         function finishSession() { downloadDocx(); document.getElementById('success-modal').classList.add('active'); }
     </script>
 </body>
