@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -302,7 +303,7 @@
                 .replace(/\(https?:\/\/.*?\)/g, '')
                 .replace(/\(www\..*?\)/g, '')
                 .replace(/https?:\/\/\S+/g, '')
-                .replace(/\(.*?\)/g, '')
+                .replace(/\(.*?\d{4}.*?\)/g, '') // Hapus tahun sitasi misal (2020)
                 .replace(/\s+([,.])/g, '$1')
                 .replace(/\s{2,}/g, ' ')
                 .trim();
@@ -324,19 +325,19 @@
                 const res = await response.json();
                 const content = res.choices[0].message.content;
                 
-                // PARSING JSON LEBIH KUAT (Anti-Gagal)
+                // PARSING JSON LEBIH KUAT (Anti-Gagal baca Markdown)
                 const jsonStart = content.indexOf('{');
                 const jsonEnd = content.lastIndexOf('}');
                 if (jsonStart !== -1 && jsonEnd !== -1) {
                     const jsonStr = content.substring(jsonStart, jsonEnd + 1);
                     return JSON.parse(jsonStr);
                 } else {
-                    return JSON.parse(content); // Coba parse langsung jika tidak ada teks sampah
+                    return JSON.parse(content); // Fallback
                 }
             } catch (e) { 
                 console.error(e); 
-                // Jangan throw error agar user bisa coba lagi tanpa reload
-                return null;
+                alert("AI sedang sibuk. Mohon coba klik tombolnya sekali lagi."); 
+                throw e; 
             }
         }
 
@@ -349,11 +350,10 @@
             try {
                 const prompt = `Konteks: ${userData.jurusan}, ${userData.fakultas}. Minat: "${userData.minat}". Sebutkan 8 objek penelitian spesifik. DILARANG KERAS MENYERTAKAN SUMBER/SITASI. JSON: { objects: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih.");
-                if(!data) throw new Error("Gagal");
                 const list = document.getElementById('ai-objects-list'); list.innerHTML='';
                 data.objects.forEach(obj => { const d=document.createElement('div'); d.className="p-3 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:border-[#1A4AB6] cursor-pointer text-center fade-in"; d.innerHTML=marked.parseInline(cleanText(obj)); d.onclick=()=>{document.getElementById('custom-object').value=cleanText(obj)}; list.appendChild(d); });
                 list.classList.remove('hidden');
-            } catch(e){ alert("AI Gagal. Coba lagi."); } finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-robot"></i> Rekomendasi AI'; }
+            } catch(e){} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-robot"></i> Rekomendasi AI'; }
         }
         function goToStep3() { userData.objek=document.getElementById('custom-object').value; if(!userData.objek) return alert("Isi objek!"); hideAll(); document.getElementById('step-3').classList.remove('hidden'); updateProgress(3); }
         function backToStep2() { hideAll(); document.getElementById('step-2').classList.remove('hidden'); updateProgress(2); }
@@ -363,11 +363,10 @@
             try {
                 const prompt = `Konteks: ${userData.jurusan}, Objek: "${userData.objek}". Minat: "${userData.minat}". Identifikasi 6 Research Gap (Masalah). DILARANG MENYERTAKAN SUMBER, SITASI, NAMA JURNAL, ATAU LINK APAPUN. JSON: { problems: [string] }`;
                 const data = await fetchAI(prompt, "Output JSON bersih tanpa sumber.");
-                if(!data) throw new Error("Gagal");
                 const list = document.getElementById('ai-problems-list'); list.innerHTML='';
                 data.problems.forEach(p => { const d=document.createElement('div'); d.className="p-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-blue-50 cursor-pointer text-left fade-in flex gap-2"; const cleanP=cleanText(p); d.innerHTML=`<i class="fas fa-exclamation-circle mt-1 text-slate-300 flex-shrink-0"></i><div class="prose prose-sm">${marked.parseInline(cleanP)}</div>`; d.onclick=()=>{document.getElementById('custom-problem').value=cleanP}; list.appendChild(d); });
                 list.classList.remove('hidden');
-            } catch(e){ alert("AI Gagal. Coba lagi."); } finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-search-plus"></i> Identifikasi Masalah'; }
+            } catch(e){} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-search-plus"></i> Identifikasi Masalah'; }
         }
         function goToStep4() { userData.masalah=document.getElementById('custom-problem').value; if(!userData.masalah) return alert("Isi masalah!"); hideAll(); document.getElementById('step-4').classList.remove('hidden'); document.getElementById('display-objek').innerText=userData.objek; document.getElementById('display-masalah').innerText=userData.masalah; document.getElementById('display-jurusan').innerText=userData.jurusan; updateProgress(4); }
         function backToStep3() { hideAll(); document.getElementById('step-3').classList.remove('hidden'); updateProgress(3); }
@@ -377,14 +376,13 @@
             try {
                 const prompt = `Validasi Judul. Mahasiswa: ${userData.jurusan}. Rencana: "${userData.objek}", Masalah "${userData.masalah}". Apakah linier? JANGAN sertakan link/sumber. JSON: { is_relevant: boolean, reason: string }`;
                 const data = await fetchAI(prompt, "Analisis dosen.");
-                if(!data) throw new Error("Gagal");
                 const div = document.getElementById('connection-analysis-result');
                 const next = document.getElementById('btn-next-step-5');
                 div.innerHTML = `<div class="prose prose-sm max-w-none">${marked.parse(cleanText(data.reason))}</div>`;
                 div.classList.remove('hidden');
                 if(data.is_relevant) { div.className="text-left p-5 rounded-xl text-sm border bg-teal-50 border-teal-200"; userData.analisisMasalah=cleanText(data.reason); next.disabled=false; next.classList.replace('bg-slate-200','step-gradient'); next.classList.replace('text-slate-400','text-white'); next.classList.remove('cursor-not-allowed'); }
                 else { div.className="text-left p-5 rounded-xl text-sm border bg-red-50 border-red-200 text-red-800"; next.disabled=true; }
-            } catch(e){alert("Error Validasi. Coba lagi.");} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-check-double"></i> Cek Kelayakan'; }
+            } catch(e){alert("Error");} finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-check-double"></i> Cek Kelayakan'; }
         }
         function goToStep5() { hideAll(); document.getElementById('step-5').classList.remove('hidden'); updateProgress(5); }
         function backToStep4() { hideAll(); document.getElementById('step-4').classList.remove('hidden'); updateProgress(4); }
@@ -395,14 +393,14 @@
             try {
                 const prompt = `Buat 3 opsi judul skripsi formal. Data: "${userData.minat}", "${userData.objek}", "${userData.masalah}", "${userData.metode}". JANGAN sertakan nama jurnal/sumber dalam kurung. HANYA JUDUL MURNI. JSON: { paths: [ { topic: 'Tema', phenomenon: 'Konteks', analysis: 'Alat', titles: [string] } ] }`;
                 const data = await fetchAI(prompt, "Judul formal bersih.");
-                if(!data) throw new Error("Gagal");
                 const list=document.getElementById('topics-list'); list.innerHTML='';
+                savedTitles = data.paths;
                 data.paths.forEach((p,i) => {
                     let tHTML = p.titles.map(t => `<div class="title-option p-4 rounded-lg text-sm font-semibold text-slate-800 relative group" onclick="pickTitle(this, '${cleanText(t).replace(/'/g,"\\'")}')"><div class="absolute right-4 opacity-0 group-[.selected]:opacity-100 text-[#1A4AB6]"><i class="fas fa-check-circle"></i></div>${cleanText(t)}</div>`).join('');
                     list.innerHTML += `<div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm fade-in stagger-${i+1}"><div class="flex items-center gap-2 mb-3"><span class="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-1 rounded uppercase">Opsi ${i+1}</span><h3 class="font-bold text-base text-[#1A4AB6]">${p.topic}</h3></div><p class="text-xs text-slate-500 mb-4">${cleanText(p.phenomenon)}</p><div class="space-y-2">${tHTML}</div></div>`;
                 });
                 hideAll(); document.getElementById('step-6').classList.remove('hidden'); document.getElementById('context-summary').innerText = `${userData.jurusan} • ${userData.metode}`;
-            } catch(e) { hideAll(); document.getElementById('step-5').classList.remove('hidden'); alert("Gagal generate judul. Coba lagi."); }
+            } catch(e) { hideAll(); document.getElementById('step-5').classList.remove('hidden'); }
         }
         function pickTitle(el, t) { selectedTitle=t; document.querySelectorAll('.title-option').forEach(e=>e.classList.remove('selected')); el.classList.add('selected'); document.getElementById('selected-title-preview').innerText=t; const b=document.getElementById('btn-to-step-7'); b.disabled=false; b.classList.replace('bg-slate-200','step-gradient'); b.classList.replace('text-slate-400','text-white'); b.classList.remove('cursor-not-allowed'); document.getElementById('sticky-action').classList.remove('translate-y-full'); }
         function backToStep5() { hideAll(); document.getElementById('step-5').classList.remove('hidden'); updateProgress(5); }
@@ -413,13 +411,13 @@
         
         async function repairTitle() {
             const instr=document.getElementById('repair-instruction').value; if(!instr) return alert("Isi instruksi!"); const btn=document.getElementById('btn-repair'); btn.disabled=true; btn.innerText="...";
-            try { const data=await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}. JANGAN sertakan sumber. JSON: { repaired_title: string }`, "Revisi judul."); if(!data) throw new Error("Gagal"); repairedTitle=cleanText(data.repaired_title); document.getElementById('text-repaired').innerText=repairedTitle; document.getElementById('text-original').innerText=originalTitle; document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired'); btn.innerText="Selesai"; } catch(e){btn.disabled=false; alert("Gagal revisi.");}
+            try { const data=await fetchAI(`Judul: ${originalTitle}. Revisi: ${instr}. JANGAN sertakan sumber. JSON: { repaired_title: string }`, "Revisi judul."); repairedTitle=cleanText(data.repaired_title); document.getElementById('text-repaired').innerText=repairedTitle; document.getElementById('text-original').innerText=originalTitle; document.getElementById('comparison-area').classList.remove('hidden'); selectFinalTitle('repaired'); btn.innerText="Selesai"; } catch(e){btn.disabled=false;}
         }
         function selectFinalTitle(t) { document.getElementById('opt-original').classList.remove('selected','border-[#1A4AB6]'); document.getElementById('opt-repaired').classList.remove('selected','border-[#1A4AB6]'); if(t==='original'){currentTitleBase=originalTitle; document.getElementById('opt-original').classList.add('selected','border-[#1A4AB6]');} else {currentTitleBase=repairedTitle; document.getElementById('opt-repaired').classList.add('selected','border-[#1A4AB6]');} }
 
         async function goToStep8() {
             hideAll(); document.getElementById('step-8').classList.remove('hidden'); document.getElementById('standardization-loading').classList.remove('hidden'); document.getElementById('standardization-result').classList.add('hidden'); updateProgress(8);
-            try { const data=await fetchAI(`Standarisasi judul: "${currentTitleBase}". JANGAN sertakan sumber. JSON: { standardized_title: string }`, "Baku PUEBI."); if(!data) throw new Error("Gagal"); document.getElementById('std-title-raw').innerText=currentTitleBase; standardizedTitle=cleanText(data.standardized_title); document.getElementById('std-title-std').innerText=standardizedTitle; selectStandardization('std'); document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden'); } catch(e){goToStep9();}
+            try { const data=await fetchAI(`Standarisasi judul: "${currentTitleBase}". JANGAN sertakan sumber. JSON: { standardized_title: string }`, "Baku PUEBI."); document.getElementById('std-title-raw').innerText=currentTitleBase; standardizedTitle=cleanText(data.standardized_title); document.getElementById('std-title-std').innerText=standardizedTitle; selectStandardization('std'); document.getElementById('standardization-loading').classList.add('hidden'); document.getElementById('standardization-result').classList.remove('hidden'); } catch(e){goToStep9();}
         }
         function selectStandardization(t) { document.getElementById('std-opt-raw').classList.remove('selected','border-[#1A4AB6]'); document.getElementById('std-opt-std').classList.remove('selected','border-[#1CB8A3]'); if(t==='raw'){finalTitle=currentTitleBase; document.getElementById('std-opt-raw').classList.add('selected','border-[#1A4AB6]');} else {finalTitle=standardizedTitle; document.getElementById('std-opt-std').classList.add('selected','border-[#1CB8A3]');} }
 
@@ -428,7 +426,6 @@
             try {
                 const prompt = `Telaah Feasibility Judul: "${finalTitle}". Konteks: ${userData.jurusan}. JANGAN sertakan sumber/sitasi. JSON: { necessity: {score: int, reason: string}, novelty: {score: int, reason: string}, relevance: {score: int, reason: string}, feasibility: {score: int, reason: string}, conclusion: string }`;
                 const data=await fetchAI(prompt, "Analisis dosen.");
-                if(!data) throw new Error("Gagal");
                 document.getElementById('analysis-loading').classList.add('hidden'); document.getElementById('analysis-result').classList.remove('hidden'); document.getElementById('analyzed-title').innerText=finalTitle; document.getElementById('synthesis-text').innerHTML=`<div class="prose prose-sm">${marked.parse(cleanText(data.conclusion))}</div>`;
                 
                 const pill=(id,l,item)=>{ const el=document.getElementById(id); let c=0; const i=setInterval(()=>{c+=2;if(c>=item.score){c=item.score;clearInterval(i);}el.innerText=c+"%";el.parentElement.style.borderColor=c<60?"#ef4444":c<80?"#eab308":"#1CB8A3";},20); return `<div class="mb-4 bg-white p-4 rounded-lg border border-slate-100"><h4 class="font-bold text-slate-900 text-sm mb-1">${l} <span class="float-right">${item.score}%</span></h4><div class="text-xs text-slate-600 prose prose-sm">${marked.parse(cleanText(item.reason))}</div></div>`; };
@@ -437,16 +434,14 @@
                 savedAnalysisData = data;
                 const sc=[data.necessity.score,data.novelty.score,data.relevance.score,data.feasibility.score]; const avg=sc.reduce((a,b)=>a+b,0)/4;
                 const c=document.getElementById('analysis-actions'); c.innerHTML = (Math.min(...sc)>=40 && avg>=50) ? `<button onclick="goToStep10()" class="w-full step-gradient text-white font-bold font-heading py-4 rounded-xl shadow-lg hover:shadow-xl">Lanjut Hipotesis</button>` : `<div class="text-amber-600 font-bold mb-2 text-sm text-center">Skor Rendah.</div><div class="flex gap-2"><button onclick="goToStep7()" class="flex-1 bg-white border py-3 rounded-lg text-sm font-bold">Revisi</button><button onclick="goToStep10()" class="flex-1 bg-slate-100 text-sm py-3 rounded-lg">Paksa Lanjut</button></div>`;
-            } catch(e){ console.error(e); document.getElementById('step-8').classList.remove('hidden'); alert("Gagal mengambil telaah. Coba lagi.");}
+            } catch(e){document.getElementById('step-8').classList.remove('hidden'); alert("Gagal mengambil telaah. Coba lagi.");}
         }
 
         async function goToStep10() {
             showLoading("Menyusun Variabel", "Identifikasi konsep..."); updateProgress(10);
             try {
                 const prompt = `Judul: "${finalTitle}". Metode: ${userData.metode}. JANGAN sertakan sumber. JSON: { variables: [{name: string, role: string, def: string}], hypotheses: [string] }`;
-                const data=await fetchAI(prompt, "Output akademik."); 
-                if(!data) throw new Error("Gagal");
-                savedHypothesisData=data; document.getElementById('hypo-title-display').innerText=finalTitle;
+                const data=await fetchAI(prompt, "Output akademik."); savedHypothesisData=data; document.getElementById('hypo-title-display').innerText=finalTitle;
                 const vList=document.getElementById('variable-list'); vList.innerHTML=''; data.variables.forEach(v=>{ vList.innerHTML+=`<div class="p-4 bg-white border-l-4 border-[#1A4AB6] rounded shadow-sm"><div class="flex justify-between mb-2"><h5 class="font-bold text-sm">${v.name}</h5><span class="text-[10px] bg-blue-50 px-2 py-1 rounded border">${v.role}</span></div><div class="text-xs text-slate-600 prose prose-sm">${marked.parse(cleanText(v.def))}</div></div>`; });
                 const hList=document.getElementById('hypothesis-list'); hList.innerHTML=''; data.hypotheses.forEach((h,i)=>{ hList.innerHTML+=`<div class="p-3 bg-teal-50/50 rounded-lg text-sm text-slate-700 border border-teal-100 flex gap-3"><span class="font-bold text-[#1CB8A3] whitespace-nowrap">H${i+1}</span><div class="prose prose-sm">${marked.parse(cleanText(h))}</div></div>`; });
                 hideAll(); document.getElementById('step-10').classList.remove('hidden');
@@ -457,9 +452,7 @@
             showLoading("Finalisasi", "Menyusun blueprint..."); updateProgress(11);
             try {
                 const prompt = `Blueprint Riset Judul: "${finalTitle}". Metode: ${userData.metode}. JANGAN sertakan sumber. JSON: { data_steps: [string], analysis_steps: [string] }`;
-                const data=await fetchAI(prompt, "Langkah teknis."); 
-                if(!data) throw new Error("Gagal");
-                savedPlanData=data; document.getElementById('final-context-display').innerText=`${userData.metode} | ${userData.jurusan}`;
+                const data=await fetchAI(prompt, "Langkah teknis."); savedPlanData=data; document.getElementById('final-context-display').innerText=`${userData.metode} | ${userData.jurusan}`;
                 const dList=document.getElementById('data-steps'); dList.innerHTML=''; data.data_steps.forEach(s=>{ dList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4AB6] flex-shrink-0"></div><div class="text-sm text-slate-600 prose prose-sm">${marked.parse(cleanText(s))}</div></div>`; });
                 const aList=document.getElementById('analysis-steps'); aList.innerHTML=''; data.analysis_steps.forEach(s=>{ aList.innerHTML+=`<div class="flex items-start gap-3"><div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1CB8A3] flex-shrink-0"></div><div class="text-sm text-slate-600 prose prose-sm">${marked.parse(cleanText(s))}</div></div>`; });
                 abstractDone=false; instrumentsDone=false; document.getElementById('generated-abstract').classList.add('hidden'); document.getElementById('generated-instruments').classList.add('hidden'); hideAll(); document.getElementById('step-11').classList.remove('hidden');
@@ -470,9 +463,7 @@
             const btn=document.getElementById('btn-analysis'); btn.disabled=true; btn.innerText="Generating...";
             try {
                 const prompt = `Analisis 5W+1H judul: "${finalTitle}". DILARANG KERAS MENYERTAKAN SUMBER/SITASI. JSON: { what: "...", why: "...", who: "...", where: "...", when: "...", how: "..." }`;
-                const data=await fetchAI(prompt, "Analisis tajam."); 
-                if(!data) throw new Error("Gagal");
-                savedAnalysis5W1H=data;
+                const data=await fetchAI(prompt, "Analisis tajam."); savedAnalysis5W1H=data;
                 const g=document.getElementById('abstract-content'); g.innerHTML='';
                 const c=(t,c,cl,i)=>`<div class="analysis-card border-l-4 border-${cl}-500"><div class="flex items-center gap-2 mb-2"><span class="p-1.5 bg-${cl}-100 rounded text-${cl}-600 text-xs"><i class="fas fa-${i}"></i></span><span class="text-xs font-bold text-slate-400 uppercase">${t}</span></div><div class="text-xs text-slate-700 prose prose-sm">${marked.parse(cleanText(c))}</div></div>`;
                 g.innerHTML+=c('What',data.what,'blue','microscope'); g.innerHTML+=c('Why',data.why,'red','exclamation-circle'); g.innerHTML+=c('Who',data.who,'amber','users'); g.innerHTML+=c('Where',data.where,'emerald','map-marker-alt'); g.innerHTML+=c('When',data.when,'purple','clock'); g.innerHTML+=c('How',data.how,'slate','cogs');
@@ -484,15 +475,17 @@
             const btn=document.getElementById('btn-instruments'); btn.disabled=true; btn.innerText="Generating...";
             try {
                 const prompt = `Instrumen Penelitian judul: "${finalTitle}". Metode: ${userData.metode}. Strict JSON. JANGAN sertakan sumber. JSON: { type: "Jenis", items: [string] }`;
-                const data=await fetchAI(prompt, "Instrumen."); 
-                if(!data) throw new Error("Gagal");
-                savedInstruments=data;
+                const data=await fetchAI(prompt, "Instrumen."); savedInstruments=data;
                 const c=document.getElementById('instruments-content'); c.innerHTML=`<h5 class="font-bold text-xs text-slate-500 uppercase mb-3 border-b pb-1">${data.type}</h5>`;
                 if (data.items && Array.isArray(data.items)) {
                     data.items.forEach((q,i)=>{ c.innerHTML+=`<div class="flex gap-3 text-sm text-slate-700 bg-slate-50 p-2 rounded"><span class="font-bold text-slate-400 select-none">${i+1}.</span><div class="prose prose-sm">${marked.parseInline(cleanText(q))}</div></div>`; });
                 }
                 document.getElementById('generated-instruments').classList.remove('hidden'); instrumentsDone=true; btn.innerHTML='<i class="fas fa-check"></i> Selesai'; updateFinishButton();
-            } catch(e){ console.error(e); btn.disabled=false; btn.innerText="Coba Lagi"; alert("Gagal memuat instrumen. Coba lagi."); }
+            } catch(e){
+                console.error(e);
+                btn.disabled=false; btn.innerText="Coba Lagi";
+                alert("Gagal memuat instrumen. Coba lagi.");
+            }
         }
 
         function updateFinishButton() { if(abstractDone && instrumentsDone) { const b=document.getElementById('btn-finish'); b.disabled=false; b.classList.remove('bg-slate-200','text-slate-400','cursor-not-allowed'); b.classList.add('step-gradient','text-white','shadow-xl'); } }
@@ -505,6 +498,7 @@
                 .table-data { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
                 .table-data td { padding: 4px; vertical-align: top; }
                 .label { width: 200px; font-weight: bold; }
+                .colon { width: 20px; text-align: center; }
                 .section-title { font-weight: bold; text-decoration: underline; margin-top: 10px; display: block; }
                 ul, ol { margin-left: 20px; } li { margin-bottom: 5px; }
                 .score-box { border: 1px solid #000; padding: 10px; margin: 10px 0; }
@@ -516,20 +510,20 @@
 
                 <h3>I. DATA PENELITI</h3>
                 <table class="table-data">
-                    <tr><td class="label">Nama</td><td>: ${userData.nama}</td></tr>
-                    <tr><td class="label">Jenis Kelamin</td><td>: ${userData.gender}</td></tr>
-                    <tr><td class="label">Jurusan</td><td>: ${userData.jurusan}</td></tr>
-                    <tr><td class="label">Fakultas</td><td>: ${userData.fakultas}</td></tr>
-                    <tr><td class="label">Perguruan Tinggi</td><td>: ${userData.universitas}</td></tr>
-                    <tr><td class="label">Minat Khusus</td><td>: ${userData.minat}</td></tr>
+                    <tr><td class="label">Nama</td><td class="colon">:</td><td>${userData.nama}</td></tr>
+                    <tr><td class="label">Jenis Kelamin</td><td class="colon">:</td><td>${userData.gender}</td></tr>
+                    <tr><td class="label">Jurusan</td><td class="colon">:</td><td>${userData.jurusan}</td></tr>
+                    <tr><td class="label">Fakultas</td><td class="colon">:</td><td>${userData.fakultas}</td></tr>
+                    <tr><td class="label">Perguruan Tinggi</td><td class="colon">:</td><td>${userData.universitas}</td></tr>
+                    <tr><td class="label">Minat Khusus</td><td class="colon">:</td><td>${userData.minat}</td></tr>
                 </table>
 
                 <h3>II. FOKUS PENELITIAN</h3>
                 <table class="table-data">
-                    <tr><td class="label">Objek</td><td>: ${userData.objek}</td></tr>
-                    <tr><td class="label">Masalah</td><td>: ${userData.masalah}</td></tr>
-                    <tr><td class="label">Analisis Kaitan</td><td>: ${cleanText(userData.analisisMasalah)}</td></tr>
-                    <tr><td class="label">Metode</td><td>: ${userData.metode}</td></tr>
+                    <tr><td class="label">Objek</td><td class="colon">:</td><td>${userData.objek}</td></tr>
+                    <tr><td class="label">Masalah</td><td class="colon">:</td><td>${userData.masalah}</td></tr>
+                    <tr><td class="label">Analisis Kaitan</td><td class="colon">:</td><td>${cleanText(userData.analisisMasalah)}</td></tr>
+                    <tr><td class="label">Metode</td><td class="colon">:</td><td>${userData.metode}</td></tr>
                 </table>
 
                 <h3>III. JUDUL FINAL & TELAAH</h3>
@@ -543,6 +537,7 @@
                     <div class="score-box">
                         <strong>Kesimpulan:</strong> ${cleanText(savedAnalysisData.conclusion)}
                     </div>
+                    <p><strong>Rata-rata Skor:</strong> ${Math.round((savedAnalysisData.necessity.score + savedAnalysisData.novelty.score + savedAnalysisData.relevance.score + savedAnalysisData.feasibility.score) / 4)}%</p>
                 ` : ''}
 
                 <h3>IV. HIPOTESIS & VARIABEL</h3>
@@ -579,9 +574,10 @@
                     ${savedInstruments?.items?.map(i => `<li>${cleanText(i)}</li>`).join('') || ''}
                 </ol>
 
+                <br style="page-break-before: always;">
                 <h3>LAMPIRAN: OPSI JUDUL</h3>
                 <ul>
-                    ${savedTitles?.map(t => `<li>${cleanText(t.titles[0])}</li>`).join('') || ''}
+                    ${savedTitles?.map(t => `<li><strong>${cleanText(t.topic)}:</strong> ${t.titles.map(sub=>cleanText(sub)).join(', ')}</li>`).join('') || ''}
                 </ul>
 
                 <br><br>
@@ -589,7 +585,7 @@
             </body></html>`;
 
             const converted = htmlDocx.asBlob(content, {orientation: 'portrait', margins: {top: 1440, right: 1440, bottom: 1440, left: 1440}});
-            saveAs(converted, `Deskripsi_Judul_${userData.nama.replace(/\s+/g, '_')}.docx`);
+            saveAs(converted, `Proposal_Riset_${userData.nama.replace(/\s+/g, '_')}.docx`);
         }
 
         function finishSession() { downloadDocx(); document.getElementById('success-modal').classList.add('active'); }
